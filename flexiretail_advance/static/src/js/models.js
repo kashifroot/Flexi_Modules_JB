@@ -322,7 +322,10 @@ function decimalAdjust(value){
                         return new models.Product({}, product);
                     }));
             	}
-            	self.gui.screen_instances.products.product_categories_widget.renderElement();
+            	if (self.gui.screen_instances.products){
+            	   self.gui.screen_instances.products.product_categories_widget.renderElement();
+
+            	}
             });
             return def;
         },
