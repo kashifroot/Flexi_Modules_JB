@@ -298,7 +298,7 @@ function decimalAdjust(value){
                 async: false,
             }).then(function(res){
             	self.db.currency_symbol = currency_symbol;
-            	if(res && res.variants){
+            	if(res && res.variants && self.gui.screen_instances.products){
             		var setup_prd = _.map(res.variants, function (product) {
                 		product.categ = _.findWhere(self.product_categories, {'id': product.categ_id[0]});
 	                    return new models.Product({}, product);
