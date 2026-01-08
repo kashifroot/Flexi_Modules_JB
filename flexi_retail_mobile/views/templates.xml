@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+        <template inherit_id="flexiretail_advance.point_of_sale_assets" name="remove flexi retail css 1" id="point_of_sale_assets">
+            <xpath expr="//link[@href='/flexiretail_advance/static/src/css/pos.css']" position="replace"/>
+        </template>
+        <template id="ast3" inherit_id="point_of_sale.index">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/flexi_retail_mobile/static/src/css/retail_mobile.css"/>
+                <link rel="stylesheet" href="/flexi_retail_mobile/static/src/css/customer_button.css"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sami updated this file -->
+    <template id="assets" inherit_id="point_of_sale.assets" name="pos mobile assets">
+        <xpath expr="." position="inside">
+            <script src="/flexi_mobile_ui/static/src/js/mobile_chrome.js"/>
+        </xpath>
+    </template>
+
+    <template id="posindex" inherit_id="point_of_sale.index">
+        <xpath expr="//meta[@name='viewport']" position="attributes">
+            <attribute name="content">width="device-width, initial-scale=1.0"</attribute>
+        </xpath>
+    </template>
+
+    <template id="ast1" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/flexi_mobile_ui/static/src/css/odoo.css" />
+        </xpath>
+    </template>
+
+    <template id="ast2" inherit_id="point_of_sale.index">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/flexi_mobile_ui/static/src/css/pos_mobile.css" />
+        </xpath>
+    </template>
+
+    <template id="ast3" inherit_id="point_of_sale.assets">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/flexi_mobile_ui/static/src/js/screens.js"/>
+        </xpath>
+    </template>
+</odoo>

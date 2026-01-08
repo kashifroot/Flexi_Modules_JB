@@ -1,0 +1,75 @@
+.customer-head {
+    /* display: flex;
+    align-items: center;
+    justify-content: space-between; */
+    width: 100%;
+}
+
+.avatar-img.client-image,
+.c-name {
+    display: flex;
+    align-items: center;
+    margin-right: 5px; /* Adjust as needed for spacing */
+    margin-left: 3%;
+}
+
+.c-name {
+    display: flex;
+    align-items: center;
+}
+
+.c-user {
+    font-size:12px;
+}
+
+.customer-icon-action {
+    /* display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin-right:3%; */
+    font-size:50px;
+}
+
+
+/* Ensuring the icons align properly */
+.avatar-img.client-image i,
+.customer-icon-action i {
+    display: block;
+}
+@media (max-width: 768px) {
+    .cart-customer-section{
+        width: 90%;
+        margin-left: 5%;
+        margin-right: 5%;
+        padding-top:8px;
+    }
+    /* .customer-icon-action {
+        margin-right:0%;
+        font-size:35px;
+        margin-left:0px;
+    }
+    .c-user {
+        font-size:12px;
+    }*/
+    .customer-head {
+        /* margin-top:5px; */
+    }
+    .avatar-img.client-image img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+    .avatar-img.client-image i {
+        font-size: 35px !important;
+    }
+    /*
+    span.avatar-img.client-image {
+        display: none;
+    }
+    */
+    .avatar-img.client-image,
+    .c-name {
+        margin-left: 0px !important;
+        margin-right: 2% !important;
+    }
+}

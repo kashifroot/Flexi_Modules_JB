@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="assets_backend" name="hr assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/EasyERPS_pos_bluetooth_built-in_printer/static/src/lib/html2canvas.js"></script>
+        </xpath>
+    </template>
+
+    <template id="assets" inherit_id="point_of_sale.assets">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/EasyERPS_pos_bluetooth_built-in_printer/static/src/js/printers.js"></script>
+            <script type="text/javascript" src="/EasyERPS_pos_bluetooth_built-in_printer/static/src/js/Models.js"></script>
+            <script type="text/javascript" src="/EasyERPS_pos_bluetooth_built-in_printer/static/src/js/chrome.js"></script>
+            <script type="text/javascript" src="/EasyERPS_pos_bluetooth_built-in_printer/static/src/js/screens.js"></script>
+            <link rel="stylesheet" type="text/scss" href="/EasyERPS_pos_bluetooth_built-in_printer/static/src/css/BluetoothPrinterReceiptScreen.css"/>
+            <link rel="stylesheet" type="text/scss" href="/EasyERPS_pos_bluetooth_built-in_printer/static/src/css/pos.css"/>
+            <link rel="stylesheet" type="text/scss" href="/EasyERPS_pos_bluetooth_built-in_printer/static/src/css/pos_receipts.css"/>
+        </xpath>
+    </template>
+
+</odoo>

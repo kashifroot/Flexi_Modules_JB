@@ -1,0 +1,14 @@
+.o_main_navbar>ul>li {
+    position: relative;
+    display: block;
+    float: left;
+
+}
+
+.o_control_panel>.o_cp_left {
+    width: auto;
+}
+
+.o_control_panel>.o_cp_right {
+    width: auto;
+}

@@ -1,0 +1,262 @@
+.left_option_menu{
+    width: auto;
+    position: relative;
+}
+.pos .order-button.square{
+    height: 40px;
+}
+
+
+.login-fields .input-fields{
+    width: 90%;
+}
+
+
+#menu-slider{
+    position: relative;
+    width: auto;
+    display: flex;
+    padding-right: 2px;
+    padding-left: 2px;
+}
+#menu-slider #mysidebar .toggled #sidebar-wrapper{
+    position: fixed;
+    top: 48px;
+    z-index: 3;
+    left: 251px;
+    width: 180px;
+}
+
+.left_option_menu #left-sidebar-content{
+    position: fixed;
+    padding: 2px;
+    width: 180px;
+    left: 1px;
+    top: 48px;
+    z-index: 3;
+    background-color: #f1eeef;
+    height: calc(100vh - 50px);
+}
+
+.left_option_menu #left-sidebar-content>div{
+    padding: 5px;
+}
+
+.lock-section{
+    padding: 5px;
+    color: white;
+}
+
+.slide_menubtn a.menu_toggle, #mysidebar a#menu-toggle{
+    padding: 10px;
+    display: flex;
+    font-size: 20px;
+    background-color: #f0eeee;
+}
+
+header.rightpane-header{
+    display: flex;
+    align-items: center;
+}
+#menu-slider #left-sidebar-content, #menu-slider #sidebar-wrapper
+{
+    border: 1px solid #ddd;
+}
+#menu-slider a{
+    cursor: pointer;
+}
+@media(max-width:767px) {
+.screen .full-content{
+    margin-top: 50px;
+
+}
+.screen .top-content{
+    height: 106px;
+
+}
+.pos .searchbox_divs{
+    padding-top: 35px;
+
+}
+}
+@media(min-width: 991px){
+.pos .searchbox_prod{
+    position: relative;
+    right: 150px;
+    bottom:30px;
+}
+}
+
+.pos .searchbox_divs{
+DISPLAY: INLINE-FLEX;
+    margin: 25PX;
+}
+.pos .search_inputboxe
+{
+    background-position-x: 3px;
+    padding: 5px;
+    height: 25px;
+    left:3px;
+    padding-left: 15px;
+    border-radius: 5px;
+    width: calc(100% - 25px);
+
+}
+.pos .btn_add_product{
+    DISPLAY: block;
+    RIGHT: 10px;
+
+}
+
+.pos .breadcrumb-button.breadcrumb-home{
+    width: 30px;
+}
+.pos .breadcrumb{
+    min-width: auto;
+}
+
+.slide_menubtn{
+    font-size: 24px;
+}
+
+.pos-login .panel-container
+{
+
+}
+.panel-container .login-fields{
+    padding: 5px;
+}
+
+.pos .subwindow .subwindow-container-fix{
+    border-left: solid 1px #ccc;
+}
+.pos .pos-cart-info {
+    margin: 0;
+    height: auto;
+    height: 46px;
+    padding: 0 1px;
+    background: none;
+    line-height: 12px;
+}
+#pos-cart img{
+    width: 30px;
+}
+
+.pos .order-button.select-order {
+    line-height: 36px;
+    height: inherit;
+    background: initial;
+    color: initial;
+}
+.pos .order-button .order-sequence{
+    color: white;
+}
+.rightpane-header>div
+{
+    margin-right: 1vw;
+}
+.pos .rightpane-header .breadcrumb{
+    margin: 0 1vw 0 5px;
+}
+.pos .rightpane .brand_searchbox input, .pos .rightpane .category_searchbox input, .pos .rightpane .searchbox input{
+    background-position-x: 3px;
+    padding: 5px;
+    height: 25px;
+    padding-left: 15px;
+    border-radius: 5px;
+    width: calc(100% - 25px);
+}
+.pos .rightpane .searchbox input{
+    border-radius: 15px;
+    margin: 0;
+    position: static;
+}
+
+@media (max-width: 767px)
+{
+    .panel-container {
+        margin: 10% 0 0 0;
+    }
+}
+
+@media (min-width: 768px){
+    #mysidebar #wrapper {
+        padding-left: 0;
+    }
+}
+
+.pos .orders{
+    max-width: min-content;
+}
+
+
+
+#mysidebar #wrapper.toggled {
+    padding-left: 0;
+}
+
+
+.pos .order-button.select-order{
+    background: initial;
+    background-color: #392b2b
+}
+.order-numbers::-webkit-scrollbar {
+    width: 10px;
+}
+.order-numbers::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+.order-numbers::-webkit-scrollbar-track {
+    background: #ddd;
+}
+.pos .order-button.selected {
+    border: 0;
+    width: 95px;
+    color: white;
+}
+@media ( min-width :768px) and (max-width:1024px) {
+
+
+    }
+@media (min-width: 768px) and (max-width: 1024px){
+    .pos .pos-branding {
+        width: auto;
+    }
+}
+
+@media only screen and (max-width: 991px){
+    .pos .pos-cart-info {
+        display: none;
+    }
+
+    #pos-left-sidebar-container:not(.toggled) #left-sidebar-content{
+        display: none;
+    }
+    .screen .left-content{
+        position: static;
+    }
+    .screen .right-content{
+        position: static;
+    }
+}
+@media only screen and (min-width: 992px){
+    .order-selector .toggle_btn{
+        display: none;
+    }
+    .screen .top-content .button{
+        margin-left: 150px;
+    }
+    .new-customer {
+        margin-left: 1px !important;
+    }
+    .button .default .highlight {
+        margin-left: 1px !important;
+    }
+}
+#show_client_history{
+    display: none;
+}
+.pos .pos-rightheader{
+    height: initial;
+}

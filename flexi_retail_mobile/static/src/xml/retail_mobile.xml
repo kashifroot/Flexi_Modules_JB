@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+<!--    <t t-extend="ActionpadWidget">-->
+<!--		<t t-jquery="div.actionpad" t-operation="before">-->
+<!--            <t t-call="CustomerWidget"/>-->
+<!--        </t>-->
+<!--    </t>-->
+
+    <t t-extend="ProductScreenFlexiWidget">
+        <t t-jquery=".left_option_menu.touch-scrollable.scrollable-y" position="replace"/>
+    </t>
+    <t t-extend="PosCartCountWidget">
+        <t t-jquery="div#pos-cart" t-operation="replace">
+            <div id="pos-cart">
+                <div class="cart-num">0</div>
+                <div><img src="/flexi_retail_mobile/static/src/cart.png"/></div>
+            </div>
+        </t>
+    </t>
+    <t t-extend="SliderWidget">
+        <t t-jquery="#mysidebar" t-operation="after">
+            <div id="slider2">
+                <div id="pos-left-sidebar-container" class="left_option_menu sami touch-scrollable scrollable-y">
+                    <div class="slide_menubtn">
+                        <a class="menu_toggle">
+                            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <script>
+                        (function(){
+                            $('#pos-left-sidebar-container .menu_toggle').click(function(){
+                                $(this).closest('#pos-left-sidebar-container').toggleClass('toggled');
+                                $(this).find('i').toggleClass('fa fa-chevron-right fa fa-chevron-left');
+                            })
+                        })();
+                    </script>
+                    <div id="left-sidebar-content">
+                        <div id="sale_mode" title="Sale Mode" class="selected-menu btn_icon_set">
+                            <img src="/flexiretail_advance/static/src/img/icons/sale.png"/>
+                            <span class="btn_span_set"> Sale Mode</span>
+                        </div>
+                        <t t-if="widget.pos.config.pos_sale_order">
+                            <div id="sale_order_mode" title="Sale Mode" class="btn_icon_set">
+                                <img src="/flexiretail_advance/static/src/img/icons/sale_icon.png"/>
+                                <span class="btn_span_set" title="Sale Order Mode"> Sale Order</span>
+                            </div>
+                        </t>
+                        <t t-if="widget.pos.config.enable_order_reservation">
+                            <div id="reservation_mode" class="btn_icon_set">
+                                <img src="/flexiretail_advance/static/src/img/icons/booking_mode.png"/>
+                                <span class="btn_span_set">Reservation</span>
+                            </div>
+                        </t>
+                        <t t-if="widget.pos.config.enable_delivery_charges and widget.pos.get_cashier().access_delivery_charges">
+                            <div id="delivery_mode" class="btn_icon_set">
+                                <img src="/flexiretail_advance/static/src/img/icons/delivery_charge.png"/>
+                                <span class="btn_span_set">Delivery</span>
+                            </div>
+                        </t>
+                        <t t-if="widget.pos.config.enable_pos_return and widget.pos.get_cashier().access_pos_return">
+                            <div id="order_return" class="btn_icon_set">
+                                <img src="/flexiretail_advance/static/src/img/icons/order_return.png"/>
+                                <span class="btn_span_set">Item Return</span>
+                            </div>
+                        </t>
+                        <t t-if="widget.pos.config.display_warehouse_qty and widget.pos.get_cashier().access_display_warehouse_qty">
+                           <div id="product_qty" class="btn_icon_set" title="Product Quantity">
+                               <img src="/flexiretail_advance/static/src/img/icons/product_quantity.png"/>
+                               <span class="btn_span_set" style="line-height:24px;">Warehouse Qty</span>
+                           </div>
+                        </t>
+                        <t t-if="widget.pos.config.enable_draft_order and widget.pos.get_cashier().access_draft_order">
+                            <div id="draft_order" class="btn_icon_set draft_order_img" title="Create Draft Order">
+                                <img  class="draft_order_img" src="/flexiretail_advance/static/src/img/icons/draft_order.png"/>
+                                <span class="btn_span_set">Draft</span>
+                            </div>
+                        </t>
+                        <t t-if="widget.pos.config.enable_bag_charges and widget.pos.get_cashier().access_bag_charges">
+                            <div id="bag_charges" class="btn_icon_set" title="Apply Bag Charges">
+                                <img src="/flexiretail_advance/static/src/img/icons/bags.png"/>
+                                <span class="btn_span_set">Bag</span>
+                            </div>
+                        </t>
+                        <t t-if="widget.pos.config.multi_store_id and widget.pos.config.multi_store_id[0]">
+                            <div id="multi-shop" class="btn_icon_set">
+                                <img src="/flexiretail_advance/static/src/img/icons/store.png"/>
+                                <span class="btn_span_set">Store</span>
+                            </div>
+                        </t>
+                        <t t-if="widget.pos.config.money_in_out and widget.pos.get_cashier().access_money_in_out">
+                            <div id="money_in" class="btn_icon_set" title="Put Money In">
+                                <img src="/flexiretail_advance/static/src/img/icons/put_money.png"/>
+                                <span class="btn_span_set">Money In</span>
+                            </div>
+                            <div id="money_out" class="btn_icon_set" title="Take Money Out">
+                                <img src="/flexiretail_advance/static/src/img/icons/take_money.png"/>
+                                <span class="btn_span_set">Money Out</span>
+                            </div>
+                        </t>
+                        <t t-if="widget.pos.config.enable_credit">
+                            <div id="add_credit" title="Add Credit Amount" class="btn_icon_set">
+                                <img style="height: 61px;width: 61px;margin-left: 2px;" src="/flexiretail_advance/static/src/img/icons/add_credit.png"/>
+                                <span class="btn_span_set"> Add Credit</span>
+                            </div>
+                        </t>
+                        <t t-if="widget.pos.config.enable_debit">
+                            <div id="pay_debit" title="Pay Debit Amount" class="btn_icon_set">
+                                <img style="height: 61px;width: 61px;margin-left: 2px;" src="/flexiretail_advance/static/src/img/icons/pay_debit.png"/>
+                                <span class="btn_span_set"> Pay Debit</span>
+                            </div>
+                        </t>
+                        <t t-if="widget.pos.config.discard_product">
+                            <div id="discard_product" class="btn_icon_set" title="Discard Product">
+                                <img style="height: 61px;width: 61px;margin-left: 2px;"
+                                     src="/flexiretail_advance/static/src/img/discard_product.png"/>
+                                <span class="btn_span_set" style="line-height:19px;">Discard Products</span>
+                            </div>
+                        </t>
+                        <t t-if="widget.pos.config.customer_display and widget.pos.config.customer_dislay_login">
+                            <div id="customer_display" class="btn_icon_set">
+                                <img src="/flexiretail_advance/static/src/img/icons/customer_display.png" style="width:55px;height:55px"/>
+                                <span class="btn_span_set" style="line-height:19px;">Customer Display</span>
+                            </div>
+                        </t>
+                        <div id="set_customer_button" class="btn_icon_set">
+                            <t t-if="widget.pos.get_client()">
+                                <span class="set_customer" style="width:55px;height:55px">
+                                    <img t-att-src='widget.partner_icon_url(widget.pos.get_client().id)'/>
+                                </span>
+                            </t>
+                            <t t-else="">
+<!--                                                <i style="font-size:30px;padding: 8px;" class="fa fa-user" aria-hidden="true"></i>-->
+                                <span class="set_customer" style="width:55px;height:55px">
+                                    <i class="fa fa-user-plus" style="font-size:45px" title="Add customer"></i>
+                                </span>
+                            </t>
+                            <span class="btn_span_set set_customer" style="line-height:19px; margin-left: 6px">Select Customer</span>
+<!--                                        <span class="customer-icon-action icon icon-plus set_customer">-->
+<!--                                            <i class="fa fa-user-plus" title="Add customer"></i>-->
+<!--                                        </span>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </t>
+</templates>

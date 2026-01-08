@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-extend='web.AppsMenu'>
+        <t t-jquery='li.dropdown a.full[data-toggle="dropdown"]' t-operation="after">
+            <a class="full" data-toggle="dropdown" data-display="static">
+                <i class="fa fa-th-large"/>
+            </a>
+        </t>
+    </t>
+</templates>

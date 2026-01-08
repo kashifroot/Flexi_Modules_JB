@@ -1,0 +1,8 @@
+11.1.18 - Bug fix
+- Disable product brand views conflicting with alan customize
+
+11.1.19 - Kenny - 07/01/2025
+- add timeout on build_widgets js function to let partner db data loaded before setting partner
+
+11.1.20 - Kenny - 05/01/2026
+- fix POS Session closing date is empty

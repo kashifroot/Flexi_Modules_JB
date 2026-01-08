@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+     <t t-extend="Chrome">
+         <t t-jquery="div.pos" t-operation="before">
+            <div class='pos-receipt-print'>
+                <!-- here go the receipts that will be printed -->
+            </div>
+         </t>
+    </t>
+
+    <t t-extend="PaymentScreenWidget">
+        <t t-jquery=".payment-buttons" t-operation="append">
+            <t t-if="widget.pos.config.easy_iface_cashdrawer">
+                <div class='button jjs_cashdrawer'>
+                    <i class='fa fa-archive' /> Open Cashbox
+                </div>
+            </t>
+       </t>
+    </t>
+    <t t-extend="ReceiptScreenWidget">
+        <t t-jquery=".centered-content.touch-scrollable" t-operation="replace">
+            <div class="centered-content touch-scrollable">
+                <h2 class="print_invoice">The order has been synchronized earlier. To print the invoice please refer to the order in the backend</h2>
+                <t t-if="widget.pos.config.pos_bluetooth_printer">
+                <t t-if="widget.pos.config.receipt_types_views == 'categoryReceipt' and widget.pos.pos_categ_id or widget.pos.config.receipt_types_views == 'labelReceipt'">
+                    <div class="button printReceiptAndLabel">
+                        <i class='fa fa-print'></i> Print Receipt and Category/Label
+                    </div>
+                    <div class="button print">
+                        <i class='fa fa-print'></i> Print Receipt
+                    </div>
+                    <div class="button printLabel">
+                        <i class='fa fa-print'></i> Print Category/Label
+                    </div>
+                </t>
+                <t t-else="">
+                    <div class="button print">
+                        <i class='fa fa-print'></i> Print Receipt
+                    </div>
+                </t>
+                </t>
+                <t t-else="">
+                    <div class="button print">
+                        <i class='fa fa-print'></i> Print Receipt
+                    </div>
+                </t>
+                <div class="pos-receipt-container">
+                </div>
+            </div>
+
+       </t>
+    </t>
+
+    <t t-extend="PosTicket">
+        <t t-jquery=".pos-sale-ticket" t-operation="after">
+            <br />
+            <br />
+            <t t-if="widget.pos.config.pos_bluetooth_printer">
+                <t t-if="widget.pos.config.receipt_types_views == 'labelReceipt'">
+                    <t t-foreach="order.get_compute_product().products" t-as="label_receipt" t-key="label_receipt">
+                        <t t-call="LabelReceipt"/>
+                    </t>
+                </t>
+                <t t-if="widget.pos.config.receipt_types_views == 'categoryReceipt' and pos.pos_categ_id">
+                    <t t-foreach="pos.pos_categ_id" t-as="category_receipt" t-key="category_receipt">
+                    <t t-set='count_t' t-value='0' />
+                    <t t-foreach="orderlines" t-as="orderline">
+                        <t t-if="orderline.product.pos_categ_id">
+                            <t t-if="orderline.product.pos_categ_id[0] == category_receipt">
+                                <t t-set='count_t' t-value='1' />
+                            </t>
+                        </t>
+                    </t>
+                    <t t-if="count_t">
+                        <t t-call="CategoryReceipt"/>
+                    </t>
+                    </t>
+                </t>
+           </t>
+       </t>
+    </t>
+    <t t-name="OrderReceiptWrappedProductNameOrderLine"><t t-foreach="orderline.product_name_wrapped.slice(1)" t-as="wrapped_line"><t t-esc="wrapped_line"/></t></t>
+    <t t-name="CategoryReceipt">
+        <div class="pos-receipt">
+                <t t-set='count_v' t-value='0' />
+                <div style="text-align: center;margin-bottom: 10px;"><t t-esc="receipt.name" /></div>
+                <div class="order-date" style="margin-bottom: 10px;"><t t-esc="receipt.date.LocaleStringdateStyle"/><span t-esc="receipt.date.LocaleStringtimeStyle" class="pos-receipt-right-align"/></div>
+                <t t-if="order.get_client()">
+                    <div class="table-info" style="padding-top: 0px !important;margin-bottom: 10px;">
+                        <div> <span>Client Name: </span><span><t t-esc="order.get_client().name"/></span></div>
+                        <t t-if="receipt.client.phone">
+                            <div> <span>Client Phone: </span><span><t t-esc="order.get_client().phone"/></span></div>
+                        </t>
+                    </div>
+                </t>
+                    <div style="font-size: 150% !important; display: grid; justify-content: center;">
+                        <t t-foreach="receipt.orderlines" t-as="orderline">
+                                <t t-if="orderline.pos_categ_id[0] == category_receipt">
+                                    <t t-if="count_v == 0">
+                                        <tr>
+                                            <td><b><t t-esc="orderline.pos_categ_id[1]"/></b></td>
+                                            <t t-set='count_v' t-value='1' />
+                                        </tr>
+                                    </t>
+                                </t>
+                            </t>
+                    </div>
+
+                <div class="orderlines">
+                    <table class="mine-table">
+                        <colgroup>
+                        <col width='10%'/>
+                        <col width='80%'/>
+                    </colgroup>
+                        <thead>
+                            <tr>
+                                <th > <span class="start">Qty</span></th>
+                                <th > <span >Item</span></th>
+                            </tr>
+                        </thead>
+                        <t t-foreach="receipt.orderlines" t-as="orderline">
+                            <tbody>
+                            <t t-if="orderline.pos_categ_id[0] == category_receipt">
+                                <tr>
+                                    <td style='text-align:center;float:none'>
+                                        <t t-esc="orderline.quantity"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc='orderline.product_name_wrapped[0]'/><t t-call="OrderReceiptWrappedProductNameOrderLine"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            </tbody>
+                        </t>
+                    </table>
+                </div>
+            <br />
+            <br />
+        </div>
+    </t>
+    <t t-name="LabelReceipt">
+        <div class="pos-receipt">
+            <div style="text-align: center;margin-bottom: 10px;"><t t-esc="receipt.name" /></div>
+            <div class="order-date" style="margin-bottom: 10px;"><t t-esc="receipt.date.LocaleStringdateStyle"/><span t-esc="receipt.date.LocaleStringtimeStyle" class="pos-receipt-right-align"/></div>
+            <t t-if="order.get_client()">
+                <div class="table-info" style="padding-top: 0px !important;margin-bottom: 10px;">
+                        <div> <span>Client Name: </span><span><t t-esc="order.get_client().name"/></span></div>
+                        <t t-if="receipt.client.phone">
+                            <div> <span>Client Phone: </span><span><t t-esc="order.get_client().name"/></span></div>
+                        </t>
+                </div>
+            </t>
+            <div style="font-size: 150% !important; display: grid; justify-content: center; margin-bottom: 10px;">
+                <div class="multiprint-flex">
+                    <t t-esc="label_receipt.product.display_name"/>
+                    <t t-if="label_receipt.description">
+                     ( <t t-esc="label_receipt.description"/> )
+                    </t>
+                </div>
+            </div>
+            <br />
+            <br />
+        </div>
+    </t>
+
+    <t t-name="ReReprintButton">
+        <div class='control-button js_reprint'>
+            <i class="fa fa-retweet"></i> Reprint Receipt
+        </div>
+    </t>
+
+    <t t-name="ReReceiptScreenWidget">
+        <div class='receipt-screen screen'>
+            <div class='screen-content'>
+                <div class='top-content'>
+                    <span class='button back'>
+                        <i class='fa fa-angle-double-left'></i>
+                        Back
+                    </span>
+                </div>
+                <div class="centered-content touch-scrollable">
+                    <h2 class="print_invoice">The order has been synchronized earlier. To print the invoice please refer to the order in the backend</h2>
+                    <t t-if="widget.pos.config.pos_bluetooth_printer">
+                    <t t-if="widget.pos.config.receipt_types_views == 'categoryReceipt' and widget.pos.pos_categ_id or widget.pos.config.receipt_types_views == 'labelReceipt'">
+                        <div class="button reprintReceiptAndLabel">
+                            <i class='fa fa-print'></i> Print Receipt and Category/Label
+                        </div>
+                        <div class="button reprint">
+                            <i class='fa fa-print'></i> Print Receipt
+                        </div>
+                        <div class="button reprintLabel">
+                            <i class='fa fa-print'></i> Print Category/Label
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <div class="button reprint">
+                            <i class='fa fa-print'></i> Print Receipt
+                        </div>
+                    </t>
+                    </t>
+                    <t t-else="">
+                        <div class="button print">
+                            <i class='fa fa-print'></i> Print Receipt
+                        </div>
+                    </t>
+                    <div class="pos-receipt-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    <t t-name="ReOrderReceiptWrappedProductNameLines"><t t-foreach="line.product_name_wrapped.slice(1)" t-as="wrapped_line"><t t-esc="wrapped_line"/></t></t>
+    <t t-name="ReOrderReceipt">
+        <div class="pos-rereceipt">
+            <div class="pos-center-align"><t t-esc="order.formatted_validation_date"/> <t t-esc="order.name"/></div>
+            <br />
+            <t t-esc="widget.pos.company.name"/><br />
+            <div class="receipt-phone">
+                Phone: <t t-esc="widget.pos.company.phone || ''"/><br />
+            </div>
+            <div class="receipt-user">
+                User: <t t-esc="widget.pos.get_cashier().name"/><br />
+            </div>
+            <br />
+            <t t-if="receipt.header">
+                <div style='text-align:center'>
+                    <t t-esc="receipt.header" />
+                </div>
+                <br />
+            </t>
+            <table class='receipt-orderlines'>
+                <colgroup>
+                    <col width='50%' />
+                    <col width='25%' />
+                    <col width='25%' />
+                </colgroup>
+                <tr t-foreach="orderlines" t-as="orderline">
+                    <td>
+                        <t t-esc="orderline.get_product().display_name"/>
+                         <t t-if="orderline.get_discount() > 0">
+                            <div class="pos-disc-font">
+                                With a <t t-esc="orderline.get_discount()"/>% discount
+                            </div>
+                        </t>
+                    </td>
+                    <td class="pos-right-align">
+                        <t t-esc="orderline.get_quantity_str_with_unit()"/>
+                    </td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(orderline.get_display_price())"/>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <table class='receipt-total'>
+                <tr>
+                    <td>Subtotal:</td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(order.get_total_without_tax())"/>
+                    </td>
+                </tr>
+                <t t-foreach="order.get_tax_details()" t-as="taxdetail">
+                    <tr>
+                        <td><t t-esc="taxdetail.name" /></td>
+                        <td class="pos-right-align">
+                            <t t-esc="widget.format_currency(taxdetail.amount)" />
+                        </td>
+                    </tr>
+                </t>
+                <tr>
+                    <t t-if="order.get_total_discount() > 0">
+                        <td>Discount:</td>
+                        <td class="pos-right-align">
+                            <t t-esc="widget.format_currency(order.get_total_discount())"/>
+                        </td>
+                    </t>
+                </tr>
+                <tr class="emph">
+                    <td>Total:</td>
+                    <td class="pos-right-align">
+                        <t t-esc="widget.format_currency(order.get_total_with_tax())"/>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <table class='receipt-paymentlines'>
+                <t t-foreach="paymentlines" t-as="line">
+                  <tr>
+                      <td>
+                          <t t-esc="line.name"/>
+                      </td>
+                      <td class="pos-right-align">
+                          <t t-esc="widget.format_currency(line.get_amount())"/>
+                      </td>
+                  </tr>
+                </t>
+            </table>
+            <br />
+            <table class='receipt-change'>
+                <tr><td>Change:</td><td class="pos-right-align">
+                    <t t-esc="widget.format_currency(order.get_change())"/>
+                    </td></tr>
+            </table>
+            <t t-if="receipt.footer">
+                <br />
+                <div style='text-align:center'>
+                    <t t-esc="receipt.footer" />
+                </div>
+            </t>
+            <div class="pos-receipt-order-data">
+                <div>DUPLICATA</div>
+            </div>
+            <br />
+            <br />
+        </div>
+    </t>
+    <t t-extend="ReOrderReceipt">
+        <t t-jquery=".pos-rereceipt" t-operation="after">
+            <t t-if="widget.pos.config.pos_bluetooth_printer">
+                    <t t-if="widget.pos.config.receipt_types_views == 'labelReceipt'">
+                        <t t-foreach="order.get_compute_product().products" t-as="label_receipt" t-key="label_receipt">
+                            <t t-call="LabelReReceipt"/>
+                        </t>
+                    </t>
+                    <t t-if="widget.pos.config.receipt_types_views == 'categoryReceipt' and pos.pos_categ_id">
+                        <t t-foreach="pos.pos_categ_id" t-as="category_receipt" t-key="category_receipt">
+                        <t t-set='count_t' t-value='0' />
+                        <t t-foreach="orderlines" t-as="orderline">
+                            <t t-if="orderline.product.pos_categ_id">
+                                <t t-if="orderline.product.pos_categ_id[0] == category_receipt">
+                                    <t t-set='count_t' t-value='1' />
+                                </t>
+                            </t>
+                        </t>
+                        <t t-if="count_t">
+                            <t t-call="CategoryReReceipt"/>
+                        </t>
+                    </t>
+                    </t>
+            </t>
+       </t>
+    </t>
+    <t t-name="CategoryReReceipt">
+        <div class="pos-rereceipt">
+                <t t-set='count_v' t-value='0' />
+                <div style="text-align: center;margin-bottom: 10px;"><t t-esc="receipt.name" /></div>
+                <div class="order-date" style="margin-bottom: 10px;"><t t-esc="receipt.date.LocaleStringdateStyle"/><span t-esc="receipt.date.LocaleStringtimeStyle" class="pos-receipt-right-align"/></div>
+                <t t-if="order.get_client()">
+                    <div class="table-info" style="padding-top: 0px !important;margin-bottom: 10px;">
+                        <div> <span>Client Name: </span><span><t t-esc="order.get_client().name"/></span></div>
+                        <t t-if="receipt.client.phone">
+                            <div> <span>Client Phone: </span><span><t t-esc="order.get_client().phone"/></span></div>
+                        </t>
+                    </div>
+                </t>
+                    <div style="font-size: 150% !important; display: grid; justify-content: center;">
+                        <t t-foreach="receipt.orderlines" t-as="orderline">
+                                <t t-if="orderline.pos_categ_id[0] == category_receipt">
+                                    <t t-if="count_v == 0">
+                                        <tr>
+                                            <td><b><t t-esc="orderline.pos_categ_id[1]"/></b></td>
+                                            <t t-set='count_v' t-value='1' />
+                                        </tr>
+                                    </t>
+                                </t>
+                            </t>
+                    </div>
+
+                <div class="orderlines">
+                    <table class="mine-table">
+                        <colgroup>
+                        <col width='10%'/>
+                        <col width='80%'/>
+                    </colgroup>
+                        <thead>
+                            <tr>
+                                <th > <span class="start">Qty</span></th>
+                                <th > <span >Item</span></th>
+                            </tr>
+                        </thead>
+                        <t t-foreach="receipt.orderlines" t-as="orderline">
+                            <tbody>
+                            <t t-if="orderline.pos_categ_id[0] == category_receipt">
+                                <tr>
+                                    <td style='text-align:center;float:none'>
+                                        <t t-esc="orderline.quantity"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc='orderline.product_name_wrapped[0]'/>
+                                    </td>
+                                </tr>
+                            </t>
+                            </tbody>
+                        </t>
+                    </table>
+                </div>
+            <br />
+            <br />
+        </div>
+    </t>
+    <t t-name="LabelReReceipt">
+        <div class="pos-rereceipt">
+            <div style="text-align: center;margin-bottom: 10px;"><t t-esc="receipt.name" /></div>
+            <div class="order-date" style="margin-bottom: 10px;"><t t-esc="receipt.date.LocaleStringdateStyle"/><span t-esc="receipt.date.LocaleStringtimeStyle" class="pos-receipt-right-align"/></div>
+            <t t-if="order.get_client()">
+                <div class="table-info" style="padding-top: 0px !important;margin-bottom: 10px;">
+                        <div> <span>Client Name: </span><span><t t-esc="order.get_client().name"/></span></div>
+                        <t t-if="receipt.client.phone">
+                            <div> <span>Client Phone: </span><span><t t-esc="order.get_client().name"/></span></div>
+                        </t>
+                </div>
+            </t>
+            <div style="font-size: 150% !important; display: grid; justify-content: center; margin-bottom: 10px;">
+                <div class="multiprint-flex">
+                    <t t-esc="label_receipt.product.display_name"/>
+                    <t t-if="label_receipt.description">
+                     ( <t t-esc="label_receipt.description"/> )
+                    </t>
+                </div>
+            </div>
+            <br />
+            <br />
+        </div>
+    </t>
+
+    <t t-name="easySaleDetailsReport">
+        <div class="pos-sale-ticket">
+            <t t-if='pos.company_logo_base64'>
+                <img t-att-src='pos.company_logo_base64' alt="Logo"/>
+                <br/>
+            </t>
+            <t t-if='!pos.company_logo_base64'>
+                <h1><t t-esc='company.name' /></h1>
+                <br/>
+            </t>
+            <br /><br />
+
+            <!-- Orderlines -->
+
+            <div class='orderlines' line-ratio='0.6'>
+                <t t-foreach='products' t-as='line'>
+                    <line>
+                        <left><t t-esc='line.product_name.substr(0,20)' /></left>
+                        <right>
+                            <value value-decimals='2' value-autoint='on'>
+                                <t t-esc='line.quantity' />
+                            </value>
+                            <t t-if='line.uom !== "Unit(s)"'>
+                                <t t-esc='line.uom' />
+                            </t>
+                        </right>
+                        <right>
+                            <value><t t-esc='line.price_unit' /></value>
+                        </right>
+                    </line>
+                    <t t-if='line.discount !== 0'>
+                        <line indent='1'><left>Discount: <t t-esc='line.discount' />%</left></line>
+                    </t>
+                </t>
+            </div>
+
+            <br/>
+            <line><left>------------------------</left></line>
+            <br/>
+
+            <line>
+                <left>Payments:</left>
+            </line>
+            <line t-foreach='payments' t-as='payment'>
+                <left><t t-esc='payment.name' /></left>
+                <right>
+                    <t t-esc='widget.format_currency_no_symbol(payment.total)'/>
+                </right>
+            </line>
+
+            <br/>
+            <line><left>------------------------</left></line>
+            <br/>
+
+            <line>
+                <left>Taxes:</left>
+            </line>
+            <line t-foreach='taxes' t-as='taxe'>
+                <left><t t-esc='taxe.name' /></left>
+                <right>
+                    <t t-esc='widget.format_currency_no_symbol(taxe.tax_amount)'/>
+                </right>
+            </line>
+
+            <br/>
+            <line><left>------------------------</left></line>
+            <br/>
+
+            <line>
+                <left>Total:</left>
+                <right>
+                    <t t-esc='widget.format_currency_no_symbol(total_paid)'/>
+                </right>
+            </line>
+
+            <br/>
+            <div font='b'>
+                <div><t t-esc='date' /></div>
+            </div>
+
+        </div>
+    </t>
+</templates>

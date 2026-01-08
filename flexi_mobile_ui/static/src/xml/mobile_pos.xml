@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="MobileLeftPaneButton">
+        <div class="oe_status pos-show-leftpane">
+            <div class="js_connected oe_icon">
+                <span class="icon-and-badge">
+                  <i aria-label="Order info and actions" role="img" title="Order info and actions"
+                     class="fa fa-fw fa-th-list"></i>
+                    <t t-if="widget.pos.get_order() and widget.pos.get_order().orderlines.length">
+                    <span class="badge"><t t-esc="widget.pos.get_order().orderlines.length" /></span>
+                  </t>
+                </span>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="MobileMoreControlsButton">
+        <span class="control-button show-all-controls">
+            <span class="show-all"><i class="fa fa-ellipsis-h"></i>Show All</span>
+            <span class="show-less"><i class="fa fa-angle-down"></i>Show less</span>
+        </span>
+    </t>
+
+    <t t-name="MobileHideKbButton">
+        <button class="close-keyboard">
+            <span class="show-kb"><i class="fa fa-calculator"></i>Show
+                <i class="fa fa-angle-up"></i></span>
+            <span class="hide-kb"><i class="fa fa-calculator"></i>Hide
+                <i class="fa fa-angle-down"></i></span>
+        </button>
+    </t>
+
+    <t t-name="MobileHideCatsButton">
+        <button class="close-cats">
+            <span class="show-cats"><i class="fa fa-th"></i>Show categories
+                <i class="fa fa-angle-down"></i></span>
+            <span class="hide-cats"><i class="fa fa-th"></i>Hide categories
+                <i class="fa fa-angle-up"></i></span>
+        </button>
+    </t>
+
+
+    <t t-extend="Chrome">
+        <t t-jquery="div.pos-topheader" t-operation="replace">
+            <div class="pos-rightheader">
+                <span class="placeholder-OrderSelectorWidget"></span>
+                <div class="pos-branding">
+                    <img class="pos-logo" src="/point_of_sale/static/src/img/logo.png" alt="Logo"/>
+                    <span class="placeholder-UsernameWidget"></span>
+                </div>
+            </div>
+        </t>
+    </t>
+
+    <t t-extend="OrderSelectorWidget" t-name="OrderSelectorWidget">
+        <t t-jquery=".order-selector" t-operation="replace">
+            <div class="order-selector switched_on">
+                <div class="toggle_btn">
+                    <span class="order-button square toggle-orders">
+                        <i class='fa fa-toggle-off' role="img" aria-label="Toggle orders" title="Toggle orders"/>
+                    </span>
+                </div>
+                <div class="orders order-selector-contents touch-scrollable">
+                    <div class="add_remove">
+                        <span class="order-button square neworder-button">
+                            <i class='fa fa-plus' role="img" aria-label="New order" title="New order"/>
+                        </span>
+                        <span class="order-button square deleteorder-button">
+                            <i class='fa fa-minus' role="img" aria-label="Delete order" title="Delete order"/>
+                        </span>
+                    </div>
+                    <div class="order-numbers">
+                        <t t-foreach="widget.pos.get_order_list()" t-as="order">
+                            <t t-if='order === widget.pos.get_order()'>
+                                <span class="order-button select-order selected" t-att-data-uid="order.uid">
+                                    <span class='order-sequence'>
+                                        <t t-esc='order.sequence_number'/>
+                                    </span>
+                                    <t t-esc="moment(order.creation_date).format('hh:mm')"/>
+                                </span>
+                            </t>
+                            <t t-if='order !== widget.pos.get_order()'>
+                                <span class="order-button select-order" t-att-data-uid="order.uid">
+                                    <span class='order-sequence'>
+                                        <t t-esc='order.sequence_number'/>
+                                    </span>
+                                </span>
+                            </t>
+                        </t>
+                    </div>
+                    <div class="order-information oe_hidden">
+                                    <span>DRAFT ORDER</span>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </t>
+
+</templates>
