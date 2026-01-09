@@ -665,9 +665,12 @@ height : 40px !important ;
 .pos .paymentlines-container {
 	border-bottom: solid 1px #3e3e3e;
     overflow: auto;
-    height: 200px;
+    height: 130px;
 }
 
+.pos .paymentlines-container {
+padding: 0px;
+}
 .pos .actionpad .button:hover {
 	background: #7982a6;
 	color: #fff;

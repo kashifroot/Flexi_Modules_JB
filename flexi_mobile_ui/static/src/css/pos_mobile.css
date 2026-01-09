@@ -5,6 +5,9 @@
     display: none;
 }
 
+.pos .order{
+padding-top:0px;
+}
 
 .pos .subwindow .subwindow-container {
     display: block;
@@ -821,6 +824,7 @@
 
     .pos .numpad button {
         width: 25% !important;
+
     }
 
     .pos .product-list {

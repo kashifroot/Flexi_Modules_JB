@@ -87,7 +87,7 @@ odoo.define('flexi_mobile_ui.screens', function (require) {
             $('.order').addClass('collasped_subwindow');
             var kb = self.getParent().$('.leftpane>.window>.subwindow.collapsed');
             kb.toggleClass('collapsed');
-            $('.order-scroller')[0].style.setProperty('height', 'auto', 'important');
+            $('.order-scroller')[0].style.setProperty('height', 'calc(80vh - 100px)', 'important');
             $('.order').addClass('collasped_unsubwindow');
             $('.order').removeClass('collasped_subwindow');
 
@@ -99,15 +99,12 @@ odoo.define('flexi_mobile_ui.screens', function (require) {
                     $('.order').removeClass('collasped_unsubwindow');
                     $('.order-scroller')[0].style.setProperty('height', 'calc(80vh - 100px)', 'important');
                     //                .style.height='auto !important'
-
-
-
                 }
                 else {
                     $('.order').addClass('collasped_unsubwindow');
                     $('.order').removeClass('collasped_subwindow');
 //                     $('.order-scroller')[0].style.setProperty('height', 'calc(90vh - 100px)', 'important');
-                    $('.order-scroller')[0].style.height = "220px";
+                    $('.order-scroller')[0].style.height = "90px";
                 }
             });
         }
@@ -189,8 +186,9 @@ odoo.define('flexi_mobile_ui.screens', function (require) {
 //                    self.$('.leftpane').removeClass('show');
 //            });
 
-            if (this.$('.leftpane').height() > 650) {
+            if (this.$('.leftpane').height() < 650) {
                 this.$('.leftpane>.window>.subwindow.collapsed').removeClass('collapsed');
+                 self.$('.leftpane').addClass('show');
             }
 
         },

@@ -9,14 +9,14 @@
     <t t-extend="ProductScreenFlexiWidget">
         <t t-jquery=".left_option_menu.touch-scrollable.scrollable-y" position="replace"/>
     </t>
-    <t t-extend="PosCartCountWidget">
-        <t t-jquery="div#pos-cart" t-operation="replace">
-            <div id="pos-cart">
-                <div class="cart-num">0</div>
-                <div><img src="/flexi_retail_mobile/static/src/cart.png"/></div>
-            </div>
-        </t>
-    </t>
+<!--    <t t-extend="PosCartCountWidget">-->
+<!--        <t t-jquery="div#pos-cart" t-operation="replace">-->
+<!--            <div id="pos-cart">-->
+<!--                <div class="cart-num">0</div>-->
+<!--                <div><img src="/flexi_retail_mobile/static/src/cart.png"/></div>-->
+<!--            </div>-->
+<!--        </t>-->
+<!--    </t>-->
     <t t-extend="SliderWidget">
         <t t-jquery="#mysidebar" t-operation="after">
             <div id="slider2">
