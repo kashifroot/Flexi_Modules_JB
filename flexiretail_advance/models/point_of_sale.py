@@ -2878,7 +2878,8 @@ class pos_session(models.Model):
 			                                                                                         session.name,
 			                                                                                         int(journal_id),
 			                                                                                         company_id)
-			orders.with_context(force_company=company_id)._create_account_move_line(session, move)
+			if move:
+				orders.with_context(force_company=company_id)._create_account_move_line(session, move)
 			for order in session.order_ids.filtered(lambda o: o.state not in ['done', 'invoiced']):
 				if order.state not in ('draft'):
 					# raise UserError(_("You cannot confirm all orders of this session, because they have not the 'paid' status"))
