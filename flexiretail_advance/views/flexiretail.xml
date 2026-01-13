@@ -10,7 +10,7 @@
                         src="/flexiretail_advance/static/src/js/custom_flex.js"/>
                 <script type="text/javascript" src="/flexiretail_advance/static/src/js/screens.js"/>
                 <script type="text/javascript" src="/flexiretail_advance/static/src/js/models.js"/>
-                <script type="text/javascript" src="/flexiretail_advance/static/src/js/chrome.js"/>
+                <script type="text/javascript" src="/flexiretail_advance/static/src/js/chromes.js"/>
                 <script type="text/javascript" src="/flexiretail_advance/static/src/js/gui.js"/>
                 <script type="text/javascript" src="/flexiretail_advance/static/src/js/db.js"/>
                 <script type="text/javascript" src="/flexiretail_advance/static/src/js/popup.js"/>

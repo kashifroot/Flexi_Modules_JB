@@ -2874,7 +2874,7 @@ class pos_session(models.Model):
 			journal_id = self.env['ir.config_parameter'].sudo().get_param(
 				'pos.closing.journal_id_%s' % company_id, default=session.config_id.journal_id.id)
 			
-			move = self.env['pos.order'].with_context(force_company=company_id)._create_account_move(session.start_at,
+			move = self.env['pos.order'].with_context(force_company=company_id)._create_account_move(session.start_at or session.create_date,
 			                                                                                         session.name,
 			                                                                                         int(journal_id),
 			                                                                                         company_id)

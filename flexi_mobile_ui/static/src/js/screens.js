@@ -92,20 +92,12 @@ odoo.define('flexi_mobile_ui.screens', function (require) {
             $('.order').removeClass('collasped_subwindow');
 
             var kb1 = self.getParent().$('.leftpane>.window>.subwindow');
+            this.$('.show-kb').hide();
+            this.$('.hide-kb').show();
             this.$el.click(function (ev) {
-                kb.toggleClass('collapsed');
-                if (kb1.hasClass('collapsed')) {
-                    $('.order').addClass('collasped_subwindow');
-                    $('.order').removeClass('collasped_unsubwindow');
-                    $('.order-scroller')[0].style.setProperty('height', 'calc(80vh - 100px)', 'important');
-                    //                .style.height='auto !important'
-                }
-                else {
-                    $('.order').addClass('collasped_unsubwindow');
-                    $('.order').removeClass('collasped_subwindow');
-//                     $('.order-scroller')[0].style.setProperty('height', 'calc(90vh - 100px)', 'important');
-                    $('.order-scroller')[0].style.height = "90px";
-                }
+                $(this).closest('.subwindow-container-fix.pads').children().not('.close-keyboard').toggle();
+                $(this).find('.show-kb').toggle();
+                $(this).find('.hide-kb').toggle();
             });
         }
     });
@@ -180,15 +172,15 @@ odoo.define('flexi_mobile_ui.screens', function (require) {
 
             var widget2 = new MobileMoreControlsButton(this, {});
             widget2.prependTo(this.$('.control-buttons'));
-//
-//            $(window).click(function (event) {
-//                if (!$(event.target).closest('.orderline').length && !$(event.target).closest('.leftpane').length && !$(event.target).closest('.popup').length)
-//                    self.$('.leftpane').removeClass('show');
-//            });
+            //
+            //            $(window).click(function (event) {
+            //                if (!$(event.target).closest('.orderline').length && !$(event.target).closest('.leftpane').length && !$(event.target).closest('.popup').length)
+            //                    self.$('.leftpane').removeClass('show');
+            //            });
 
             if (this.$('.leftpane').height() < 650) {
                 this.$('.leftpane>.window>.subwindow.collapsed').removeClass('collapsed');
-                 self.$('.leftpane').addClass('show');
+                self.$('.leftpane').addClass('show');
             }
 
         },

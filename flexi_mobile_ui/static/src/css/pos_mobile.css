@@ -106,9 +106,17 @@ padding-top:0px;
     }
 
     .pos .actionpad {
-        width: 137px !important;
+        width: 30% !important;
     }
-
+.pos .numpad {
+    width:62%;
+    margin: 2px;
+    margin-top: 3px;
+    display:contents;
+}
+.pos .numpad .input-button, .pos .numpad .mode-button {
+margin-top:-5px;
+}
     .pos button.close-cats,
     .pos button.close-keyboard {
         display: block !important;
