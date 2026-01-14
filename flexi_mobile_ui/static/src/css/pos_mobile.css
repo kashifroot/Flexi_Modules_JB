@@ -116,6 +116,8 @@ padding-top:0px;
 }
 .pos .numpad .input-button, .pos .numpad .mode-button {
 margin-top:-5px;
+margin-bottom:-2px;
+        margin: -2px;
 }
     .pos button.close-cats,
     .pos button.close-keyboard {
