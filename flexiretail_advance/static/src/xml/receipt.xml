@@ -1062,9 +1062,12 @@
             <t t-if="widget.pos.config.company_id.enable_e_invoice">
                 <div class='row tax-invoice-header'>
                     <div class='col-11 text-center' style='font-size:15px;'>
-                        <b>E-Invoice</b><br/>
-                        Scan QR to Request<br/>
-                        <img t-att-src="'/report/barcode/QR/einvoice/' + str(''.join(c for c in str(order.pos_reference) if c.isdigit())) + '?width=120&amp;height=120'" alt="Barcode"/>
+                        <b>E-Invoice</b>
+                        <br/>
+                        Scan QR to Request
+                        <br/>
+                        <img t-att-src="'/report/barcode/QR/einvoice/' + str(''.join(c for c in str(order.pos_reference) if c.isdigit())) + '?width=120&amp;height=120'"
+                             alt="Barcode"/>
                         <!-- <t t-set='url' t-value="o.create_tax_url('einvoice')"/>
                         Tax Invoice : <span t-esc="url"/> -->
                     </div>
@@ -1072,9 +1075,14 @@
                 </div>
                 <div class='row tax-invoice-body' style="border-bottom:1px solid black;">
                     <div class='col-11' style='font-size:10px;'>
-                        <b>Request Timeline:</b><br/>
-                        <b>Start Date:</b> Next day after your purchase<br/>
-                        <b>Last Date:</b> 1st calendar day of the following month<br/>
+                        <b>Request Timeline:</b>
+                        <br/>
+                        <b>Start Date:</b>
+                        Next day after your purchase
+                        <br/>
+                        <b>Last Date:</b>
+                        1st calendar day of the following month
+                        <br/>
                         <i>(All requests must be submitted within the timeframe)</i>
                     </div>
                     <div class='col-1'/>
@@ -3002,14 +3010,14 @@
                     </td>
                     <td colspan="3"/>
                  </tr>
-                 <t t-if="receipt.header">
+                <t t-if="receipt.header">
                      <tr>
                          <td colspan="6" style="text-align:center;font-size:11px;">
                           <span class="tight-spacing">
                               <t t-esc="receipt.header"/>
                           </span>
                     </td>
-                    <td colspan="3"/>
+                         <td colspan="3"/>
                      </tr>
                 </t>
                 <tr>
@@ -3020,7 +3028,7 @@
                     </td>
                     <td colspan="3"/>
                  </tr>
-                  <tr>
+                <tr>
                     <td colspan="6" class="tight-spacing" style="text-align:center;font-size:11px;">
                           <span>
                              Tin:  <t t-esc="order.get_tin()"/>
@@ -3028,12 +3036,12 @@
                     </td>
                     <td colspan="3"/>
                  </tr>
-                 <tr>
+                <tr>
                     <td colspan="6" class="tight-spacing"
                         style="text-align:center;font-size:10px;">
                           <span t-esc="dateorder"/>
                     </td>
-                      <td colspan="3"/>
+                    <td colspan="3"/>
                  </tr>
                 <tr>
                     <td colspan="6" class="tight-spacing" style="text-align:center;font-size:10px;">
@@ -3057,7 +3065,7 @@
                                 <t t-esc="widget.get_15_char_product(orderline.get_product().name)"/>
                             </t>
                             </t>
-                             <t t-else="">
+                            <t t-else="">
                                  <t t-esc="orderline.get_product().name"/>
                              </t>
                         </td>
@@ -3066,17 +3074,18 @@
                         <td colspan="3" style="text-align:right;">
                             <t t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
                             <span>@</span>
-                             <t t-if="orderline.discount_amount > 0 || orderline.discount > 0">
+                            <t t-if="orderline.discount_amount > 0 || orderline.discount > 0">
                                        <t t-esc="widget.after_discount_price(orderline.quantity,orderline.get_display_price())"/>
-                                    <t t-set="discounted_price" t-value="widget.after_discount_price(orderline.quantity, orderline.get_display_price())"/>
-                                    <t t-if="discount_price == 1">
+                                <t t-set="discounted_price"
+                                   t-value="widget.after_discount_price(orderline.quantity, orderline.get_display_price())"/>
+                                <t t-if="discount_price == 1">
                                          <t t-esc="orderline.get_display_price()"/>
                                     </t>
-                                    <t t-else="">
+                                <t t-else="">
                                         <t t-esc="discounted_price"/>
                                     </t>
                                 </t>
-                                <t t-else="">
+                            <t t-else="">
                                       <t t-esc="widget.format_currency_front(orderline.price)"/>
                                 </t>
                         </td>
@@ -3414,7 +3423,7 @@
         <div class="pos-sale-ticket">
             <div class="page">
                 <t t-set="dateorder" t-value="order.formatted_validation_date || order.date_order"/>
-            <!--   Yulia 12122024 change receipt format         -->
+                <!--   Yulia 12122024 change receipt format         -->
                 <table style="font-family: 'Arial Black'">
                    <!-- <tr>
                         <td colspan="9"/>
@@ -3422,8 +3431,8 @@
                     <tr>
                         <td>
 <!--          Yulia 18012025 use html entity nbsp                  -->
-                           &#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;
-                             &#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;
+                            &#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;
+                            &#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;
                             &#160;&#160;
                             <span>UNPAID</span>
                         </td>
@@ -3435,7 +3444,7 @@
                              &#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;
                              &#160;&#160;&#160;&#160;
                               <span>
-                                 <t t-esc="order.get_sticker()"/> <t t-esc="order.get_tour_code()"/>
+                                 Sticker: <t t-esc="order.sticker"/>
                               </span>
                         </td>
                     </tr>
@@ -3448,14 +3457,21 @@
                               </span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr t-if="widget.salesperson_name">
+                        <td style="text-align:left">
+                              &#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;
+                             &#160;&#160;&#160;
+                            User: <t t-esc="widget.user_salesperson"/>
+                        </td>
+                    </tr>
+                    <tr t-else="">
                         <td style="text-align:left">
                               &#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;
                              &#160;&#160;&#160;
                             User: <t t-esc="widget.pos.get_cashier().name"/>
-
                         </td>
                     </tr>
+
                 </table>
                 <br/>
 
@@ -3466,14 +3482,14 @@
                             <td style="font-family: 'Arial Black';text-align:left;">
                               <t t-if="orderline.get_product().default_code">
                                     <t t-esc="orderline.get_product().default_code"/>
-                                    <t t-if="orderline.get_product().second_name">
+                                  <t t-if="orderline.get_product().second_name">
                                     <t t-esc="orderline.get_product().second_name"/>
                                     </t>
-                                    <t t-else="">
+                                  <t t-else="">
                                     <t t-esc="widget.get_15_char_product(orderline.get_product().name)"/>
                                 </t>
                                 </t>
-                                 <t t-else="">
+                                <t t-else="">
                                      <t t-esc="orderline.get_product().name"/>
                                  </t>
                             </td>
@@ -3481,11 +3497,13 @@
 
                         <tr>
                             <td style="margin-left:-20px">
-                                  &#160;&#160;&#160;&#160;<t t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
+                                  &#160;&#160;&#160;&#160;<t
+                                    t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
                                 <span>@</span>
                                 <t t-if="orderline.discount_amount > 0 || orderline.discount > 0">
                                        <t t-esc="widget.after_discount_price(orderline.quantity,orderline.get_display_price())"/>
-                                    <t t-set="discounted_price" t-value="widget.after_discount_price(orderline.quantity, orderline.get_display_price())"/>
+                                    <t t-set="discounted_price"
+                                       t-value="widget.after_discount_price(orderline.quantity, orderline.get_display_price())"/>
                                     <t t-if="discount_price == 1">
                                          <t t-esc="orderline.get_display_price()"/>
                                     </t>
@@ -3504,13 +3522,13 @@
                             </td>
                         </tr>
                     </t>
-                   <!-- <tr height="20px;"></tr>-->
+                    <!-- <tr height="20px;"></tr>-->
 
                     <tr>
                             <td>
                                 <b>Total:</b>
                             </td>
-                            <td style="text-align:left">
+                        <td style="text-align:left">
                                  <t t-if="order.get_credit_detail()">
                                     <t t-set="net_total" t-value="0"/>
                                      <t t-foreach="order.get_credit_detail()" t-as="credit">
@@ -3518,7 +3536,7 @@
                                     </t>
                                      <t t-esc="widget.format_currency_front(order.getNetTotalTaxIncluded() + net_total)"/>
                                 </t>
-                                <t t-else="">
+                            <t t-else="">
                                     <t t-esc="widget.format_currency_front(order.getNetTotalTaxIncluded())"/>
                                 </t>
 
