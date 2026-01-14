@@ -106,10 +106,10 @@ padding-top:0px;
     }
 
     .pos .actionpad {
-        width: 30% !important;
+        width: 25% !important;
     }
 .pos .numpad {
-    width:62%;
+    width:60%;
     margin: 2px;
     margin-top: 3px;
     display:contents;
