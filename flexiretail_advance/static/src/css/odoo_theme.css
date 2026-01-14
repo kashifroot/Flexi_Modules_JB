@@ -736,6 +736,9 @@ padding: 0px;
 .pos .actionpad .button.pay .pay-circle {
 	background: #959595;
 	color: white;
+	    line-height: 44px;
+    line-height: 44px;
+
 }
 
 .pos .actionpad .button:hover .pay-circle {
