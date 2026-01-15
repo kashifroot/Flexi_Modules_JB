@@ -1320,6 +1320,17 @@ ul.tabs-menu li {
 }
 @media ( min-width :220px) and (max-width:760px) {
 
+.numpad-resetbtn{
+height: max-content;
+    font-size: 13px;
+    margin-top: 1px;
+    margin-left: 1px;
+}
+
+.pos .payment-buttons{
+ padding: 30px;
+}
+
 .pos .orderlist-screen .order-list {
 display: block;
 

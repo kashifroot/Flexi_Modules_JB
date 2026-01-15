@@ -132,7 +132,7 @@
                    </div>
                     <div class="payment_btn_top1" style="z-index:1">
 
-	                    <h1 class="paymenttotalset">Payment of <span id="payment_total"/></h1>
+<!--	                    <h1 class="paymenttotalset">Payment of <span id="payment_total"/></h1>-->
                         <t t-if="widget.pos.config.enable_rounding and widget.pos.get_cashier().access_rounding and !widget.pos.config.auto_rounding
                                 and widget.pos.get_order().get_sale_mode() and !widget.pos.get_order().get_invoice_id()">
 	                    	<span class='button rounding rounding_btn'>
@@ -178,7 +178,7 @@
                 </div>
                 <div class='left-content pc40 touch-scrollable scrollable-y' style="right: 35%;">
                 	<div>
-                        <div class='paymentmethods-container'/>
+                        <div class='paymentmethods-container' style="margin-bottom: -71px;"/>
                         <t t-call="FromCredit"/>
                         <section class='paymentlines-container'>
                         </section>

@@ -28,16 +28,14 @@
             <br/>
             <button style="height: max-content;" class="mode-button" data-mode='discountAmnt'>Disc I</button>
             <button style="height: max-content;" class="mode-button" data-mode='discountTotal'>Disc T</button>
-                        <button style="height: max-content;" class="mode-button" data-mode='discountTotalPercent'>Disc T%</button>
+            <button style="height: max-content;" class="mode-button" data-mode='discountTotalPercent'>Disc T%</button>
 <!--            //             kasihf 22jan25: added reset button in pos functionality-->
 
-                        <button style="height: max-content;"  class="numpad-reset">
-                            <span>reset</span>
-                            <span class="fa fa-refresh" width="24" height="21"/>
+                    <button style="height: max-content;font-size:15px;margin-top: 1px;margin-bottom:1px"  class="numpad-reset numpad-resetbtn">
+                        <span>reset</span>
+                        <span class="fa fa-refresh" width="22" height="20"/>
 
-                        </button>
-
-
+                    </button>
         </div>
     </t>
     <t t-extend="Chrome">
