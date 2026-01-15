@@ -479,9 +479,12 @@ odoo.define('flexiretail_advance.db', function (require) {
             if(order.pos_reference){
                 str += '|' + order.pos_reference;
             }
-            if(order.partner_id.length > 0){
+            if(order.partner_id){
+              if(order.partner_id.length > 0){
                 str += '|' + order.partner_id[1];
             }
+            }
+
             str = '' + order.id + ':' + str.replace(':','') + '\n';
             return str;
         },

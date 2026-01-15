@@ -337,10 +337,10 @@
                 t-att-data-id='order.id'>
                 <td><t t-esc='order.pos_reference' /></td>
 
-                <td><t t-esc='order.create_uid' /></td>
+                <td><t t-esc='sp_name' /></td>
                 <td><t t-esc='order.sticker' /></td>
 
-                <td><t t-esc='widget.format_currency(order.amount_due) or ""' /></td>
+                <td><t t-esc='widget.format_currency(order.amount_total) or ""' /></td>
                 <td>
                     <span id="pay_quick_order" t-att-data-id='order.id' style="cursor:pointer;font-size: 27px;">
                         <i class="fa fa-money"></i>

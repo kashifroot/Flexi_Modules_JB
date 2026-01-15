@@ -4344,7 +4344,9 @@ self._super(val);
 	    pay_order_due: function(event, order_id){
 	        var self = this;
 	        var order_id = event ? parseInt($(event.currentTarget).data('id')) : order_id;
-	        var result = self.pos.db.get_order_by_id(order_id);
+//	        var result = self.pos.db.get_order_by_id(order_id);
+var result=false;
+
 
 	        if(self.pos.config.orders_sync && self.pos.get_cashier().pos_user_type=="salesman"){
 	        	self.pos.db.notification('danger',"You don't have access rights to this operation.");

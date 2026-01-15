@@ -3457,11 +3457,11 @@
                               </span>
                         </td>
                     </tr>
-                    <tr t-if="widget.salesperson_name">
+                    <tr t-if="order.salesperson_name">
                         <td style="text-align:left">
                               &#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;
                              &#160;&#160;&#160;
-                            User: <t t-esc="widget.user_salesperson"/>
+                            User: <t t-esc="order.salesperson_name"/>
                         </td>
                     </tr>
                     <tr t-else="">

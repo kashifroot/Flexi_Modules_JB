@@ -139,25 +139,25 @@ odoo.define('flexiretail_advance.chrome', function (require) {
 					return item.state == 'draft'
 				});
 
-					var params = {
-						model: 'pos.order',
-						method: 'search_read',
-						domain: [['state', '=', 'draft']],
-						limit: 20,
-						order: 'id desc',
+				var params = {
+					model: 'pos.order',
+					method: 'search_read',
+					domain: [['state', '=', 'draft']],
+					limit: 20,
+					order: 'id desc',
+				}
+				rpc.query(params, { async: false }).then(function (orders) {
+					if (orders && orders.length > 0) {
+						var current_orders = self.pos.get('pos_order_list') || [];
+						var new_orders = _.filter(orders, function (o) {
+							return !_.findWhere(current_orders, { id: o.id });
+						});
+						self.pos.set({ 'pos_order_list': current_orders.concat(new_orders) });
+						self.render_sale_note_order_list(orders);
+					} else {
+						self.render_sale_note_order_list([]);
 					}
-					rpc.query(params, { async: false }).then(function (orders) {
-						if (orders && orders.length > 0) {
-							var current_orders = self.pos.get('pos_order_list') || [];
-							var new_orders = _.filter(orders, function (o) {
-								return !_.findWhere(current_orders, { id: o.id });
-							});
-							self.pos.set({ 'pos_order_list': current_orders.concat(new_orders) });
-							self.render_sale_note_order_list(orders);
-						} else {
-							self.render_sale_note_order_list([]);
-						}
-					});
+				});
 
 				$('#draggablePanelList_sale_note.draft_order .head_data_sale_note').html(_t("Orders"));
 				$('#draggablePanelList_sale_note.draft_order .panel-body').html("Message-Box Empty");
@@ -221,6 +221,48 @@ odoo.define('flexiretail_advance.chrome', function (require) {
 			cross_tab._isMasterTab = true;
 			this.call('bus_service', 'startPolling');
 			this.call('bus_service', '_poll');
+
+			if (this.pos.user.pos_user_type === 'cashier') {
+				this.refresh_draft_orders();
+				setInterval(function () {
+					self.refresh_draft_orders();
+				}, 10000);
+			}
+		},
+		refresh_draft_orders: function () {
+			var self = this;
+			var current_orders = self.pos.get('pos_order_list') || [];
+			var last_id = 0;
+			if (current_orders.length > 0) {
+				last_id = _.max(current_orders, function (o) { return o.id; }).id;
+			}
+			var domain = [['state', '=', 'draft']];
+			if (last_id > 0) {
+				domain.push(['id', '>', last_id]);
+			}
+			var params = {
+				model: 'pos.order',
+				method: 'search_read',
+				domain: domain,
+				fields: ['id', 'name', 'state', 'sticker', 'pos_reference', 'amount_total', 'amount_due', 'salesperson_name', 'user_id'],
+				limit: 20,
+				order: 'id desc',
+			}
+			rpc.query(params).then(function (orders) {
+				if (orders && orders.length > 0) {
+					var updated_orders = current_orders.concat(orders);
+					updated_orders = _.uniq(updated_orders, function (o) { return o.id; });
+					self.pos.set({ 'pos_order_list': updated_orders });
+				}
+				// Re-render the full draft list from the updated local state
+				var all_drafts = _.filter(self.pos.get('pos_order_list'), function (o) {
+					return o.state === 'draft';
+				});
+				all_drafts = _.sortBy(all_drafts, function (o) {
+					return -o.id;
+				});
+				self.render_sale_note_order_list(all_drafts);
+			});
 		},
 		save_receipt_for_reprint: function () {
 			var self = this;
@@ -385,14 +427,16 @@ odoo.define('flexiretail_advance.chrome', function (require) {
 				if (orders) {
 					var contents = $('.message-panel-body1');
 					contents.html("");
+
 					var order_count = 0;
 					for (var i = 0, len = Math.min(orders.length, 1000); i < len; i++) {
 						var order = orders[i];
+						var salesperson_name = order.salesperson_name || (order.user_id ? order.user_id[1] : "-");
 						if (order.state == "draft" && order.sticker) {
 							order_count++;
 							var orderlines = [];
 							order.amount_total = parseFloat(order.amount_total).toFixed(2);
-							var clientline_html = QWeb.render('SaleNoteQuickWidgetLinesticker', { widget: this, order: order, orderlines: orderlines });
+							var clientline_html = QWeb.render('SaleNoteQuickWidgetLinesticker', { widget: this, order: order, orderlines: orderlines, sp_name: salesperson_name });
 							var clientline = document.createElement('tbody');
 							clientline.innerHTML = clientline_html;
 							clientline = clientline.childNodes[1];

@@ -3657,6 +3657,9 @@ class pos_session(models.Model):
 			for order in pos_orders:
 				if order.test_paid():
 					order.action_pos_order_paid()
+				else:
+					#kashif 15 jan 25:  Delete draft orders that are not paid when closing the session
+					order.unlink()
 		return super().action_pos_session_close()
 
 

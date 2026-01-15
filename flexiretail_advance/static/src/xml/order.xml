@@ -97,8 +97,13 @@
         <tr class='client-line' t-att-data-id='order.id'>
             <td><t t-esc='order.name' /></td>
             <td><t t-esc='order.pos_reference' /></td>
-            <td class="partner_details"><t t-esc='order.partner_id[1]' /></td>
-            <td><t t-esc='order.salesman_id[1]' /></td>
+            <td class="partner_details">
+    <t t-if="order.partner_id">
+        <t t-esc="order.partner_id[1]"/>
+    </t>
+</td>
+
+            <td> <t t-if="order.salesman_id"><t t-esc='order.salesman_id[1]' /></t></td>
             <td><t t-esc='order.amount_total or ""' /></td>
             <t t-if="widget.pos.config and widget.pos.config.enable_order_reservation">
                 <td><t t-esc='widget.format_currency(order.amount_due) or ""' /></td>
