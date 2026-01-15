@@ -883,7 +883,7 @@ function decimalAdjust(value){
 				     return item.state == 'draft'
 				});
 	        	$('.notification-count').show();
-	        	$('.draft_order_count').text(draft_orders.length);
+//	        	$('.draft_order_count').text(draft_orders.length);
 //	        	$('.sale_note_icon_widget').css('display','inherit');
 	        	user=this.user;
 			} else{
