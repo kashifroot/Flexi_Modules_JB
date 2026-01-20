@@ -3402,6 +3402,23 @@
                     </tr>
                 </tbody>
             </table>
+<!--           Kashif 19 jan 25:  QR Image Area-->
+            <t t-if="data and data.taxqr">
+                <div style="text-align:center; margin-top:10px;">
+                    <div style="font-size:15px; font-weight:bold;">E-Invoice</div>
+                    <div style="font-size:12px;">Scan QR to Request</div>
+                </div>
+                <div style="text-align:center; padding:10px 0; border-bottom:1px solid black;">
+                    <img t-att-src="data.taxqr" style="max-width:200px; height:auto;"/>
+                    <div style="font-size:10px; text-align:left; padding:0 20px;">
+                        <b>Request Timeline:</b><br/>
+                        <b>Start Date:</b> Next day after your purchase<br/>
+                        <b>Last Date:</b> Within <span t-esc='taxInvoiceTimeframe'/> days from your purchase<br/>
+                        <i>(All requests must be submitted within the timeframe)</i>
+                    </div>
+                </div>
+            </t>
+<!--            END-->
             <t t-if="receipt.footer">
                 <br/>
                 <table>

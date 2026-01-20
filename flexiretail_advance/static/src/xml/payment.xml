@@ -118,6 +118,10 @@
 	                        <i class="fa fa-angle-double-left"></i>
                             Back
 	                    </span>
+                        <span class="button edit_order" style="display: flow-root;">
+                            <i class="fa fa-pencil-square-o"></i>
+                            Edit
+                        </span>
                        <span class="button js_set_customer">
 	                        <i class='fa fa-user'/>
                            <span class='js_customer_name'>
