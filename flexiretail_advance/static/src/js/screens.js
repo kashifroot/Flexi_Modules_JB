@@ -4166,7 +4166,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 							}
 							else{
 
-                                var url = base_url + '/einvoice/' +  order.uid
+                                var url ='https://api.qrserver.com/v1/create-qr-code/?size=250x250&data='+ base_url + '/einvoice/' +  order.uid
                                 qr_data = {
 									type: 'url',
 									taxqr: url,
