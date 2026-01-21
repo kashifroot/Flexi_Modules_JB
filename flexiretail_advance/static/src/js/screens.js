@@ -4163,6 +4163,15 @@ odoo.define('flexiretail_advance.screens', function (require) {
 									taxInvoiceTimeframe: result.timeframe || 30
 								};
 							}
+							else{
+                                var base_url = this.getSession()['web.base.url'];
+                                var url = base_url + '/einvoice/' +  order.uid
+                                qr_data = {
+									type: 'url',
+									taxqr: url,
+									taxInvoiceTimeframe: 3
+								};
+							}
 						});
 //						.catch(function (error) {
 //							console.error('Error fetching E-Invoice QR:', error);
