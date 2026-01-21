@@ -4151,6 +4151,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 						// Kashif 19 jan 25: Invoke action_einvoice_qr to get QR code
 						var self = this;
 						var qr_data = {};
+						 var base_url = this.getSession()['web.base.url'];
 						rpc.query({
 							model: 'pos.order',
 							method: 'action_einvoice_qr',
@@ -4164,7 +4165,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 								};
 							}
 							else{
-                                var base_url = this.getSession()['web.base.url'];
+
                                 var url = base_url + '/einvoice/' +  order.uid
                                 qr_data = {
 									type: 'url',
