@@ -4156,7 +4156,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 							method: 'action_einvoice_qr',
 							args: [[],order.name],
 						}, { async: false }).then(function (result) {
-							if (result) {
+							if (result && result['url'] !=="") {
 								qr_data = {
 									type: result.type || 'url',
 									taxqr: result.url || '',
