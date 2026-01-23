@@ -150,9 +150,18 @@ class ProductProduct(models.Model):
 	pos_sequence = fields.Integer(
 		string='POS Sequence',
 		compute='_compute_pos_sequence',
-		store=True,
-		help='Auto sequence based on POS sales — higher sales get smaller sequence numbers.'
+		help='Computed sequence based on sales quantity (Most sold has lower sequence)'
 	)
+
+	def _compute_pos_sequence(self):
+		"""Assign lower sequence numbers to higher-selling products."""
+		all_products = self.search([('available_in_pos', '=', True)])
+		# Sort by total_sold_qty descending (most sold = top)
+		sorted_prods = all_products.sorted(lambda p: p.total_sold_qty, reverse=True)
+		seq = 1
+		for prod in sorted_prods:
+			prod.pos_sequence = seq
+			seq += 1
 	
 	def _compute_total_sold_qty(self):
 		"""Compute total sold quantity per product from POS order lines."""
@@ -164,16 +173,6 @@ class ProductProduct(models.Model):
 				('order_id.state', 'in', ['paid', 'invoiced', 'done'])
 			])
 			product.total_sold_qty = sum(lines.mapped('qty'))
-	
-	def _compute_pos_sequence(self):
-		"""Assign lower sequence numbers to higher-selling products."""
-		all_products = self.search([])
-		# Sort by total_sold_qty descending (most sold = top)
-		sorted_prods = all_products.sorted(lambda p: p.total_sold_qty, reverse=True)
-		seq = 1
-		for prod in sorted_prods:
-			prod.pos_sequence = seq
-			seq += 1
 	
 	def name_get(self):
 		result = []
@@ -189,12 +188,24 @@ class ProductProduct(models.Model):
 	def load_latest_product(self, write_date, fields, context):
 		variant_ids = self.with_context(context).search(
 			[("sale_ok", "=", True), ("available_in_pos", "=", True)])
+		
+		# Sort variants in Python because pos_sequence is computed and not stored
+		# We need to ensure 'pos_sequence' is read to trigger computation
+		# And since we defined pos_sequence = -sales, sorting by it (default ASC) puts most sold first.
+		
+		# Read data including pos_sequence
+		variants_data = variant_ids.read(fields + ['pos_sequence'])
+		
+		# Sort by pos_sequence (ascending)
+		# variants_data.sort(key=lambda x: x.get('pos_sequence', 0),reverse=True)
+
 		tmpl_ids = [x.product_tmpl_id.id for x in variant_ids]
 		tmpl_ids = list(dict.fromkeys(tmpl_ids))
 		product_ids = self.env['product.template'].search([('id', 'in', tmpl_ids)])
+		
 		return {
 			'product_tmpl': product_ids.read(),
-			'variants': variant_ids.read(fields)
+			'variants': variants_data
 		}
 	
 	@api.model

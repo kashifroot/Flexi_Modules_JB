@@ -222,12 +222,17 @@ class DataSet(http.Controller):
     def load_products_template(self, **kw):
         cr, uid, context = request.cr, request.uid, request.context
         product_ids = eval(kw.get('product_ids'))
-        fields = eval(kw.get('fields'))
+        fields = eval(kw.get('fields')) + ['pos_sequence']
         stock_location_id = eval(kw.get('stock_location_id'))
         if product_ids and fields:
             records = request.env['product.product'].with_context(
                 {'location': stock_location_id, 'compute_child': False}).search_read([('id', 'in', product_ids)],
-                                                                                     fields)
+                                                                                     fields,)
+            if records:
+	            #kashif 22 jan 26: pos show most sales product on top
+                # Sort by pos_sequence (Ascending: -100 comes before -5, so High Sales before Low Sales)
+                records.sort(key=lambda x: x.get('pos_sequence', 0))
+            
             template_ids = []
             if records:
                 for each_rec in records:
