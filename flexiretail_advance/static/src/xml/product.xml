@@ -790,12 +790,12 @@
         </div>
     </t>
 
-    <t t-name="PosCartCountWidget">
-        <div id="pos-cart">
-	        <span><img src="/flexiretail_advance/static/src/img/cart/cart.png"/></span>
-            <span class="cart-num">0</span>
-        </div>
-    </t>
+<!--    <t t-name="PosCartCountWidget">-->
+<!--        <div id="pos-cart">-->
+<!--	        <span><img src="/flexiretail_advance/static/src/img/cart/cart.png"/></span>-->
+<!--            <span class="cart-num">0</span>-->
+<!--        </div>-->
+<!--    </t>-->
 
     <t t-name="ProductList">
         <t t-foreach='products' t-as='product'>
