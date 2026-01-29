@@ -27,7 +27,8 @@ odoo.define('flexiretail_advance.models', function (require) {
         'remaining_loyalty_amount', 'loyalty_points_earned',
         'total_remaining_points', 'remaining_wallet_amount', 'credit_limit',
         'property_product_pricelist', 'remaining_credit_amount',
-        'property_account_receivable_id', 'parent_id', 'remaining_debit_amount', 'debit_limit']);
+        'property_account_receivable_id', 'parent_id', 'remaining_debit_amount', 'debit_limit',
+        'buyer_tin_no', 'brn_no']);
     models.load_fields("product.product", ['sequence', 'qty_available', 'type', 'is_packaging', 'product_brand_id', 'loyalty_point',
         'is_dummy_product', 'invoice_policy', 'return_valid_days', 'non_refundable', 'write_date',
         'attribute_value_ids', 'lst_price', 'second_name', 'name']);
@@ -304,7 +305,7 @@ odoo.define('flexiretail_advance.models', function (require) {
                         return new models.Product({}, product);
                     });
                     // Sort by pos_sequence (Ascending: -100 comes before -5, so High Sales before Low Sales)
-//                    setup_prd = _.sortBy(setup_prd, 'pos_sequence');
+                    //                    setup_prd = _.sortBy(setup_prd, 'pos_sequence');
                     var prod_obj = self.gui.screen_instances.products.product_list_widget;
                     var current_pricelist = prod_obj._get_active_pricelist();
                     _.map(setup_prd, function (product) {
@@ -2028,6 +2029,13 @@ odoo.define('flexiretail_advance.models', function (require) {
                 return
             }
             _super_Order.set_client.apply(this, arguments);
+            if (client) {
+                this.set_tin(client.buyer_tin_no);
+                this.set_brn(client.brn_no);
+            } else {
+                this.set_tin(false);
+                this.set_brn(false);
+            }
             if (this.pos.gui.get_current_screen() == 'products') {
                 if (client) {
                     $('.c-user').text(client.name);
@@ -3130,6 +3138,8 @@ odoo.define('flexiretail_advance.models', function (require) {
                 order_on_debit: this.get_order_on_debit() || false,
                 pos_normal_receipt_html: this.get_pos_normal_receipt_html() || '',
                 pos_xml_receipt_html: this.get_pos_xml_receipt_html() || '',
+                tin: this.get_tin() || false,
+                brn: this.get_brn() || false,
             }
             $.extend(orders, new_val);
             return orders;

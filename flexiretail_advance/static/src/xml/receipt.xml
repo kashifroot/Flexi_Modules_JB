@@ -3028,10 +3028,10 @@
                     </td>
                     <td colspan="3"/>
                  </tr>
-                <tr>
+                              <tr>
                     <td colspan="6" class="tight-spacing" style="text-align:center;font-size:11px;">
                           <span>
-                             Tin:  <t t-esc="order.get_tin()"/>
+                             Tin: <t t-esc="order.get_tin()"/>
                           </span>
                     </td>
                     <td colspan="3"/>
@@ -3404,13 +3404,13 @@
             </table>
 <!--           Kashif 19 jan 25:  QR Image Area-->
             <t t-if="data and data.taxqr">
-                <div style="text-align:center; margin-top:10px;">
+                <div style="text-align:left;">
                     <div style="font-size:15px; font-weight:bold;">E-Invoice</div>
                     <div style="font-size:12px;">Scan QR to Request</div>
                 </div>
-                <div style="text-align:center; padding:10px 0; border-bottom:1px solid black;">
-                    <img t-att-src="data.taxqr" style="max-width:200px; height:auto;"/>
-                    <div style="font-size:10px; text-align:left; padding:0 20px;">
+                <div style="text-align:left; padding:10px 0;">
+                    <img t-att-src="data.taxqr" style="max-width:80px; height:80px;padding: 3px;"/>
+                    <div style="font-size:10px; text-align:left; padding:0 0px;max-width: 160px;">
                         <b>Request Timeline:</b><br/>
                         <b>Start Date:</b> Next day after your purchase<br/>
                         <b>Last Date:</b> Within <span t-esc='taxInvoiceTimeframe'/> days from your purchase<br/>
@@ -3420,7 +3420,7 @@
             </t>
 <!--            END-->
             <t t-if="receipt.footer">
-                <br/>
+<!--                <br/>-->
                 <table>
                     <tr>
                         <td colspan="6" style="text-align:center;">

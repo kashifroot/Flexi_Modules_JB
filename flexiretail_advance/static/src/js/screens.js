@@ -2157,6 +2157,14 @@ odoo.define('flexiretail_advance.screens', function (require) {
 		validate_order: function (force_validation) {
 			var self = this;
 			var order = this.pos.get_order();
+
+			if (order.get_due() > 0) {
+				this.gui.show_popup('flexi_alert', {
+					'title': _t('Amount Error'),
+					'body': _t('Amount should be equal or greater than due amount'),
+				});
+				return false;
+			}
 			// var value_picking_debit = $('.create_picking_debit').find('i').hasClass('fa-toggle-on')
 			// if(value_picking_debit){
 			//     self.pos.get_order().set_order_make_picking(value_picking_debit)
@@ -2484,7 +2492,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 		click_set_customer: function () {
 			var order = this.pos.get_order();
 			if (order.get_cancel_order() || order.get_paying_due()) {
-				return
+				this._super();
 			}
 			if (!order.get_paying_order()) {
 				this._super();
@@ -4151,37 +4159,37 @@ odoo.define('flexiretail_advance.screens', function (require) {
 						// Kashif 19 jan 25: Invoke action_einvoice_qr to get QR code
 						var self = this;
 						var qr_data = {};
-						 var base_url = this.getSession()['web.base.url'];
+						var base_url = this.getSession()['web.base.url'];
 						rpc.query({
 							model: 'pos.order',
 							method: 'action_einvoice_qr',
-							args: [[],order.name],
+							args: [[], order.name],
 						}, { async: false }).then(function (result) {
-							if (result && result['url'] !=="") {
+							if (result && result['url'] !== "") {
 								qr_data = {
 									type: result.type || 'url',
 									taxqr: result.url || '',
 									taxInvoiceTimeframe: result.timeframe || 30
 								};
 							}
-							else{
+							else {
 
-                                var url ='https://api.qrserver.com/v1/create-qr-code/?size=250x250&data='+ base_url + '/einvoice/' +  order.uid
-                                qr_data = {
+								var url = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + base_url + '/einvoice/' + order.uid
+								qr_data = {
 									type: 'url',
 									taxqr: url,
 									taxInvoiceTimeframe: 3
 								};
 							}
 						});
-//						.catch(function (error) {
-//							console.error('Error fetching E-Invoice QR:', error);
-//							qr_data = {
-//								type: 'url',
-//								taxqr: '',
-//								taxInvoiceTimeframe: 30
-//							};
-//						});
+						//						.catch(function (error) {
+						//							console.error('Error fetching E-Invoice QR:', error);
+						//							qr_data = {
+						//								type: 'url',
+						//								taxqr: '',
+						//								taxInvoiceTimeframe: 30
+						//							};
+						//						});
 
 						this.$('.pos-receipt-container').html(QWeb.render('PosTicket_custom', {
 

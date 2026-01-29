@@ -207,9 +207,9 @@ odoo.define('flexiretail_advance.chrome', function (require) {
 				});
 			}
 			self.slider_widget = new SliderWidget(this);
-			self.pos_cart_widget = new PosCartCountWidget(this);
+//			self.pos_cart_widget = new PosCartCountWidget(this);
 			self.slider_widget.replace(this.$('.placeholder-SliderWidget'));
-			self.pos_cart_widget.replace(this.$('.placeholder-PosCartCountWidget'));
+//			self.pos_cart_widget.replace(this.$('.placeholder-PosCartCountWidget'));
 			if (self.pos.config.enable_pos_login) {
 				self.gui.set_startup_screen('login');
 				self.gui.show_screen('login');
