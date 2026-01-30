@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+
+<odoo>
+    <data>
+        <record id="print_jobs_tree" model="ir.ui.view">
+            <field name="name">print.jobs.tree</field>
+            <field name="model">print.jobs</field>
+            <field name="arch" type="xml">
+                <tree string="" create="false" default_order="create_date desc" decoration-warning="state == 'Queue'" decoration-success="state == 'Done'" decoration-danger="state == 'Failed'" >
+                    <field name="create_date"/>
+                    <field name="create_uid"/>
+                    <field name="printer_id"/>
+                    <field name="method"/>
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="print_jobs_form" model="ir.ui.view">
+            <field name="name">print.jobs.form</field>
+            <field name="model">print.jobs</field>
+            <field name="arch" type="xml">
+                <form string="" create="false">
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="Queue,Done"/>
+                        <button name="retry_print" type="object" string="Retry" attrs="{'invisible':[('state', '=', 'Done')]}" class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <span>Record ID</span>
+                            <h1>
+                                <field name="id" readonly="True"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="printer_id" readonly="True"/>
+                                <field name="method" readonly="True"/>
+                                <field name="file_extension" attrs="{'invisible':[('file_extension', '=', False)]}" readonly="True"/>
+                            </group>
+                            <group>
+                                <field name="msg" attrs="{'invisible':[('state', '!=', 'Failed')]}" readonly="True" class="text-danger"/>
+                                <field name="create_date"/>
+                                <field name="create_uid"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Content">
+                                <div style="overflow-wrap: break-word;">
+                                    <field name="content"/>
+                                </div>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record> 
+
+        <record id="print_jobs_view" model="ir.actions.act_window">
+            <field name="name">Print Jobs</field>
+            <field name="res_model">print.jobs</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Print Jobs" sequence="3" id="print_jobs_menu" parent="wk_direct_printer_main_menu" action="print_jobs_view" />
+    </data>
+</odoo>

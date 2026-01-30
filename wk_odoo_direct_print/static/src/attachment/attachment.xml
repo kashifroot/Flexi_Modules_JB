@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+    <t t-extend="mail.Attachment">
+        <t t-jquery="a.o_attachment_download" t-operation="after">
+            <t t-if="!editable and !attachment.upload">
+                <t t-set="print_direct_label" t-value="'Print Direct'"/>
+                <div role="button" class="wk_print_direct justify-content-end d-flex mt-1 "
+                style="cursor: pointer;" t-att-title="print_direct_label" t-att-data-id="attachment.id">
+                    <i class="fa fa-print " aria-label="Print Direct"/>
+                </div>
+            </t>
+        </t>
+    </t>
+</templates>

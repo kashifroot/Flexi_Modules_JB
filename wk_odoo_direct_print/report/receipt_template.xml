@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<odoo noupdate="1">
+    <!-- Copyright (c) 2018-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+    <!-- See LICENSE URL <https://store.webkul.com/license.html/> for full copyright and licensing details. -->
+
+    <template id="escpos_receipt_sale_order">
+        <t t-foreach="docs" t-as="object">
+            <receipt>
+                <header>
+                    <div align="center">
+                        <h1 t-if="object.company_id" t-esc="object.company_id.name" />
+                        <t t-if="object.company_id.vat">
+                            <p>
+                                <t t-esc="object.company_id.vat" style="white-space:pre-line"/>
+                            </p>
+                        </t>
+                        <p t-if="object.company_id.phone" t-esc="object.company_id.phone" />
+                        <p t-if="object.company_id.email" t-esc="object.company_id.email" />
+                        <p t-if="object.company_id.website" t-esc="object.company_id.website" />
+                        <br/>
+                    </div>
+                    <line size='double-height' bold='on'>
+                        <left>
+                            <t t-esc="object.name" />
+                        </left>
+                        <right>Date: <span t-field="object.date_order"/>
+                        </right>
+                    </line>
+                    <hr/>
+                </header>
+                <footer>
+                    <div align="center">
+                        <p>
+                            <b>Thank you.</b>
+                        </p>
+                    </div>
+                </footer>
+            </receipt>
+        </t>
+    </template>
+
+    <template id="escpos_receipt_account_invoice">
+        <t t-foreach="docs" t-as="object">
+            <receipt>
+                <header>
+                    <div align="center">
+                        <h1 t-if="object.company_id" t-esc="object.company_id.name" />
+                        <t t-if="object.company_id.vat">
+                            <p>
+                                <t t-esc="object.company_id.vat" style="white-space:pre-line"/>
+                            </p>
+                        </t>
+                        <p t-if="object.company_id.phone" t-esc="object.company_id.phone" />
+                        <p t-if="object.company_id.email" t-esc="object.company_id.email" />
+                        <p t-if="object.company_id.website" t-esc="object.company_id.website" />
+                        <br/>
+                    </div>
+                    <line size='double-height' bold='on'>
+                        <left>
+                            <t t-esc="object.number" />
+                        </left>
+                        <right>Date: <span t-field="object.date_invoice"/>
+                        </right>
+                    </line>
+                    <hr/>
+                </header>
+                <line bold='on'>
+                    <left>Item --- Qty. Price</left>
+                    <right>Total Price</right>
+                </line>
+                <hr />
+                <t t-foreach="object.invoice_line_ids" t-as="line">
+                    <span t-field="line.name"/>
+                    <line>
+                        <left>
+                            <span t-field="line.quantity"/>X <span t-esc="line.price_unit"/>
+                        </left>
+                        <right>
+                            <span t-esc="line.price_subtotal"/>
+                        </right>
+                    </line>
+                    <br></br>
+                </t>
+                <hr />
+                <line>
+                    <left></left>
+                    <right>Subtotal: <span t-if="object.amount_untaxed" t-esc="object.amount_untaxed"/>
+                    </right>
+                </line>
+                <line>
+                    <left></left>
+                    <right>
+                        <t t-set="tax_group_name" t-value="object.move_id.line_ids.filtered(lambda l: l.tax_line_id)[0].tax_line_id.tax_group_id.name if object.move_id.line_ids.filtered(lambda l: l.tax_line_id) else ''"/>
+                        <span t-if="tax_group_name" t-esc="tax_group_name"/>
+                        <span t-if="object.amount_tax" t-esc="object.amount_tax"/>
+                    </right>
+                </line>
+                <line>
+                    <left></left>
+                    <right>
+                        <hr/>
+                    </right>
+                </line>
+                <line size='double-height'>
+                    <left>TOTAL</left>
+                    <right>
+                        <span t-esc="object.amount_total"/>
+                    </right>
+                </line>
+                <footer>
+                    <div align="center">
+                        <p>
+                            <b>Thanks for shopping.</b>
+                        </p>
+                    </div>
+                </footer>
+            </receipt>
+        </t>
+    </template>
+
+</odoo>

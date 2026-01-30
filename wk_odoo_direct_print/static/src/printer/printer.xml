@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+<templates id="template" xml:space="preserve">
+    <t t-name="wk_odoo_direct_print.PrinterButton">
+        <button t-att-class="'btn oe_inline btn-link wk_printer_button'" t-att-title="title" t-att-data-method="method">
+            <t t-esc="title" />
+        </button>
+    </t>
+</templates>
