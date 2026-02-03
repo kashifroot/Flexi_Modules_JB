@@ -603,16 +603,16 @@
     </t>
 
     <t t-extend="ProductCategoriesWidget">
-    	<t t-jquery="div.searchbox" t-operation="before">
-			<div class="category_searchbox">
-                <input placeholder="Search Category"/>
-                <span class="category-clear"></span>
-           	</div>
-            <div class="brand_searchbox">
-                <input placeholder="Search Brand"/>
-                <span class="brand-clear"></span>
-           	</div>
-	   	</t>
+<!--    	<t t-jquery="div.searchbox" t-operation="before">-->
+<!--			<div class="category_searchbox">-->
+<!--                <input placeholder="Search Category"/>-->
+<!--                <span class="category-clear"></span>-->
+<!--           	</div>-->
+<!--            <div class="brand_searchbox">-->
+<!--                <input placeholder="Search Brand"/>-->
+<!--                <span class="brand-clear"></span>-->
+<!--           	</div>-->
+<!--	   	</t>-->
         <t t-jquery="div.breadcrumbs" t-operation="replace">
 	   		<span class="breadcrumb">
                 <span class=" breadcrumb-button breadcrumb-home js-category-switch">
@@ -828,14 +828,14 @@
 	             </div>
                 <div class="pro_width_set2">
                     <div class="row searchbox_divs">
-                     <div class="brand_searchbox manage_search_brand pro_width_set3">
-		                <input class="search_inputboxe" placeholder="Search Brand"/>
-                         <span class="brand-clear_manage"></span>
-		           	</div>
-                        <div class="category_searchbox manage_search_category pro_width_set3">
-		                <input class="search_inputboxe" placeholder="Search Category"/>
-                            <span class="category-clear_manage"></span>
-		            </div>
+<!--                     <div class="brand_searchbox manage_search_brand pro_width_set3">-->
+<!--		                <input class="search_inputboxe" placeholder="Search Brand"/>-->
+<!--                         <span class="brand-clear_manage"></span>-->
+<!--		           	</div>-->
+<!--                     <div class="category_searchbox manage_search_category pro_width_set3">-->
+<!--		                <input class="search_inputboxe" placeholder="Search Category"/>-->
+<!--                            <span class="category-clear_manage"></span>-->
+<!--		            </div>-->
                         <div class="manage_search_prod pro_width_set3">
 		                <input class="search_inputboxe" placeholder="Search Products"/>
                             <span class="search-clear"></span>

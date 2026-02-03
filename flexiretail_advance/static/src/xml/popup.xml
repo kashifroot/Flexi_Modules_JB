@@ -1995,7 +1995,7 @@
 
     <t t-name="CashControlWizardPopup">
         <div class="modal-dialog">
-            <div class="popup popup-cashcontrol-structure" style="height: 100%;width: 50%;">
+            <div class="popup popup-cashcontrol-structure" style="max-height: 525px;width: 50%;">
                 <p class="title"><t t-esc="widget.title" /></p>
                 <div style="max-height: 250px !important;overflow: auto;">
                     <table id="cashbox_data_table">
