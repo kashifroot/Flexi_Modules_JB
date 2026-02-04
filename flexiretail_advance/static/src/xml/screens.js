@@ -562,8 +562,8 @@ odoo.define('flexiretail_advance.screens', function (require) {
                 });
                 e.stopPropagation();
             });
-    		this.el.querySelector('.category-clear').addEventListener('click',this.clear_category_search_handler);
-    		this.el.querySelector('.brand-clear').addEventListener('click',this.clear_brand_search_handler);
+//    		this.el.querySelector('.category-clear').addEventListener('click',this.clear_category_search_handler);
+//    		this.el.querySelector('.brand-clear').addEventListener('click',this.clear_brand_search_handler);
     	},
     	clear_cat_search: function(){
 			var self = this;
@@ -1243,19 +1243,19 @@ odoo.define('flexiretail_advance.screens', function (require) {
             $('.category_searchbox input').val('');
             $('.searchbox input').val('');
             $('.searchbox input').focus();
-            $('span.category-clear_manage').click(function(e){
-            	self.clear_search();
-            	var input = $('.category_searchbox input');
-	            input.val('');
-	            input.focus();
-
-            });
-            $('span.brand-clear_manage').click(function(e){
-            	self.clear_search();
-            	var input = $('.brand_searchbox input');
-            	input.val('');
-                input.focus();
-            });
+//            $('span.category-clear_manage').click(function(e){
+//            	self.clear_search();
+//            	var input = $('.category_searchbox input');
+//	            input.val('');
+//	            input.focus();
+//
+//            });
+//            $('span.brand-clear_manage').click(function(e){
+//            	self.clear_search();
+//            	var input = $('.brand_searchbox input');
+//            	input.val('');
+//                input.focus();
+//            });
             this.render_products(all_products);
         },
         renderElement: function(){
