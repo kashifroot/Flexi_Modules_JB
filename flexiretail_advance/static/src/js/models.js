@@ -963,10 +963,10 @@ odoo.define('flexiretail_advance.models', function (require) {
         },
         start_timer_product: function () {
             var self = this;
-            setInterval(function () {
-                //  kashif 6feb24: update /sync product every 10 seconds e.g price name etc
-                self.load_new_products_price();
-            }, 60 * 1000);
+//            setInterval(function () {
+//                //  kashif 6feb24: update /sync product every 10 seconds e.g price name etc
+//                self.load_new_products_price();
+//            }, 60 * 1000);
         },
         set_lock_status: function (status) {
             this.set('pos_block_status', status)

@@ -4160,28 +4160,36 @@ odoo.define('flexiretail_advance.screens', function (require) {
 						var self = this;
 						var qr_data = {};
 						var base_url = this.getSession()['web.base.url'];
-						rpc.query({
-							model: 'pos.order',
-							method: 'action_einvoice_qr',
-							args: [[], order.name],
-						}, { async: false }).then(function (result) {
-							if (result && result['url'] !== "") {
-								qr_data = {
-									type: result.type || 'url',
-									taxqr: result.url || '',
-									taxInvoiceTimeframe: result.timeframe || 30
-								};
-							}
-							else {
 
-								var url = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + base_url + '/einvoice/' + order.uid
+							var url = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + base_url + '/einvoice/' + order.uid
 								qr_data = {
 									type: 'url',
 									taxqr: url,
 									taxInvoiceTimeframe: 3
 								};
-							}
-						});
+
+//						rpc.query({
+//							model: 'pos.order',
+//							method: 'action_einvoice_qr',
+//							args: [[], order.name],
+//						}, { async: false }).then(function (result) {
+//							if (result && result['url'] !== "") {
+//								qr_data = {
+//									type: result.type || 'url',
+//									taxqr: result.url || '',
+//									taxInvoiceTimeframe: result.timeframe || 30
+//								};
+//							}
+//							else {
+//
+//								var url = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + base_url + '/einvoice/' + order.uid
+//								qr_data = {
+//									type: 'url',
+//									taxqr: url,
+//									taxInvoiceTimeframe: 3
+//								};
+//							}
+//						});
 						//						.catch(function (error) {
 						//							console.error('Error fetching E-Invoice QR:', error);
 						//							qr_data = {

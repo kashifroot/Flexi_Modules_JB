@@ -886,9 +886,9 @@ function decimalAdjust(value){
                     $('#msg_lock').hide();
                     $('#msg_lock').text('');
                 }
-                //  kashif 6feb24: update /sync product every 10 seconds e.g price name etc
-//            self.load_new_products();
-//        	$('.prodcut_sync').toggleClass('rotate', 'rotate-reset');
+//                  kashif 6feb24: update /sync product every 10 seconds e.g price name etc
+            self.load_new_products();
+        	$('.prodcut_sync').toggleClass('rotate', 'rotate-reset');
             },19 * 1000);
         },
         set_lock_status:function(status){
