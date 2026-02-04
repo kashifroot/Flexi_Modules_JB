@@ -45,6 +45,8 @@
                 <field name="order_status"/>
                 <field name="order_make_picking"/>
                 <field name="is_debit"/>
+                <field name="tin"/>
+                <field name="brn"/>
             </field>
             <field name="amount_tax" position="after">
                 <field name="rounding"/>

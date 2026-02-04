@@ -595,16 +595,18 @@
                                 <div class="text-muted">
                                     Enable Pos login.
                                 </div>
-<!--                                <div class="content-group mt16"-->
-<!--                                     >-->
-<!--                                    <div class="row mt16">-->
-<!--                                        <label string="Enable pos login" for="enable_pos_login"-->
-<!--                                               class="col-md-3 o_light_label"/>-->
-<!--                                        <field name="enable_pos_login"-->
-<!--                                              />-->
-<!--                                    </div>-->
+                            </div>
+                        </div>
 
-<!--                                </div>-->
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="designated_pos_user_type"/>
+                                <div class="text-muted">
+                                    Only user having same POS User Type can access this POS.
+                                </div>
+                                <div class="content-group mt16">
+                                    <field name="designated_pos_user_type"/>
+                                </div>
                             </div>
                         </div>
 

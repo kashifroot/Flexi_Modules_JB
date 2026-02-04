@@ -207,9 +207,9 @@ odoo.define('flexiretail_advance.chrome', function (require) {
 				});
 			}
 			self.slider_widget = new SliderWidget(this);
-			self.pos_cart_widget = new PosCartCountWidget(this);
+//			self.pos_cart_widget = new PosCartCountWidget(this);
 			self.slider_widget.replace(this.$('.placeholder-SliderWidget'));
-			self.pos_cart_widget.replace(this.$('.placeholder-PosCartCountWidget'));
+//			self.pos_cart_widget.replace(this.$('.placeholder-PosCartCountWidget'));
 			if (self.pos.config.enable_pos_login) {
 				self.gui.set_startup_screen('login');
 				self.gui.show_screen('login');
@@ -974,29 +974,29 @@ odoo.define('flexiretail_advance.chrome', function (require) {
 		},
 	});
 
-	var PosCartCountWidget = PosBaseWidget.extend({
-		template: 'PosCartCountWidget',
-		init: function (parent, options) {
-			var self = this;
-			this._super(parent, options);
-			self.show_cart = function () {
-				var order = self.pos.get_order();
-				if (order.is_empty()) {
-					return;
-				}
-				if (self.gui.get_current_screen() != 'products') {
-					var html_data = $('.order-scroller').html();
-					$('.show-left-cart').html('').append(html_data);
-					$('.show-left-cart').toggle("slide");
-				}
-			};
-		},
-		renderElement: function () {
-			var self = this;
-			self._super();
-			$(".pos-cart-info").delegate("#pos-cart", "click", self.show_cart);
-		},
-	});
+//	var PosCartCountWidget = PosBaseWidget.extend({
+//		template: 'PosCartCountWidget',
+//		init: function (parent, options) {
+//			var self = this;
+//			this._super(parent, options);
+//			self.show_cart = function () {
+//				var order = self.pos.get_order();
+//				if (order.is_empty()) {
+//					return;
+//				}
+//				if (self.gui.get_current_screen() != 'products') {
+//					var html_data = $('.order-scroller').html();
+//					$('.show-left-cart').html('').append(html_data);
+//					$('.show-left-cart').toggle("slide");
+//				}
+//			};
+//		},
+//		renderElement: function () {
+//			var self = this;
+//			self._super();
+//			$(".pos-cart-info").delegate("#pos-cart", "click", self.show_cart);
+//		},
+//	});
 
 	chrome.HeaderButtonWidget.include({
 		renderElement: function () {

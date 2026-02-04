@@ -245,6 +245,10 @@ class PosConfig(models.Model):
 	customer_dislay_logout = fields.Boolean(string="Enable Cust. Display as logout", default=False)
 	
 	has_sticker = fields.Boolean(default=False, string="sticker")
+	designated_pos_user_type = fields.Selection([
+		('cashier', 'Cashier'),
+		('salesman', 'Sales Person')
+	], string="Designated POS User Type")
 	
 	@api.model
 	def name_search(self, name, args=None, operator='ilike', limit=100):
@@ -311,12 +315,19 @@ class PosConfig(models.Model):
 				('default_pos', '=', self.id)
 			]):
 				raise UserError(_("You can not open the session, which is already assigned to Other user!"))
+
+		if self.designated_pos_user_type:
+			if self.env.user.pos_user_type != self.designated_pos_user_type:
+				raise UserError(_("Please select POS according to your user type"))
 		
 		return super(PosConfig, self).open_session_cb()
 
 
 class pos_order(models.Model):
 	_inherit = 'pos.order'
+	
+	tin = fields.Char('Tin')
+	brn = fields.Char('Brn')
 	
 	def get_order_byBarcode(self, code):
 		return self.search([('pos_reference', '=', code)]) or False
@@ -1528,6 +1539,8 @@ class pos_order(models.Model):
 			'order_on_debit': ui_order.get('order_on_debit'),
 			'pos_normal_receipt_html': ui_order.get('pos_normal_receipt_html'),
 			'pos_xml_receipt_html': ui_order.get('pos_xml_receipt_html'),
+			'tin': ui_order.get('tin'),
+			'brn': ui_order.get('brn'),
 		})
 		return res
 	

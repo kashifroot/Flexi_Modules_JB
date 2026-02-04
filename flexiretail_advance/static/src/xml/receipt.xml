@@ -2907,18 +2907,18 @@
                     font-family: "Lato","Lucida Grande", Helvetica, Verdana, Arial;
 }
                 .pos .pos-sale-ticket {
-      width:5.8cm;
+      width:8cm;
                 }
 
 .pos-sale-ticket {
                     font-family: "Lato","Lucida Grande", Helvetica, Verdana, Arial;
-    text-align: left;
+    text-align: center;
     width: 300px;
     background-color: white;
-    margin: 20px;
-    padding: 15px;
+    margin: 10px;
+    padding: 5px;
     font-size: 14px;
-    padding-bottom:30px;
+    padding-bottom:3px;
     display: inline-block;
     font-family: "Inconsolata";
     border: solid 1px rgb(220,220,220);
@@ -2993,63 +2993,63 @@
             <!--                </div>-->
             <!--                <br/>-->
             <!--            </t>-->
-            <table class='receipt-orderlines'>
+            <table class='receipt-orderlines' colspan="12">
                 <tr>
-                    <td colspan="6" class="tight-spacing" style="text-align:center;font-size:11px;">
+                    <td  colspan="12" class="tight-spacing" style="text-align:center;font-size:11px;">
                           <span>
                                <t t-esc="widget.pos.company.name"/>
                           </span>
                     </td>
-                    <td colspan="3"/>
+
                  </tr>
                 <tr>
-                    <td colspan="6" class="tight-spacing" style="text-align:center;font-size:11px;">
+                    <td  colspan="12" class="tight-spacing" style="text-align:center;font-size:11px;">
                           <span>
                              (<t t-esc="order.get_brn()"/>)
                           </span>
                     </td>
-                    <td colspan="3"/>
+
                  </tr>
                 <t t-if="receipt.header">
                      <tr>
-                         <td colspan="6" style="text-align:center;font-size:11px;">
+                         <td  colspan="12" style="text-align:center;font-size:11px;">
                           <span class="tight-spacing">
                               <t t-esc="receipt.header"/>
                           </span>
                     </td>
-                         <td colspan="3"/>
+
                      </tr>
                 </t>
                 <tr>
-                    <td colspan="6" class="tight-spacing" style="text-align:center;font-size:11px;">
+                    <td  colspan="12"  class="tight-spacing" style="text-align:center;font-size:11px;">
                           <span>
                              Tel: <t t-esc="widget.pos.company.phone || ''"/>
                           </span>
                     </td>
-                    <td colspan="3"/>
+
                  </tr>
-                <tr>
-                    <td colspan="6" class="tight-spacing" style="text-align:center;font-size:11px;">
+                              <tr>
+                    <td  colspan="12" class="tight-spacing" style="text-align:center;font-size:11px;">
                           <span>
-                             Tin:  <t t-esc="order.get_tin()"/>
+                             Tin: <t t-esc="order.get_tin()"/>
                           </span>
                     </td>
-                    <td colspan="3"/>
+
                  </tr>
                 <tr>
-                    <td colspan="6" class="tight-spacing"
+                    <td  colspan="12" class="tight-spacing"
                         style="text-align:center;font-size:10px;">
                           <span t-esc="dateorder"/>
                     </td>
-                    <td colspan="3"/>
+
                  </tr>
                 <tr>
-                    <td colspan="6" class="tight-spacing" style="text-align:center;font-size:10px;">
+                    <td  colspan="12"  class="tight-spacing" style="text-align:center;font-size:10px;">
                           <span>
                               <t t-esc="order.name"/>
                           </span>
                     </td>
-                    <td colspan="3"/>
+
                  </tr>
 
                 <tr height="15px"/>
@@ -3071,7 +3071,7 @@
                         </td>
                     </tr>
                     <tr class="tight-spacing">
-                        <td colspan="3" style="text-align:right;">
+                        <td colspan="6" style="text-align:right;">
                             <t t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
                             <span>@</span>
                             <t t-if="orderline.discount_amount > 0 || orderline.discount > 0">
@@ -3089,7 +3089,7 @@
                                       <t t-esc="widget.format_currency_front(orderline.price)"/>
                                 </t>
                         </td>
-                        <td colspan="5" style="text-align:center;">
+                        <td colspan="6" style="text-align:center;">
                 <!--                            <t t-esc="widget.calc_discount_item(orderline.get_display_price(),order.get_before_disc_total())"/>-->
                             <t t-esc="widget.format_currency_front(orderline.get_display_price())"/>
                         </td>
@@ -3097,10 +3097,10 @@
                 </t>
                 <tr height="18px"/>
                 <tr class="tight-spacing" style="font-size: 17px;">
-                        <td colspan="4">
+                        <td colspan="6">
                         <b>Net Total:</b>
                         </td>
-                    <td colspan="3">
+                    <td colspan="6">
                          <t t-if="order.get_credit_detail()">
 	                        	<t t-set="net_total" t-value="0"/>
                              <t t-foreach="order.get_credit_detail()" t-as="credit">
@@ -3121,8 +3121,8 @@
                 </tr>
                 <tr height="20px"/>
                 <tr class="tight-spacing">
-                    <td colspan="4">Change:</td>
-                    <td colspan="3" style="text-align:center;">
+                    <td colspan="6">Change:</td>
+                    <td colspan="6" style="text-align:center;">
                         <span> <t t-esc="widget.format_currency_front(order.get_change())"/></span>
                     </td>
                 </tr>
@@ -3404,13 +3404,15 @@
             </table>
 <!--           Kashif 19 jan 25:  QR Image Area-->
             <t t-if="data and data.taxqr">
-                <div style="text-align:center; margin-top:10px;">
-                    <div style="font-size:15px; font-weight:bold;">E-Invoice</div>
+                <div style="text-align:center;">
+                    <div style="font-size:15px; font-weight:bold;">E-Invoicex</div>
                     <div style="font-size:12px;">Scan QR to Request</div>
                 </div>
-                <div style="text-align:center; padding:10px 0; border-bottom:1px solid black;">
-                    <img t-att-src="data.taxqr" style="max-width:200px; height:auto;"/>
-                    <div style="font-size:10px; text-align:left; padding:0 20px;">
+                <div style="text-align:center; padding:10px 0;">
+<!--                     <img t-att-src="'/report/barcode/QR/einvoice/' + str(''.join(c for c in str(order.pos_reference) if c.isdigit())) + '?width=80&amp;height=80'"-->
+<!--                       style="max-width:80px; height:80px;padding: 3px;"       alt="Barcode"/>-->
+                    <img t-att-src="data.taxqr" style="max-width:80px; height:80px;padding: 3px;"/>
+                    <div style="font-size:10px; text-align:center; padding:0 0px;max-width: 460px;">
                         <b>Request Timeline:</b><br/>
                         <b>Start Date:</b> Next day after your purchase<br/>
                         <b>Last Date:</b> Within <span t-esc='taxInvoiceTimeframe'/> days from your purchase<br/>
@@ -3420,15 +3422,15 @@
             </t>
 <!--            END-->
             <t t-if="receipt.footer">
-                <br/>
+<!--                <br/>-->
                 <table>
                     <tr>
-                        <td colspan="6" style="text-align:center;">
+                        <td colspan="12" style="text-align:center;">
                              <span style="font-weight:bold;">
                                  <t t-esc="receipt.footer"/>
                              </span>
                         </td>
-                        <td colspan="3"/>
+                        <td />
                     </tr>
                 </table>
             </t>
@@ -3437,6 +3439,13 @@
 
 
     <t t-name="PosTicket_custom_salesperson">
+                    <style>
+
+                .pos .pos-sale-ticket {
+      width:8cm;
+                        text-align:center;
+                }
+                    </style>
         <div class="pos-sale-ticket">
             <div class="page">
                 <t t-set="dateorder" t-value="order.formatted_validation_date || order.date_order"/>
@@ -3448,43 +3457,37 @@
                     <tr>
                         <td>
 <!--          Yulia 18012025 use html entity nbsp                  -->
-                            &#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;
-                            &#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;
-                            &#160;&#160;
+
                             <span>UNPAID</span>
                         </td>
                     </tr>
                 </table>
                 <table style="font-family: 'Arial Black';">
                     <tr>
-                        <td style="text-align:left">
-                             &#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;
-                             &#160;&#160;&#160;&#160;
+                        <td style="text-align:center">
+
                               <span>
                                  Sticker: <t t-esc="order.sticker"/>
                               </span>
                         </td>
                     </tr>
                     <tr>
-                        <td style="text-align:left">
-                             &#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;
-                             &#160;&#160;&#160;&#160;
+                        <td style="text-align:center">
+
                               <span>
                                    <t t-esc="order.name"/>
                               </span>
                         </td>
                     </tr>
                     <tr t-if="order.salesperson_name">
-                        <td style="text-align:left">
-                              &#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;
-                             &#160;&#160;&#160;
+                        <td style="text-align:center">
+
                             User: <t t-esc="order.salesperson_name"/>
                         </td>
                     </tr>
                     <tr t-else="">
-                        <td style="text-align:left">
-                              &#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;
-                             &#160;&#160;&#160;
+                        <td style="text-align:center">
+
                             User: <t t-esc="widget.pos.get_cashier().name"/>
                         </td>
                     </tr>
@@ -3492,11 +3495,12 @@
                 </table>
                 <br/>
 
-                <table style="font-family: 'Arial Black';">
+                <table style="font-family: 'Arial Black';    display: table-cell;">
                     <!--<tr height="15px;"/>-->
                     <t t-foreach="orderlines" t-as="orderline">
                         <tr>
-                            <td style="font-family: 'Arial Black';text-align:left;">
+                            <td colspan="9" style="font-family: 'Arial Black';display:flex">
+                                <span >
                               <t t-if="orderline.get_product().default_code">
                                     <t t-esc="orderline.get_product().default_code"/>
                                   <t t-if="orderline.get_product().second_name">
@@ -3509,11 +3513,12 @@
                                 <t t-else="">
                                      <t t-esc="orderline.get_product().name"/>
                                  </t>
+                                 </span>
                             </td>
                         </tr>
 
                         <tr>
-                            <td style="margin-left:-20px">
+                            <td colspan="9" >
                                   &#160;&#160;&#160;&#160;<t
                                     t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
                                 <span>@</span>
@@ -3533,7 +3538,7 @@
                                 </t>
 
                             </td>
-                            <td>
+                            <td colspan="3">
                                 <!--   <t t-esc="widget.calc_discount_item(orderline.get_display_price(),order.get_before_disc_total())"/>-->
                                 <t t-esc="widget.format_currency_front(orderline.get_display_price())"/>
                             </td>
@@ -3542,10 +3547,10 @@
                     <!-- <tr height="20px;"></tr>-->
 
                     <tr>
-                            <td>
+                            <td colspan="4">
                                 <b>Total:</b>
                             </td>
-                        <td style="text-align:left">
+                        <td colspan="8" style="text-align:center">
                                  <t t-if="order.get_credit_detail()">
                                     <t t-set="net_total" t-value="0"/>
                                      <t t-foreach="order.get_credit_detail()" t-as="credit">
@@ -3561,7 +3566,7 @@
                         </tr>
                 </table>
 
-                <table style="margin-left:-20px;"><tbody><tr id="barcode2"/></tbody></table>
+                <table style="margin-left:33px;"><tbody><tr id="barcode2"/></tbody></table>
 
             </div>
 

@@ -38,21 +38,26 @@ function initAutocomplete() {
 function initMap() {
 	var el1 = document.getElementById('map_view_edit_details');
     if(el1){
-    	if(navigator.onLine && google){
-    		var infowindow = new google.maps.InfoWindow({
-        		size: new google.maps.Size(150, 50)
-        	});
-        	geocoder = new google.maps.Geocoder();
-            var latlng = new google.maps.LatLng(-34.397, 150.644);
-            var mapOptions = {
-              zoom: 8,
-              center: latlng
-            }
-            map = new google.maps.Map(el1, mapOptions);
-            google.maps.event.addListener(map, 'click', function() {
-                infowindow.close();
-            });
-    	} 
+       console.log("Selet Custoemr");
+//       if (typeof google== 'undefined') {
+//                window.ginit = this.on_ready;
+//                $.getScript('https://maps.googleapis.com/maps/api/js?sensor=false&callback=ginit');
+//            }
+//    	if(navigator.onLine && google){
+//    		var infowindow = new google.maps.InfoWindow({
+//        		size: new google.maps.Size(150, 50)
+//        	});
+//        	geocoder = new google.maps.Geocoder();
+//            var latlng = new google.maps.LatLng(-34.397, 150.644);
+//            var mapOptions = {
+//              zoom: 8,
+//              center: latlng
+//            }
+//            map = new google.maps.Map(el1, mapOptions);
+//            google.maps.event.addListener(map, 'click', function() {
+//                infowindow.close();
+//            });
+//    	}
     }
 }
 
