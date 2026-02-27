@@ -8,6 +8,9 @@
 ''' Supported Platform '''
 PLATFORM = [
     ('Windows', 'Windows'),
-    # ('Darwin', 'Mac'),
+    ('Darwin', 'Mac'),
     ('Linux', 'Linux'),
+    ('Android', 'Android'),
+    ('iOS', 'iOS'),
 ]
+

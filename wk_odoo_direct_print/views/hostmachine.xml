@@ -44,8 +44,20 @@
                                             <field name="platform"/>
                                         </div>
                                         <div attrs="{'invisible':[('platform', '!=', 'Windows')]}">
-                                            <i class="fa fa-windows"></i>
-                                            <field name="platform"/>
+                                            <i class="fa fa-windows"> </i>
+                                            <field name="platform" />
+                                        </div>
+                                        <div attrs="{'invisible':[('platform', '!=', 'Darwin')]}">
+                                            <i class="fa fa-apple"> </i>
+                                            <field name="platform" />
+                                        </div>
+                                        <div attrs="{'invisible':[('platform', '!=', 'iOS')]}">
+                                            <i class="fa fa-apple"> </i>
+                                            <field name="platform" />
+                                        </div>
+                                        <div attrs="{'invisible':[('platform', '!=', 'Android')]}">
+                                            <i class="fa fa-android"> </i>
+                                            <field name="platform" />
                                         </div>
                                     </div>
                                 </div>

@@ -152,7 +152,7 @@ class StyleStack:
         _style = {}
         for attr in style:
             if attr in self.cmds and not style[attr] in self.cmds[attr]:
-                print('WARNING: ESC/POS PRINTING: ignoring invalid value: %s for style %s' % (style[attr], utfstr(attr)))
+                logger.info('WARNING: ESC/POS PRINTING: ignoring invalid value: %s for style %s' % (style[attr], utfstr(attr)))
             else:
                 _style[attr] = self.enforce_type(attr, style[attr])
         self.stack.append(_style)
@@ -162,7 +162,7 @@ class StyleStack:
         _style = {}
         for attr in style:
             if attr in self.cmds and not style[attr] in self.cmds[attr]:
-                print('WARNING: ESC/POS PRINTING: ignoring invalid value: %s for style %s' % (style[attr], attr))
+                logger.info('WARNING: ESC/POS PRINTING: ignoring invalid value: %s for style %s' % (style[attr], attr))
             else:
                 self.stack[-1][attr] = self.enforce_type(attr, style[attr])
 
@@ -390,7 +390,7 @@ class Escpos:
 
 
         if im.size[0] > 512:
-            print("WARNING: Image is wider than 512 and could be truncated at print time ")
+            logger.info("WARNING: Image is wider than 512 and could be truncated at print time ")
         if im.size[1] > 255:
             raise ImageSizeError()
 
@@ -436,12 +436,12 @@ class Escpos:
 
     def print_base64_image(self,img):
 
-        print('print_b64_img')
+        logger.info('print_b64_img')
 
         id = md5(img).digest()
 
         if id not in self.img_cache:
-            print('not in cache')
+            logger.info('not in cache')
 
             img = img[img.find(b',')+1:]
             f = io.BytesIO(b'img')
@@ -456,16 +456,16 @@ class Escpos:
             else:
                 img.paste(img_rgba)
 
-            print('convert image')
+            logger.info('convert image')
         
             pix_line, img_size = self._convert_image(img)
 
-            print('print image')
+            logger.info('print image')
 
             buffer = self._raw_print_image(pix_line, img_size)
             self.img_cache[id] = buffer
 
-        print('raw image')
+        logger.info('raw image')
 
         self._raw(self.img_cache[id])
 

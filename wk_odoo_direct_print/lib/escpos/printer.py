@@ -11,6 +11,7 @@ from .constants import *
 from .exceptions import *
 from time import sleep
 
+_logger = logging.getLogger(__name__)
 class Usb(Escpos):
     """ Define USB printer """
 
@@ -171,9 +172,9 @@ class Serial(Escpos):
         self.device = serial.Serial(port=self.devfile, baudrate=self.baudrate, bytesize=self.bytesize, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=self.timeout, dsrdtr=True)
 
         if self.device is not None:
-            print("Serial printer enabled")
+            logger.info("Serial printer enabled")
         else:
-            print("Unable to open serial printer on: %s" % self.devfile)
+            logger.info("Unable to open serial printer on: %s" % self.devfile)
 
 
     def _raw(self, msg):
@@ -207,7 +208,7 @@ class Network(Escpos):
         self.device.connect((self.host, self.port))
 
         if self.device is None:
-            print("Could not open socket for %s" % self.host)
+            logger.info("Could not open socket for %s" % self.host)
 
 
     def _raw(self, msg):

@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 #################################################################################
 #
-#    Copyright (c) 2017-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>)
-#    You should have received a copy of the License along with this program.
-#    If not, see <https://store.webkul.com/license.html/>
+#   Copyright (c) 2025-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>)
+#    See LICENSE file for full copyright and licensing details.
 #################################################################################
 
 from odoo import http
 from odoo.http import request
 import logging
 
+_logger = logging.getLogger(__name__)
 class HostMachine(http.Controller):
 
     @http.route('/direct-print/hostmachine-connection', type='json', auth="user", csrf=False, methods=['POST'])
     def new_hostmachine_connection(self, **kwargs):
         host_info = request.jsonrequest.get('host_info')
-        print(f'\nhostmachine-connection ------------- {host_info}')  
+        _logger.info('\nhostmachine-connection ------------- %s', host_info)  
         is_online = request.jsonrequest.get('is_online')
         host_obj = request.env['wk.hostmachine'].search([('host_id', '=', host_info.get('host_id')), ('platform', '=', host_info.get('platform'))])
         if not host_obj:
@@ -26,8 +26,13 @@ class HostMachine(http.Controller):
                 'platform': host_info.get('platform'),
                 'is_online': True,
             })
+            if host_info.get('platform') in ['Android', 'iOS']:
+                request.env['wk.printer'].create({
+                'name':'Default Printer',
+                'hostmachine_id':new_host.id
+                })
         else:
-           if host_info:
+            if host_info:
                 host_obj.is_online = is_online if 'is_online' in request.jsonrequest else True
         return {
                 'success' : True,
@@ -94,4 +99,3 @@ class HostMachine(http.Controller):
                 'success': True
             }
         
-

@@ -11,6 +11,7 @@ from odoo.http import request
 import logging
 import base64
 
+_logger = logging.getLogger(__name__)
 class Report(http.Controller):
 
     @http.route('/direct-print/print-report', type='json', auth="user", csrf=False, methods=['POST'])
@@ -55,7 +56,7 @@ class Report(http.Controller):
                         try:
                             renderd_text = wkprinter.get_esc_command_set({'data':xml_text})
                         except:
-                            print(f'Could not render the report for ESCPOS priner.')
+                            logger.info('Could not render the report for ESCPOS priner.')
                     renderd_text = renderd_text.replace("\x00", "[NULL]")
                 for printer in printer_ids:
                     create_print_job(printer, 'print-raw', renderd_text)
