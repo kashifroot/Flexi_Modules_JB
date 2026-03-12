@@ -3883,12 +3883,12 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			}
 			this.pos.get_order()._printed = true;
 		},
-		print_xml: function () {
-			var receipt = QWeb.render('XmlReceipt_custom', this.get_receipt_render_env());
-
-			this.pos.proxy.print_receipt(receipt);
-			this.pos.get_order()._printed = true;
-		},
+		// print_xml: function () {
+		// 	var receipt = QWeb.render('XmlReceipt_custom', this.get_receipt_render_env());
+		//
+		// 	this.pos.proxy.print_receipt(receipt);
+		// 	this.pos.get_order()._printed = true;
+		// },
 		renderElement: function () {
 			var self = this;
 			this._super();
@@ -4264,7 +4264,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					this.pos.proxy.print_receipt(order.print_xml_receipt_html);
 					return this.pos.get_order()._printed = true;
 				} else {
-					var receipt = QWeb.render('XmlReceipt', env);
+					var receipt = QWeb.render('XmlReceipt_custom', env);
 				}
 			}
 			this.pos.proxy.print_receipt(receipt);
