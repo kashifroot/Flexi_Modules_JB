@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+<odoo>
+    <record id="pos_direct_print_config_view_form" model="ir.ui.view">
+        <field name="name">pos.direct.print.config.form.view</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='receipt']" position="inside">
+                <div class="col-12 col-lg-6 o_setting_box" id="use_direct_print">
+                    <div class="o_setting_left_pane">
+                        <field name="use_direct_print"/>
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <label for="use_direct_print" string="Use Direct Print"/>
+                        <div class="text-muted mb16">
+                            Printing POS payment Receipt directly by printers
+                        </div>
+                        <div attrs="{'invisible' : [('use_direct_print', '=', False)]}">
+                            <div class="content-group mt16">
+                                <field name="direct_printer_id" domain="[('state', '=', 'Active')]" options="{'no_create': True}"/>
+                            </div>
+                            <div>
+                                <button name="%(wk_odoo_direct_print.wk_printer_view)d" icon="fa-arrow-right" type="action" string="My Printers" class="btn-link"/>
+                            </div>
+                            <div>
+                                <button name="%(wk_odoo_direct_print.wk_hostmachine_view)d" icon="fa-arrow-right" type="action" string="Host Machine" class="btn-link"/>
+                            </div>
+                            <!-- <div class="row mt16">
+                                <label string="Order Receipt Format" for="order_receipt_format" class="col-lg-4 o_light_label" />
+                                <field name="order_receipt_format" default="default" required="1"/>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 o_setting_box" attrs="{'invisible' : [('use_direct_print', '=', False)]}" id="receipt_print_auto">
+                    <div class="o_setting_left_pane">
+                        <field name="receipt_print_auto"/>
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <label for="receipt_print_auto" string="Automatic Receipt Printing via Direct Printer"/>
+                        <div class="text-muted mb16">
+                            The receipt will automatically be printed via Direct Printer at the open of Receipt Screen.
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
