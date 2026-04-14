@@ -32,7 +32,6 @@ odoo.define('wk_odoo_direct_print.ReceiptScreen', function (require) {
                 this.pos.proxy.direct_printer
             ) {
                 var receipt = QWeb.render('XmlReceipt', this.get_receipt_render_env());
-               
                 this.pos.proxy.direct_printer.print_xml_receipt(receipt);
                 this.pos.get_order()._printed = true;
                 return

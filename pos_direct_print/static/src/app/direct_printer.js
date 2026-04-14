@@ -8,6 +8,20 @@ odoo.define('pos_direct_print.Printer', function (require) {
     var devices = require('point_of_sale.devices');
     var rpc = require('web.rpc');
 
+    devices.ProxyDevice.include({
+        print_receipt: function (receipt) {
+            if (
+                this.pos.config.use_direct_print &&
+                this.pos.proxy.direct_printer
+            ) {
+                this.pos.proxy.direct_printer.print_xml_receipt(receipt);
+                this.pos.get_order()._printed = true;
+                return
+            }
+            return this._super(...arguments);
+        },
+    })
+
     var DirectPrinter = devices.ProxyDevice.extend({
         init: function (direct_printer_id, pos) {
             this._super(pos);
@@ -76,7 +90,6 @@ odoo.define('pos_direct_print.Printer', function (require) {
                 }
             }
             sendPrintingXmlReceiptjob();
-            
         },
         async get_esc_command_set(xmlReceipt) {
             xmlReceipt = xmlReceipt
@@ -95,29 +108,6 @@ odoo.define('pos_direct_print.Printer', function (require) {
 
             return wk_receipt_data
         },
-        // escpos_print_receipt: async function (receiptParts, method) {
-        //     if (receiptParts) {
-        //         this.receipt_queue.push(receiptParts);
-        //     }
-        //     let sendPrintResult;
-        //     while (this.receipt_queue.length > 0) {
-        //         receiptParts = this.receipt_queue.shift();
-        //         try {
-        //             sendPrintResult = await this.send_printing_job(receiptParts, method);
-        //         } catch (_error) {
-        //             // Error in communicating to the IoT box.
-        //             this.receipt_queue.length = 0;
-        //             return this.printResultGenerator.IoTActionError();
-        //         }
-        //         // rpc call is okay but printing failed because
-        //         // IoT box can't find a printer.
-        //         if (!sendPrintResult || sendPrintResult.result === false) {
-        //             this.receipt_queue.length = 0;
-        //             return this.printResultGenerator.IoTResultError(sendPrintResult.printerErrorCode);
-        //         }
-        //     }
-        //     return true;
-        // },
 
         send_printing_job: function (receiptParts, method = 'print-raw', kitchen_receipt = false, is_byte_stream = false) {
             const printerId = this.direct_printer_id;
