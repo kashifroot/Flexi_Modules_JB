@@ -3649,16 +3649,19 @@
                 </right>
             </line>
             <br/>
-            <barcode encoding="CODE128">
-                <t t-esc="order.name"/>
-            </barcode>
+            <t t-if="barcode_base64">
+                <img t-att-src="'data:image/png;base64,' + barcode_base64" width='250' height='80'/>
+            </t>
+            <t t-else="">
+                <barcode encoding="CODE128"><t t-esc="order.name"/></barcode>
+            </t>
         </receipt>
     </t>
 
     <t t-name="XmlPosTicket_custom">
         <receipt align='center' width='40' value-thousands-separator=''>
             <t t-set="dateorder" t-value="order.formatted_validation_date || order.date_order"/>
-<!--            <h1><t t-esc="widget.pos.company.name"/></h1>-->
+            <h4><t t-esc="widget.pos.company.name"/></h4>
             <div>(<t t-esc="order.get_brn()"/>)</div>
             <t t-if="receipt.header">
                 <div><t t-esc="receipt.header"/></div>
@@ -3866,10 +3869,10 @@
                 <br/>
             </t>
             <!-- QR Code for E-Invoice -->
-            <t t-if="data and data.taxqr">
+            <t t-if="data and data.qr_code_base64">
                 <div>E-Invoice</div>
                 <div>Scan QR to Request</div>
-                <barcode encoding="QR" size="5"><t t-esc="data.taxqr"/></barcode>
+                <img t-att-src="'data:image/png;base64,' + data.qr_code_base64" width='80' height='80'/>
                 <div>Request Timeline:</div>
                 <div>Start Date: Next day after your purchase</div>
                 <div>Last Date: Within <t t-esc='taxInvoiceTimeframe'/> days from your purchase</div>

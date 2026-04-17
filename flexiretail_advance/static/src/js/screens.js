@@ -4265,31 +4265,86 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					return this.pos.get_order()._printed = true;
 				} else {
 					if (this.pos.user.pos_user_type == 'salesman') {
-						var receipt = QWeb.render('XmlPosTicket_custom_salesperson', {
-							widget: this,
-							pos: this.pos,
-							order: order,
-							receipt: order.export_for_printing(),
-							orderlines: order.get_orderlines(),
-							paymentlines: order.get_paymentlines(),
-						});
-					} else {
-						var base_url = this.getSession()['web.base.url'];
-						var qr_data = {
-							type: 'url',
-							taxqr: base_url + '/einvoice/' + order.uid,
-							taxInvoiceTimeframe: 3
+						var self = this;
+						var barcode_url = this.getSession()['web.base.url'] + '/report/barcode/Code128/' + encodeURIComponent(order.name);
+						var barcodeImg = new Image();
+						barcodeImg.crossOrigin = 'Anonymous';
+						barcodeImg.onload = function () {
+							var canvas = document.createElement('canvas');
+							canvas.width = barcodeImg.width || 250;
+							canvas.height = barcodeImg.height || 80;
+							canvas.getContext('2d').drawImage(barcodeImg, 0, 0);
+							var barcode_base64 = canvas.toDataURL('image/png').split(',')[1];
+							var receipt = QWeb.render('XmlPosTicket_custom_salesperson', {
+								widget: self,
+								pos: self.pos,
+								order: order,
+								receipt: order.export_for_printing(),
+								orderlines: order.get_orderlines(),
+								paymentlines: order.get_paymentlines(),
+								barcode_base64: barcode_base64,
+							});
+							self.pos.proxy.print_receipt(receipt);
+							self.pos.get_order()._printed = true;
 						};
-						var receipt = QWeb.render('XmlPosTicket_custom', {
-							widget: this,
-							pos: this.pos,
-							order: order,
-							receipt: order.export_for_printing(),
-							orderlines: order.get_orderlines(),
-							paymentlines: order.get_paymentlines(),
-							data: qr_data,
-							taxInvoiceTimeframe: qr_data.taxInvoiceTimeframe,
-						});
+						barcodeImg.onerror = function () {
+							var receipt = QWeb.render('XmlPosTicket_custom_salesperson', {
+								widget: self,
+								pos: self.pos,
+								order: order,
+								receipt: order.export_for_printing(),
+								orderlines: order.get_orderlines(),
+								paymentlines: order.get_paymentlines(),
+								barcode_base64: null,
+							});
+							self.pos.proxy.print_receipt(receipt);
+							self.pos.get_order()._printed = true;
+						};
+						barcodeImg.src = barcode_url;
+						return;
+					} else {
+						var self = this;
+						var base_url = this.getSession()['web.base.url'];
+						var qr_img_url = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + base_url + '/einvoice/' + order.uid;
+						var qrImg = new Image();
+						qrImg.crossOrigin = 'Anonymous';
+						qrImg.onload = function () {
+							var canvas = document.createElement('canvas');
+							canvas.width = 250;
+							canvas.height = 250;
+							canvas.getContext('2d').drawImage(qrImg, 0, 0, 250, 250);
+							var qr_code_base64 = canvas.toDataURL('image/png').split(',')[1];
+							var qr_data = { qr_code_base64: qr_code_base64, taxInvoiceTimeframe: 3 };
+							var receipt = QWeb.render('XmlPosTicket_custom', {
+								widget: self,
+								pos: self.pos,
+								order: order,
+								receipt: order.export_for_printing(),
+								orderlines: order.get_orderlines(),
+								paymentlines: order.get_paymentlines(),
+								data: qr_data,
+								taxInvoiceTimeframe: qr_data.taxInvoiceTimeframe,
+							});
+							self.pos.proxy.print_receipt(receipt);
+							self.pos.get_order()._printed = true;
+						};
+						qrImg.onerror = function () {
+							var qr_data = { qr_code_base64: null, taxInvoiceTimeframe: 3 };
+							var receipt = QWeb.render('XmlPosTicket_custom', {
+								widget: self,
+								pos: self.pos,
+								order: order,
+								receipt: order.export_for_printing(),
+								orderlines: order.get_orderlines(),
+								paymentlines: order.get_paymentlines(),
+								data: qr_data,
+								taxInvoiceTimeframe: qr_data.taxInvoiceTimeframe,
+							});
+							self.pos.proxy.print_receipt(receipt);
+							self.pos.get_order()._printed = true;
+						};
+						qrImg.src = qr_img_url;
+						return;
 					}
 				}
 			}
