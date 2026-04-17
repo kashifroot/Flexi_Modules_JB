@@ -523,7 +523,8 @@ class Escpos:
         elif bc.upper() == "NW7":
             self._raw(BARCODE_NW7)
         else:
-            raise BarcodeTypeError()
+            self._raw(BARCODE_EAN13)
+            # raise BarcodeTypeError()
         # Print Code
         if code:
             self._raw(code)
