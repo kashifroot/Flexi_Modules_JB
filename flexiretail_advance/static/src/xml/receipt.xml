@@ -3649,16 +3649,16 @@
                 </right>
             </line>
             <br/>
-            <t t-if="barcode_img">
-                <img t-att-src="barcode_img" width='250' height='80'/>
-            </t>
+            <barcode encoding="CODE128">
+                <t t-esc="order.name"/>
+            </barcode>
         </receipt>
     </t>
 
     <t t-name="XmlPosTicket_custom">
         <receipt align='center' width='40' value-thousands-separator=''>
             <t t-set="dateorder" t-value="order.formatted_validation_date || order.date_order"/>
-            <h1><t t-esc="widget.pos.company.name"/></h1>
+<!--            <h1><t t-esc="widget.pos.company.name"/></h1>-->
             <div>(<t t-esc="order.get_brn()"/>)</div>
             <t t-if="receipt.header">
                 <div><t t-esc="receipt.header"/></div>
@@ -3869,7 +3869,7 @@
             <t t-if="data and data.taxqr">
                 <div>E-Invoice</div>
                 <div>Scan QR to Request</div>
-                <img t-att-src="data.taxqr" style="max-width:80px; height:80px;padding: 3px;"/>
+                <barcode encoding="QR" size="5"><t t-esc="data.taxqr"/></barcode>
                 <div>Request Timeline:</div>
                 <div>Start Date: Next day after your purchase</div>
                 <div>Last Date: Within <t t-esc='taxInvoiceTimeframe'/> days from your purchase</div>
@@ -3880,10 +3880,10 @@
                 <div><t t-esc="receipt.footer"/></div>
             </t>
             <br/>
-            <div font='b'>
-                <div><t t-esc='receipt.name'/></div>
-                <div><t t-esc='receipt.date.localestring'/></div>
-            </div>
+<!--            <div font='b'>-->
+<!--                <div><t t-esc='receipt.name'/></div>-->
+<!--                <div><t t-esc='receipt.date.localestring'/></div>-->
+<!--            </div>-->
         </receipt>
     </t>
 

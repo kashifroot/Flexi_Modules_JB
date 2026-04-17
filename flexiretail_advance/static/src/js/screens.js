@@ -4265,76 +4265,31 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					return this.pos.get_order()._printed = true;
 				} else {
 					if (this.pos.user.pos_user_type == 'salesman') {
-						var self = this;
-						var barcode_url = this.getSession()['web.base.url'] + '/report/barcode/Code128/' + encodeURIComponent(order.name);
-
-						var _renderAndPrintSalesman = function (barcode_img) {
-							var receipt = QWeb.render('XmlPosTicket_custom_salesperson', {
-								widget: self,
-								pos: self.pos,
-								order: order,
-								receipt: order.export_for_printing(),
-								orderlines: order.get_orderlines(),
-								paymentlines: order.get_paymentlines(),
-								barcode_img: barcode_img,
-							});
-							self.pos.proxy.print_receipt(receipt);
-							self.pos.get_order()._printed = true;
-						};
-
-						var barcodeImg = new Image();
-						barcodeImg.crossOrigin = 'Anonymous';
-						barcodeImg.onload = function () {
-							var canvas = document.createElement('canvas');
-							canvas.width = barcodeImg.width || 250;
-							canvas.height = barcodeImg.height || 80;
-							canvas.getContext('2d').drawImage(barcodeImg, 0, 0);
-							_renderAndPrintSalesman(canvas.toDataURL('image/png'));
-						};
-						barcodeImg.onerror = function () {
-							_renderAndPrintSalesman(null);
-						};
-						barcodeImg.src = barcode_url;
-						return;
+						var receipt = QWeb.render('XmlPosTicket_custom_salesperson', {
+							widget: this,
+							pos: this.pos,
+							order: order,
+							receipt: order.export_for_printing(),
+							orderlines: order.get_orderlines(),
+							paymentlines: order.get_paymentlines(),
+						});
 					} else {
-						var self = this;
 						var base_url = this.getSession()['web.base.url'];
-						var url = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + base_url + '/einvoice/' + order.uid;
-
-						var _renderAndPrint = function (taxqr) {
-							var qr_data = {
-								type: 'url',
-								taxqr: taxqr,
-								taxInvoiceTimeframe: 3
-							};
-							var receipt = QWeb.render('XmlPosTicket_custom', {
-								widget: self,
-								pos: self.pos,
-								order: order,
-								receipt: order.export_for_printing(),
-								orderlines: order.get_orderlines(),
-								paymentlines: order.get_paymentlines(),
-								data: qr_data,
-								taxInvoiceTimeframe: qr_data.taxInvoiceTimeframe,
-							});
-							self.pos.proxy.print_receipt(receipt);
-							self.pos.get_order()._printed = true;
+						var qr_data = {
+							type: 'url',
+							taxqr: base_url + '/einvoice/' + order.uid,
+							taxInvoiceTimeframe: 3
 						};
-
-						var img = new Image();
-						img.crossOrigin = 'Anonymous';
-						img.onload = function () {
-							var canvas = document.createElement('canvas');
-							canvas.width = 250;
-							canvas.height = 250;
-							canvas.getContext('2d').drawImage(img, 0, 0, 250, 250);
-							_renderAndPrint(canvas.toDataURL('image/png'));
-						};
-						img.onerror = function () {
-							_renderAndPrint(url);
-						};
-						img.src = url;
-						return;
+						var receipt = QWeb.render('XmlPosTicket_custom', {
+							widget: this,
+							pos: this.pos,
+							order: order,
+							receipt: order.export_for_printing(),
+							orderlines: order.get_orderlines(),
+							paymentlines: order.get_paymentlines(),
+							data: qr_data,
+							taxInvoiceTimeframe: qr_data.taxInvoiceTimeframe,
+						});
 					}
 				}
 			}
