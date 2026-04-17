@@ -4264,7 +4264,36 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					this.pos.proxy.print_receipt(order.print_xml_receipt_html);
 					return this.pos.get_order()._printed = true;
 				} else {
-					var receipt = QWeb.render('XmlReceipt_custom', env);
+					if (this.pos.user.pos_user_type == 'salesman') {
+						var receipt = QWeb.render('XmlPosTicket_custom_salesperson', {
+							widget: this,
+							pos: this.pos,
+							order: order,
+							receipt: order.export_for_printing(),
+							orderlines: order.get_orderlines(),
+							paymentlines: order.get_paymentlines(),
+						});
+					} else {
+						var self = this;
+						var qr_data = {};
+						var base_url = this.getSession()['web.base.url'];
+						var url = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + base_url + '/einvoice/' + order.uid;
+						qr_data = {
+							type: 'url',
+							taxqr: url,
+							taxInvoiceTimeframe: 3
+						};
+						var receipt = QWeb.render('XmlPosTicket_custom', {
+							widget: this,
+							pos: this.pos,
+							order: order,
+							receipt: order.export_for_printing(),
+							orderlines: order.get_orderlines(),
+							paymentlines: order.get_paymentlines(),
+							data: qr_data,
+							taxInvoiceTimeframe: qr_data.taxInvoiceTimeframe,
+						});
+					}
 				}
 			}
 			this.pos.proxy.print_receipt(receipt);

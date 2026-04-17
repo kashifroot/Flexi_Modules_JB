@@ -3574,6 +3574,319 @@
     </t>
 
 
+    <t t-name="XmlPosTicket_custom_salesperson">
+        <receipt align='center' width='40' value-thousands-separator=''>
+            <h2>UNPAID</h2>
+            <br/>
+            <line>
+                <left>Sticker:</left>
+                <right><t t-esc="order.sticker"/></right>
+            </line>
+            <line>
+                <left>Order:</left>
+                <right><t t-esc="order.name"/></right>
+            </line>
+            <t t-if="order.salesperson_name">
+                <line>
+                    <left>User:</left>
+                    <right><t t-esc="order.salesperson_name"/></right>
+                </line>
+            </t>
+            <t t-else="">
+                <line>
+                    <left>User:</left>
+                    <right><t t-esc="widget.pos.get_cashier().name"/></right>
+                </line>
+            </t>
+            <line><right>--------</right></line>
+            <t t-foreach="orderlines" t-as="orderline">
+                <line>
+                    <left>
+                        <t t-if="orderline.get_product().default_code">
+                            <t t-esc="orderline.get_product().default_code"/>
+                            <t t-if="orderline.get_product().second_name">
+                                <t t-esc="orderline.get_product().second_name"/>
+                            </t>
+                            <t t-else="">
+                                <t t-esc="widget.get_15_char_product(orderline.get_product().name)"/>
+                            </t>
+                        </t>
+                        <t t-else="">
+                            <t t-esc="orderline.get_product().name"/>
+                        </t>
+                    </left>
+                </line>
+                <line indent='1'>
+                    <left>
+                        <t t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
+                        @
+                        <t t-if="orderline.discount_amount > 0 or orderline.discount > 0">
+                            <t t-esc="widget.after_discount_price(orderline.quantity, orderline.get_display_price())"/>
+                        </t>
+                        <t t-else="">
+                            <t t-esc="widget.format_currency_front(orderline.price)"/>
+                        </t>
+                    </left>
+                    <right>
+                        <t t-esc="widget.format_currency_front(orderline.get_display_price())"/>
+                    </right>
+                </line>
+            </t>
+            <line><right>--------</right></line>
+            <line class='total'>
+                <left>Total:</left>
+                <right>
+                    <t t-if="order.get_credit_detail()">
+                        <t t-set="net_total" t-value="0"/>
+                        <t t-foreach="order.get_credit_detail()" t-as="credit">
+                            <t t-set="net_total" t-value="net_total + credit.amount"/>
+                        </t>
+                        <t t-esc="widget.format_currency_front(order.getNetTotalTaxIncluded() + net_total)"/>
+                    </t>
+                    <t t-else="">
+                        <t t-esc="widget.format_currency_front(order.getNetTotalTaxIncluded())"/>
+                    </t>
+                </right>
+            </line>
+            <br/>
+            <barcode encoding="CODE128">
+                <t t-esc="order.name"/>
+            </barcode>
+        </receipt>
+    </t>
+
+    <t t-name="XmlPosTicket_custom">
+        <receipt align='center' width='40' value-thousands-separator=''>
+            <t t-set="dateorder" t-value="order.formatted_validation_date || order.date_order"/>
+            <h1><t t-esc="widget.pos.company.name"/></h1>
+            <div>(<t t-esc="order.get_brn()"/>)</div>
+            <t t-if="receipt.header">
+                <div><t t-esc="receipt.header"/></div>
+            </t>
+            <div>Tel: <t t-esc="widget.pos.company.phone || ''"/></div>
+            <div>Tin: <t t-esc="order.get_tin()"/></div>
+            <div><t t-raw="dateorder"/></div>
+            <div><t t-esc="order.name"/></div>
+            <br/>
+            <line><right>--------</right></line>
+            <t t-foreach="orderlines" t-as="orderline">
+                <line>
+                    <left>
+                        <t t-if="orderline.get_product().default_code">
+                            <t t-esc="orderline.get_product().default_code"/>
+                            <t t-if="orderline.get_product().second_name">
+                                <t t-esc="orderline.get_product().second_name"/>
+                            </t>
+                            <t t-else="">
+                                <t t-esc="widget.get_15_char_product(orderline.get_product().name)"/>
+                            </t>
+                        </t>
+                        <t t-else="">
+                            <t t-esc="orderline.get_product().name"/>
+                        </t>
+                    </left>
+                </line>
+                <line indent='1'>
+                    <left>
+                        <t t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
+                        @
+                        <t t-if="orderline.discount_amount > 0 or orderline.discount > 0">
+                            <t t-set="discounted_price" t-value="widget.after_discount_price(orderline.quantity, orderline.get_display_price())"/>
+                            <t t-esc="discounted_price"/>
+                        </t>
+                        <t t-else="">
+                            <t t-esc="widget.format_currency_front(orderline.price)"/>
+                        </t>
+                    </left>
+                    <right>
+                        <t t-esc="widget.format_currency_front(orderline.get_display_price())"/>
+                    </right>
+                </line>
+            </t>
+            <line><right>--------</right></line>
+            <line class='total' size='double-height'>
+                <left>Net Total:</left>
+                <right>
+                    <t t-if="order.get_credit_detail()">
+                        <t t-set="net_total" t-value="0"/>
+                        <t t-foreach="order.get_credit_detail()" t-as="credit">
+                            <t t-set="net_total" t-value="net_total + credit.amount"/>
+                        </t>
+                        <t t-esc="widget.format_currency_front(order.getNetTotalTaxIncluded() + net_total)"/>
+                    </t>
+                    <t t-else="">
+                        <t t-esc="widget.format_currency_front(order.getNetTotalTaxIncluded())"/>
+                    </t>
+                </right>
+            </line>
+            <line>
+                <left>Change:</left>
+                <right><t t-esc="widget.format_currency_front(order.get_change())"/></right>
+            </line>
+            <br/>
+            <!-- Credit Details -->
+            <t t-if="widget.pos.config.enable_credit and widget.pos.config.receipt_balance
+                     and widget.pos.get_client() and widget.pos.get_order().get_credit_detail() and widget.pos.get_order().get_credit_detail()[0]">
+                <div>--------------------------------</div>
+                <div>Credit Details</div>
+                <div>--------------------------------</div>
+                <line>
+                    <left>Customer:</left>
+                    <right><t t-esc="widget.pos.get_client().name"/></right>
+                </line>
+                <line>
+                    <left>Available Credit:</left>
+                    <right><t t-esc="widget.format_currency(widget.pos.get_client().remaining_credit_amount)"/></right>
+                </line>
+                <br/>
+            </t>
+            <!-- Delivery Details -->
+            <t t-if="order.get_delivery_date() and order.get_delivery_address()">
+                <div>--------------------------------</div>
+                <div>Delivery Details</div>
+                <div>--------------------------------</div>
+                <line><left>Delivery Date</left><right><t t-esc="order.get_delivery_date() or ''"/></right></line>
+                <line><left>Delivery Time</left><right><t t-esc="order.get_delivery_time() or ''"/></right></line>
+                <line><left>Delivery Address</left><right><t t-esc="order.get_delivery_address() or ''"/></right></line>
+                <line>
+                    <left>Delivery Type</left>
+                    <right>
+                        <t t-if="order.get_delivery_type() == 'pending'">Pending</t>
+                        <t t-if="order.get_delivery_type() == 'delivered'">Delivered</t>
+                    </right>
+                </line>
+                <t t-if="order.get_delivery_user_id()">
+                    <line>
+                        <left>Delivery User</left>
+                        <right><t t-esc="widget.pos.user_by_id[order.get_delivery_user_id()].name"/></right>
+                    </line>
+                </t>
+                <br/>
+            </t>
+            <!-- Return Valid Days -->
+            <t t-if="widget.pos.config.enable_print_valid_days
+                     and widget.pos.get_cashier().access_print_valid_days and !widget.pos.get_order().get_ret_o_id()">
+                <div>--------------------------------</div>
+                <div>Return Valid Days</div>
+                <div>--------------------------------</div>
+                <t t-foreach="orderlines" t-as="orderline">
+                    <t t-if="orderline.return_valid_days > 0">
+                        <line>
+                            <left><t t-esc="orderline.product.display_name"/></left>
+                            <right><t t-esc="orderline.return_valid_days"/></right>
+                        </line>
+                    </t>
+                </t>
+                <br/>
+            </t>
+            <!-- Gift Voucher -->
+            <t t-if="widget.pos.config.enable_gift_voucher">
+                <t t-if="order.get_voucher().length > 0 and order.get_remaining_redeemption()">
+                    <div>--------------------------------</div>
+                    <div>Voucher Information</div>
+                    <div>--------------------------------</div>
+                    <t t-foreach="order.get_remaining_redeemption()" t-as="voucher">
+                        <line>
+                            <left><t t-esc="voucher.voucher_name"/>(<t t-esc="voucher.voucher_code"/>)</left>
+                            <right><t t-esc="voucher.remaining_redeemption"/></right>
+                        </line>
+                    </t>
+                    <br/>
+                </t>
+            </t>
+            <!-- Loyalty Points -->
+            <t t-if="widget.pos.config.enable_pos_loyalty and widget.pos.get_cashier().access_pos_loyalty and order.get_client()">
+                <div>--------------------------------</div>
+                <div>Loyalty Points</div>
+                <div>--------------------------------</div>
+                <t t-if="order.get_client() and order.get_client().total_remaining_points">
+                    <line><left>Your Points:</left><right><t t-esc="order.get_client().total_remaining_points.toFixed(2)"/></right></line>
+                </t>
+                <t t-if="order.get_loyalty_earned_point() > 0 and order.get_client()">
+                    <line><left>Earned Points:</left><right><t t-esc="order.get_loyalty_earned_point()"/></right></line>
+                </t>
+                <t t-if="order.get_loyalty_redeemed_point() and order.get_client()">
+                    <line><left>Redeemed Points:</left><right><t t-esc="order.get_loyalty_redeemed_point()"/></right></line>
+                </t>
+                <t t-if="order.get_client()">
+                    <line><left>Total Points:</left><right><t t-esc="order.get_total_loyalty_points()"/></right></line>
+                </t>
+                <br/>
+            </t>
+            <!-- Order Notes -->
+            <t t-if="order.get_sale_note()">
+                <div>Note:</div>
+                <div><t t-esc="order.get_sale_note()"/></div>
+                <br/>
+            </t>
+            <t t-if="order.get_order_note()">
+                <div>Note:</div>
+                <div><t t-esc="order.get_order_note()"/></div>
+                <br/>
+            </t>
+            <!-- Gift Cards -->
+            <t t-if="order.get_giftcard().length > 0">
+                <div>--------------------------------</div>
+                <div>Card Details</div>
+                <div>--------------------------------</div>
+                <t t-foreach="order.get_giftcard()" t-as="giftcard">
+                    <t t-if="giftcard['giftcard_customer_name']">
+                        <line><left>Customer:</left><right><t t-esc="giftcard['giftcard_customer_name']"/></right></line>
+                    </t>
+                    <line><left>Card No.:</left><right><t t-esc="giftcard['giftcard_card_no']"/></right></line>
+                    <line><left>Expire Date:</left><right><t t-esc="giftcard['giftcard_expire_date']"/></right></line>
+                    <line><left>Card Balance:</left><right><t t-esc="widget.format_currency(giftcard['giftcard_amount'])"/></right></line>
+                </t>
+                <br/>
+            </t>
+            <t t-if="order.get_recharge_giftcard().length > 0">
+                <div>--------------------------------</div>
+                <div>Card Details</div>
+                <div>--------------------------------</div>
+                <t t-foreach="order.get_recharge_giftcard()" t-as="recharge">
+                    <t t-if="recharge['customer_name']">
+                        <line><left>Customer:</left><right><t t-esc="recharge['customer_name']"/></right></line>
+                    </t>
+                    <line><left>Card No.:</left><right><t t-esc="recharge['recharge_card_no']"/></right></line>
+                    <line><left>Total Card Balance:</left><right><t t-esc="widget.format_currency(recharge['total_card_amount'])"/></right></line>
+                </t>
+                <br/>
+            </t>
+            <t t-if="order.get_redeem_giftcard().length > 0">
+                <div>--------------------------------</div>
+                <div>Card Details</div>
+                <div>--------------------------------</div>
+                <t t-foreach="order.get_redeem_giftcard()" t-as="redeem">
+                    <t t-if="redeem['customer_name']">
+                        <line><left>Customer:</left><right><t t-esc="redeem['customer_name']"/></right></line>
+                    </t>
+                    <line><left>Card No.:</left><right><t t-esc="redeem['redeem_card']"/></right></line>
+                    <line><left>Card Balance:</left><right><t t-esc="widget.format_currency(redeem['redeem_remaining'])"/></right></line>
+                </t>
+                <br/>
+            </t>
+            <!-- QR Code for E-Invoice -->
+            <t t-if="data and data.taxqr">
+                <div>E-Invoice</div>
+                <div>Scan QR to Request</div>
+                <img t-att-src="data.taxqr" width='80' height='80'/>
+                <div>Request Timeline:</div>
+                <div>Start Date: Next day after your purchase</div>
+                <div>Last Date: Within <t t-esc='taxInvoiceTimeframe'/> days from your purchase</div>
+                <br/>
+            </t>
+            <!-- Footer -->
+            <t t-if="receipt.footer">
+                <div><t t-esc="receipt.footer"/></div>
+            </t>
+            <br/>
+            <div font='b'>
+                <div><t t-esc='receipt.name'/></div>
+                <div><t t-esc='receipt.date.localestring'/></div>
+            </div>
+        </receipt>
+    </t>
+
     <t t-name="XmlReceipt_custom">
         <receipt align='center' width='40' value-thousands-separator=''>
 <!--            <t t-if='receipt.company.logo'>-->

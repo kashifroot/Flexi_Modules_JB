@@ -11,7 +11,7 @@
 
 {
     'name': 'POS Retail Responsive',
-    'version': '11.1.20',
+    'version': '11.1.30',
     'author': 'Acespritech Solutions Pvt. Ltd., sami@cybat',
     'summary': 'POS Retail with Responsive Design (Community)',
     'description': "POS Retail with Responsive Design (Community)",
