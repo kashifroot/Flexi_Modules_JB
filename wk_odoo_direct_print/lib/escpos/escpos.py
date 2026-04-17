@@ -29,7 +29,7 @@ from .constants import *
 from .exceptions import *
 import logging
 
-_logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 def utfstr(stuff):
     """ converts stuff to string and does without failing if stuff is a utf8 string """
