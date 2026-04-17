@@ -3649,9 +3649,9 @@
                 </right>
             </line>
             <br/>
-            <barcode encoding="CODE128">
-                <t t-esc="order.name"/>
-            </barcode>
+            <t t-if="barcode_img">
+                <img t-att-src="barcode_img" width='250' height='80'/>
+            </t>
         </receipt>
     </t>
 
