@@ -3576,6 +3576,12 @@
 
     <t t-name="XmlPosTicket_custom_salesperson">
         <receipt align='center' width='40' value-thousands-separator=''>
+            <t t-if="widget.pos.company_logo_base64">
+                <div style="text-align:center;">
+                    <img t-att-src="widget.pos.company_logo_base64" style="max-height: 70px;width:auto;height:auto;"/>
+                    <br/>
+                </div>
+            </t>
             <h2>UNPAID</h2>
             <br/>
             <line>
@@ -3660,6 +3666,12 @@
 
     <t t-name="XmlPosTicket_custom">
         <receipt align='center' width='40' value-thousands-separator=''>
+            <t t-if="widget.pos.company_logo_base64">
+                <div style="text-align:center;">
+                    <img t-att-src="widget.pos.company_logo_base64" style="max-height: 70px;width:auto;height:auto;"/>
+                    <br/>
+                </div>
+            </t>
             <t t-set="dateorder" t-value="order.formatted_validation_date || order.date_order"/>
             <h4><t t-esc="widget.pos.company.name"/></h4>
             <div>(<t t-esc="order.get_brn()"/>)</div>
