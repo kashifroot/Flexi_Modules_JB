@@ -198,8 +198,32 @@ odoo.define('pos_direct_print.Printer', function (require) {
                 }
             }
 
+            // Compress barcode image if available
+            let compressedBarcode = null;
+            if (order?._direct_print_barcode_base64) {
+                try {
+                    compressedBarcode = await this.compressBase64Image(
+                        'data:image/png;base64,' + order._direct_print_barcode_base64
+                    );
+                } catch (error) {
+                    console.error("Barcode compression failed:", error);
+                }
+            }
+
+            // Compress QR code image if available
+            let compressedQr = null;
+            if (order?._direct_print_qr_code_base64) {
+                try {
+                    compressedQr = await this.compressBase64Image(
+                        'data:image/png;base64,' + order._direct_print_qr_code_base64
+                    );
+                } catch (error) {
+                    console.error("QR code compression failed:", error);
+                }
+            }
+
             // Use complex printing only when needed
-            const finalMethod = compressedLogo ? 'print-complex' : method;
+            const finalMethod = (compressedLogo || compressedBarcode || compressedQr) ? 'print-complex' : method;
 
             const finalReceiptParts = [];
 
@@ -214,6 +238,20 @@ odoo.define('pos_direct_print.Printer', function (require) {
                 finalReceiptParts.push({
                     type: "escpos",
                     content: receiptParts,
+                });
+            }
+
+            if (compressedBarcode) {
+                finalReceiptParts.push({
+                    type: "image",
+                    content: compressedBarcode,
+                });
+            }
+
+            if (compressedQr) {
+                finalReceiptParts.push({
+                    type: "image",
+                    content: compressedQr,
                 });
             }
 

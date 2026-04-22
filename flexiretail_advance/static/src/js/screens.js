@@ -4263,8 +4263,10 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					order.is_reprint = false;
 					this.pos.proxy.print_receipt(order.print_xml_receipt_html);
 					return this.pos.get_order()._printed = true;
+
 				} else {
 					if (this.pos.user.pos_user_type == 'salesman') {
+
 						var self = this;
 						var barcode_url = this.getSession()['web.base.url'] + '/report/barcode/Code128/' + encodeURIComponent(order.name);
 						var barcodeImg = new Image();
@@ -4275,6 +4277,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 							canvas.height = barcodeImg.height || 80;
 							canvas.getContext('2d').drawImage(barcodeImg, 0, 0);
 							var barcode_base64 = canvas.toDataURL('image/png').split(',')[1];
+							order._direct_print_barcode_base64 = barcode_base64;
 							var receipt = QWeb.render('XmlPosTicket_custom_salesperson', {
 								widget: self,
 								pos: self.pos,
@@ -4288,6 +4291,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 							self.pos.get_order()._printed = true;
 						};
 						barcodeImg.onerror = function () {
+							order._direct_print_barcode_base64 = null;
 							var receipt = QWeb.render('XmlPosTicket_custom_salesperson', {
 								widget: self,
 								pos: self.pos,
@@ -4314,6 +4318,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 							canvas.height = 250;
 							canvas.getContext('2d').drawImage(qrImg, 0, 0, 250, 250);
 							var qr_code_base64 = canvas.toDataURL('image/png').split(',')[1];
+							order._direct_print_qr_code_base64 = qr_code_base64;
 							var qr_data = { qr_code_base64: qr_code_base64, taxInvoiceTimeframe: 3 };
 							var receipt = QWeb.render('XmlPosTicket_custom', {
 								widget: self,
@@ -4329,6 +4334,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 							self.pos.get_order()._printed = true;
 						};
 						qrImg.onerror = function () {
+							order._direct_print_qr_code_base64 = null;
 							var qr_data = { qr_code_base64: null, taxInvoiceTimeframe: 3 };
 							var receipt = QWeb.render('XmlPosTicket_custom', {
 								widget: self,
