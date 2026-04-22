@@ -7,12 +7,12 @@
 
 {
     "name"          :  "Print Direct: Direct Printing from Desktop, Mobile, Android & iOS",
-    "summary"       :  """Effortlessly print any type of report, PDF, shipping label, ZPL, or ESC/POS on any printer— local, thermal, Zebra, remote, Wi-Fi, or Bluetooth — no downloads, no annoying pop-ups, and no printing limitations!
+    "summary"       :  """CUSTOM: Effortlessly print any type of report, PDF, shipping label, ZPL, or ESC/POS on any printer— local, thermal, Zebra, remote, Wi-Fi, or Bluetooth — no downloads, no annoying pop-ups, and no printing limitations!
                     Print Direct : Single Click Print
 Keywords: Zebra Print | Wi-Fi Printer for Odoo | Print Reports from Odoo | Odoo Direct Print Pro | Thermal Print | Shipping Print | Automated Print Workflow | Print Custom Labels | Odoo Label Printing | Direct Print Cloud Service | Smart Print Solution | Direct Print | Print Labels from Odoo | Receipt Printer | Print Using Cloud Service | Print Automation for Odoo | Multi-device Print | ERP Printing Solution | Remote Printer Access | Print Directly from Odoo | Cloud Printing for Odoo | Print ZPL from Odoo | Local Printer Integration | Invoice Print | Barcode Print | Print Directly | Bluetooth Printer for Odoo | On-demand Print | Print Shipping Labels in Odoo | IoTBox Free Print | Odoo Print | Fast Printing from Odoo | Automated Printing | ESC/POS Print | ZPL Label Print | Direct Print Integration | Shipping Label Printing from Odoo | Cloud Print | Print Without Downloading PDF | Seamless Printing Integration | Print Without Downloading | Odoo Print Module | Print Custom Labels | Plug-and-play Print | Print Reports from Odoo | Odoo to Cloud Printer | Printer Integration | Print Directly without Downloading | PrintNode Alternative | Print Automation for Odoo | Quick Print | Bluetooth Print | Direct Print Pro | Odoo Printing Solution | Print Shipping Labels in Odoo | Wireless and Bluetooth Printer Support | IoT Printing Solution | Seamless Print | Printer Connection | Print Custom Labels | Print ZPL from Odoo | Odoo Direct Print | Shipping Print | Network Print | Print Integration | Remote Printing | Mobile Printing | Android Printing | Tablet Printing | Print from Mobile | Remote Mobile Print | Cloud Printing on Mobile | Mobile Printing Solution | escpos
                     """,
     "category"      :  "Extra Tools",
-    "version"       :  "3.0.1",
+    "version"       :  "3.0.2",
     "sequence"      :   1,
     "author"        :  "Webkul Software Pvt. Ltd.",
     "license"       :  "Other proprietary",

@@ -91,6 +91,7 @@ odoo.define('pos_direct_print.Printer', function (require) {
             }
             sendPrintingXmlReceiptjob();
         },
+
         async get_esc_command_set(xmlReceipt) {
             xmlReceipt = xmlReceipt
                 .replaceAll('<br>', '<br></br>')    // Ensure self-closing
@@ -109,22 +110,118 @@ odoo.define('pos_direct_print.Printer', function (require) {
             return wk_receipt_data
         },
 
-        send_printing_job: function (receiptParts, method = 'print-raw', kitchen_receipt = false, is_byte_stream = false) {
+        compressBase64Image(base64, quality = 0.7, maxWidth = 1920, maxHeight = 1080) {
+            return new Promise((resolve, reject) => {
+                const base64Data = base64.split(',')[1] || base64;
+                const mimeType = base64.match(/data:([^;]+);/)?.[1] || 'image/jpeg';
+                const byteCharacters = atob(base64Data);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                
+                const img = new Image();
+                
+                img.onload = () => {
+                    URL.revokeObjectURL(url);
+                
+                    const canvas = document.createElement('canvas');
+                    let { width, height } = img;
+                    if (width > maxWidth || height > maxHeight) {
+                        const ratio = Math.min(maxWidth / width, maxHeight / height);
+                        width = Math.floor(width * ratio);
+                        height = Math.floor(height * ratio);
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    const ctx = canvas.getContext('2d');
+                    // For PNG or images with transparency, preserve the transparency
+                    if (mimeType === 'image/png') {
+                        // Don't fill background - keep transparency
+                        ctx.clearRect(0, 0, width, height);
+                    } else {
+                        // For JPEG, fill with white background
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, width, height);
+                    }
+                    
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Use the original format
+                    const outputFormat = mimeType;
+                    
+                    let compressedBase64 = outputFormat === 'image/jpeg' 
+                        ? canvas.toDataURL(outputFormat, quality)
+                        : canvas.toDataURL(outputFormat);
+                        
+                    compressedBase64 = compressedBase64.split(',')[1];
+
+
+
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+                    resolve(compressedBase64);
+                };
+                
+                img.onerror = (error) => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('Failed to load image: ' + error));
+                };
+                img.src = url;
+            });
+        },
+
+        async send_printing_job(receiptParts, method = 'print-raw', kitchen_receipt = false, is_byte_stream = false) {
             const printerId = this.direct_printer_id;
-            if (this && this.pos_cashdrawer && !kitchen_receipt) {
-                return rpc.query({
-                    model: 'print.jobs',
-                    method: 'create_print_and_cashdrawer_job',
-                    args: [[], printerId, method, receiptParts, undefined, is_byte_stream],
-                    kwargs: {},
-                })
+            if (!printerId) {
+                console.warn("No printer configured.");
+                return;
             }
+
+            const order = this.pos.get_order();
+            const printingData = order?.export_for_printing() || {};
+
+            let compressedLogo = null;
+
+            // Compress logo only if available
+            if (printingData.company?.logo) {
+                try {
+                    compressedLogo = await this.compressBase64Image(printingData.company.logo);
+                } catch (error) {
+                    console.error("Logo compression failed:", error);
+                }
+            }
+
+            // Use complex printing only when needed
+            const finalMethod = compressedLogo ? 'print-complex' : method;
+
+            const finalReceiptParts = [];
+
+            if (compressedLogo) {
+                finalReceiptParts.push({
+                    type: "image",
+                    content: compressedLogo,
+                });
+            }
+
+            if (receiptParts) {
+                finalReceiptParts.push({
+                    type: "escpos",
+                    content: receiptParts,
+                });
+            }
+
             return rpc.query({
                 model: 'print.jobs',
                 method: 'create_print_job',
-                args: [[], printerId, method, receiptParts, undefined, is_byte_stream],
-                kwargs: {},
-            })
+                args: [[], printerId, finalMethod, finalReceiptParts, undefined, is_byte_stream],
+            });
         }
     });
 

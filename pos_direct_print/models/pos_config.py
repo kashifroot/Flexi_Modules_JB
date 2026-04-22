@@ -51,7 +51,7 @@ class PrintJobs(models.Model):
         self.create_print_job(printer_id, 'print-raw', CD_KICK_5, None, False)
         # for print 
         self.create_print_job(printer_id,method,content,file_extension,is_byte_stream)
-    
+        
     def create_print_job(self, printer_id, method, content, file_extension=None, is_byte_stream=False):
         # ----------------------------------------------------------------------
         # is_byte_stream:
@@ -67,18 +67,71 @@ class PrintJobs(models.Model):
         vals = {
             'printer_id': printer_id,
             'method': method,
-            'content': content.replace("\x00", "[NULL]"),
+            'content': content,
             # 'file_extension': file_extension,
             # 'is_byte_stream': is_byte_stream,
         }
-        
         new_print_job = self.create(vals)
+        if new_print_job.method == 'print-complex':
+            content_list = literal_eval(new_print_job.content)
+            for i, item in enumerate(content_list):
+                if item['type'] == 'image' and item['content']:
+                    image_data = base64.b64decode(item['content'])
+                    image_file = BytesIO(image_data)
+                    img = Image.open(image_file)
+                    if img.mode == 'P':
+                        img = img.convert('RGBA')
+                    if img.mode == 'RGBA':
+                        background = Image.new('RGBA', img.size, (255, 255, 255, 255))
+                        img = Image.alpha_composite(background, img)
+                    img = img.convert('RGB')
+                    try:
+                        resample_filter = Image.Resampling.LANCZOS
+                    except AttributeError:
+                        resample_filter = Image.ANTIALIAS
+
+                    max_width = 530
+                    if img.width > max_width:
+                        img.thumbnail((max_width, 9999), resample_filter)
+
+                    img_bw = img.convert('1')
+                    p = Dummy()
+                    # p.profile.media['width']['pixels'] = img.width  # Matches actual image width
+                    p.image(img_bw)
+                    item['content'] = str(p.output)
+            new_print_job.content = content_list
+
+        if new_print_job.method == 'print-image':
+            image_data = base64.b64decode(new_print_job.content)
+            image_file = BytesIO(image_data)
+            img = Image.open(image_file)
+            if img.mode == 'P':
+                img = img.convert('RGBA')
+            if img.mode == 'RGBA':
+                background = Image.new('RGBA', img.size, (255, 255, 255, 255))
+                img = Image.alpha_composite(background, img)
+            img = img.convert('RGB')
+            try:
+                resample_filter = Image.Resampling.LANCZOS
+            except AttributeError:
+                resample_filter = Image.ANTIALIAS
+
+            max_width = 530
+            if img.width > max_width:
+                img.thumbnail((max_width, 9999), resample_filter)
+
+            img_bw = img.convert('1')
+            p = Dummy()
+            f = dir(Dummy)
+            # p.profile.media['width']['pixels'] = img.width  # Matches actual image width
+            p.image(img_bw)
+            new_print_job.content = str(p.output)
+            new_print_job.is_dummy = True
         for each_partner in new_print_job.printer_id.hostmachine_id.user_ids:
             message = {'type': 'print_direct',
                         'payload': {'method': 'print-job-cmd', 'host_id': new_print_job.printer_id.hostmachine_id.host_id, 'record_id':new_print_job.id}}
             self.env['bus.bus'].sendone((self._cr.dbname, 'res.partner', each_partner.partner_id.id), message)
         return new_print_job
-
 
 class WkPrinter(models.Model):
     _inherit = "wk.printer"

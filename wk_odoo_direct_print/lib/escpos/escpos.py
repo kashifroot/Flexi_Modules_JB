@@ -29,7 +29,7 @@ from .constants import *
 from .exceptions import *
 import logging
 
-logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 def utfstr(stuff):
     """ converts stuff to string and does without failing if stuff is a utf8 string """
@@ -436,12 +436,12 @@ class Escpos:
 
     def print_base64_image(self,img):
 
-        logger.info('print_b64_img')
+        # logger.info('print_b64_img')
 
         id = md5(img).digest()
 
         if id not in self.img_cache:
-            logger.info('not in cache')
+            # logger.info('not in cache')
 
             img = img[img.find(b',')+1:]
             f = io.BytesIO(b'img')
@@ -456,16 +456,16 @@ class Escpos:
             else:
                 img.paste(img_rgba)
 
-            logger.info('convert image')
+            # logger.info('convert image')
         
             pix_line, img_size = self._convert_image(img)
 
-            logger.info('print image')
+            # logger.info('print image')
 
             buffer = self._raw_print_image(pix_line, img_size)
             self.img_cache[id] = buffer
 
-        logger.info('raw image')
+        # logger.info('raw image')
 
         self._raw(self.img_cache[id])
 
@@ -523,8 +523,7 @@ class Escpos:
         elif bc.upper() == "NW7":
             self._raw(BARCODE_NW7)
         else:
-            self._raw(BARCODE_EAN13)
-            # raise BarcodeTypeError()
+            raise BarcodeTypeError()
         # Print Code
         if code:
             self._raw(code)

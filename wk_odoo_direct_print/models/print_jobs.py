@@ -14,6 +14,7 @@ METHOD = [
     ('print-raw', 'Raw Commandset'),
     ('print-image', 'Image'),
     ('print-file', 'File'),
+    ('print-complex', 'Raw+Image'),
 ]
 
 class PrintJobs(models.Model):
