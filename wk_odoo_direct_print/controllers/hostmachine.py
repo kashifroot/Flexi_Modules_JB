@@ -7,6 +7,7 @@
 
 from odoo import http
 from odoo.http import request
+from ast import literal_eval
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -78,8 +79,20 @@ class HostMachine(http.Controller):
             job_id.printer_id.hostmachine_id.is_online = True # Change The host machine status 
             printer_id = job_id.printer_id
             print_data = printer_id._get_printer_config()
-            print_data['contentCode'] = job_id.content
+            if job_id.printer_id.printerType == "ESCPOS" and job_id.printer_id.hostmachine_id.platform in ['Android','iOS']:
+                if job_id.method == 'print-raw':
+                    print_data['printing_type'] = 'raw'
+                else:
+                    print_data['printing_type'] = 'image'
+            if job_id.is_byte_stream:
+                list_bytes = job_id.content.replace("[NULL]", "\x00")
+                print_data['contentCode'] = literal_eval(list_bytes)
+            else:
+                print_data['contentCode'] = job_id.content
             print_data['file_extension'] = job_id.file_extension
+            print_data['is_byte_stream'] = job_id.is_byte_stream
+            print_data['use_raw_image'] = job_id.use_raw_image
+            print_data['is_dummy'] = job_id.is_dummy
             return {
                 'method': job_id.method,
                 'print_data': print_data
@@ -98,4 +111,3 @@ class HostMachine(http.Controller):
             return {
                 'success': True
             }
-        

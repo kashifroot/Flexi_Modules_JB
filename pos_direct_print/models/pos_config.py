@@ -36,6 +36,7 @@ class PosConfig(models.Model):
             'is_hostmachine_online':self.direct_printer_id.hostmachine_id.is_online,
             'pos_cashdrawer': self.direct_printer_id.pos_cashdrawer,
             'pending_print_jobs':len(self.env['print.jobs'].search([('printer_id', '=', self.direct_printer_id.id),('state', '!=', 'Done')])),
+            'host_platform': self.direct_printer_id.hostmachine_id.platform or '',
         })
         return printer_info
 
@@ -64,11 +65,13 @@ class PrintJobs(models.Model):
         #           ['cp688', b'byte-data']
         #       ]
         # ----------------------------------------------------------------------
+        if method == 'print-raw':
+            content = content.replace("\x00", "[NULL]")
         vals = {
             'printer_id': printer_id,
             'method': method,
             'content': content,
-            # 'file_extension': file_extension,
+            'file_extension': file_extension,
             # 'is_byte_stream': is_byte_stream,
         }
         new_print_job = self.create(vals)
@@ -120,13 +123,13 @@ class PrintJobs(models.Model):
             if img.width > max_width:
                 img.thumbnail((max_width, 9999), resample_filter)
 
-            img_bw = img.convert('1')
-            p = Dummy()
-            f = dir(Dummy)
-            # p.profile.media['width']['pixels'] = img.width  # Matches actual image width
-            p.image(img_bw)
-            new_print_job.content = str(p.output)
-            new_print_job.is_dummy = True
+            buffered = BytesIO()
+            img.save(buffered, format="PNG")
+            img_bytes = buffered.getvalue()
+
+            new_print_job.content = base64.b64encode(img_bytes).decode('utf-8')
+
+
         for each_partner in new_print_job.printer_id.hostmachine_id.user_ids:
             message = {'type': 'print_direct',
                         'payload': {'method': 'print-job-cmd', 'host_id': new_print_job.printer_id.hostmachine_id.host_id, 'record_id':new_print_job.id}}

@@ -4,6 +4,7 @@
         <xpath expr="." position="inside">
             <script type="text/javascript" src="/pos_direct_print/static/src/overrides/main.js"></script>
             <script type="text/javascript" src="/pos_direct_print/static/src/overrides/model.js"></script>
+            <script type="text/javascript" src="/pos_direct_print/static/lib/html2canvas/html2canvas.min.js"></script>
             <script type="text/javascript" src="/pos_direct_print/static/src/app/direct_printer.js"></script>
             <script type="text/javascript" src="/pos_direct_print/static/src/overrides/receipt_screen.js"></script>
             <!--<script type="text/javascript" src="/pos_direct_print/static/src/overrides/reprint_receipt_screen.js"></script> -->

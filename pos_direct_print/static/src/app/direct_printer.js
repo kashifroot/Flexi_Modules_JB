@@ -31,6 +31,7 @@ odoo.define('pos_direct_print.Printer', function (require) {
             this.is_hostmachine_online = false
             this.pending_print_jobs = 0
             this.pos_cashdrawer = false;
+            this.host_platform = '';
             this.set({
                 'is_hostmachine_online': false,
                 'pending_print_jobs': 0,
@@ -54,6 +55,9 @@ odoo.define('pos_direct_print.Printer', function (require) {
                     if (printer_info && printer_info['pos_cashdrawer']) {
                         self.pos_cashdrawer = printer_info['pos_cashdrawer']
                     }
+                    if (printer_info && printer_info['host_platform']) {
+                        self.host_platform = printer_info['host_platform'];
+                    }
                     if (printer_info && printer_info['pending_print_jobs']) {
                         self.pending_print_jobs = printer_info['pending_print_jobs']
                         self.set('pending_print_jobs', printer_info['pending_print_jobs']);     // triggers change:pending_print_jobs
@@ -67,7 +71,15 @@ odoo.define('pos_direct_print.Printer', function (require) {
         },
         async print_xml_receipt(xmlReceipt) {
             var self = this;
-            var receipt =await this.get_esc_command_set(xmlReceipt)
+
+            if (this.host_platform === 'Android') {
+                let imageBase64 = await this.render_receipt_to_image();
+                console.log("imageBase64------------>",imageBase64);
+                await this.send_image_printing_job(imageBase64);
+                return;
+            }
+
+            var receipt = await this.get_esc_command_set(xmlReceipt)
             if (receipt) {
                 this.receipt_queue.push(receipt);
             }
@@ -90,6 +102,54 @@ odoo.define('pos_direct_print.Printer', function (require) {
                 }
             }
             sendPrintingXmlReceiptjob();
+        },
+
+        render_receipt_to_image: async function () {
+            var el = document.querySelector('.pos-receipt-container');
+            if (!el) {
+                throw new Error('Receipt element (.pos-receipt-container) not found in DOM.');
+            }
+            var clone = el.cloneNode(true);
+            clone.style.position = 'fixed';
+            clone.style.top = '-9999px';
+            clone.style.left = '-9999px';
+            clone.style.fontSize = '2rem';
+            clone.style.height = 'auto';
+            clone.style.width = '450px';
+            clone.style.padding = '20px';
+            document.body.appendChild(clone);
+            var canvas = await html2canvas(clone, {
+                backgroundColor: '#ffffff',
+                scale: 1,
+                useCORS: true,
+                logging: false,
+            });
+            document.body.removeChild(clone);
+
+            // Scale the receipt to fill the paper width and center it
+            const paperWidth = 794; // ~A4 width at 96dpi; adjust to match your paper width
+            const scaledCanvas = document.createElement('canvas');
+            const scale = paperWidth / canvas.width;
+            scaledCanvas.width = paperWidth;
+            scaledCanvas.height = Math.floor(canvas.height * scale);
+            const ctx = scaledCanvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, scaledCanvas.width, scaledCanvas.height);
+            ctx.drawImage(canvas, 0, 0, scaledCanvas.width, scaledCanvas.height);
+            return scaledCanvas.toDataURL('image/png').split(',')[1];
+        },
+
+        async send_image_printing_job(imageBase64) {
+            const printerId = this.direct_printer_id;
+            if (!printerId) {
+                console.warn("No printer configured.");
+                return;
+            }
+            return rpc.query({
+                model: 'print.jobs',
+                method: 'create_print_job',
+                args: [[], printerId, 'print-image', imageBase64],
+            });
         },
 
         async get_esc_command_set(xmlReceipt) {
@@ -177,89 +237,22 @@ odoo.define('pos_direct_print.Printer', function (require) {
             });
         },
 
-        async send_printing_job(receiptParts, method = 'print-raw', kitchen_receipt = false, is_byte_stream = false) {
+        send_printing_job: function (receiptParts, method = 'print-raw', kitchen_receipt = false, is_byte_stream = false) {
             const printerId = this.direct_printer_id;
-            if (!printerId) {
-                console.warn("No printer configured.");
-                return;
+            if (this && this.pos_cashdrawer && !kitchen_receipt) {
+                return rpc.query({
+                    model: 'print.jobs',
+                    method: 'create_print_and_cashdrawer_job',
+                    args: [[], printerId, method, receiptParts, undefined, is_byte_stream],
+                    kwargs: {},
+                })
             }
-
-            const order = this.pos.get_order();
-            const printingData = order?.export_for_printing() || {};
-
-            let compressedLogo = null;
-
-            // Compress logo only if available
-            if (printingData.company?.logo) {
-                try {
-                    compressedLogo = await this.compressBase64Image(printingData.company.logo);
-                } catch (error) {
-                    console.error("Logo compression failed:", error);
-                }
-            }
-
-            // Compress barcode image if available
-            let compressedBarcode = null;
-            if (order?._direct_print_barcode_base64) {
-                try {
-                    compressedBarcode = await this.compressBase64Image(
-                        'data:image/png;base64,' + order._direct_print_barcode_base64
-                    );
-                } catch (error) {
-                    console.error("Barcode compression failed:", error);
-                }
-            }
-
-            // Compress QR code image if available
-            let compressedQr = null;
-            if (order?._direct_print_qr_code_base64) {
-                try {
-                    compressedQr = await this.compressBase64Image(
-                        'data:image/png;base64,' + order._direct_print_qr_code_base64
-                    );
-                } catch (error) {
-                    console.error("QR code compression failed:", error);
-                }
-            }
-
-            // Use complex printing only when needed
-            const finalMethod = (compressedLogo || compressedBarcode || compressedQr) ? 'print-complex' : method;
-
-            const finalReceiptParts = [];
-
-            if (compressedLogo) {
-                finalReceiptParts.push({
-                    type: "image",
-                    content: compressedLogo,
-                });
-            }
-
-            if (receiptParts) {
-                finalReceiptParts.push({
-                    type: "escpos",
-                    content: receiptParts,
-                });
-            }
-
-            if (compressedBarcode) {
-                finalReceiptParts.push({
-                    type: "image",
-                    content: compressedBarcode,
-                });
-            }
-
-            if (compressedQr) {
-                finalReceiptParts.push({
-                    type: "image",
-                    content: compressedQr,
-                });
-            }
-
             return rpc.query({
                 model: 'print.jobs',
                 method: 'create_print_job',
-                args: [[], printerId, finalMethod, finalReceiptParts, undefined, is_byte_stream],
-            });
+                args: [[], printerId, method, receiptParts, undefined, is_byte_stream],
+                kwargs: {},
+            })
         }
     });
 

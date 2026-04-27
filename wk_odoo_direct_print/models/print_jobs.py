@@ -25,9 +25,12 @@ class PrintJobs(models.Model):
     printer_id = fields.Many2one('wk.printer', string="Printer")
     state = fields.Selection(selection=[('Queue', 'Queue'), ('Done', 'Sent'), ('Failed', 'Failed')], string='State', default='Queue')
     method = fields.Selection(selection=METHOD, string="Print What?", required=True)
+    is_byte_stream = fields.Boolean(string="Is byte Stream", help="If True, the content stores the list() of bytes.")
     msg = fields.Text(string="Info")
     file_extension = fields.Char(string="File Extension")
     content = fields.Text(string="Content", required=True)
+    use_raw_image = fields.Boolean()
+    is_dummy = fields.Boolean()
 
     @api.depends('printer_id')
     def _compute_host_id(self):
