@@ -105,7 +105,7 @@ odoo.define('pos_direct_print.Printer', function (require) {
         },
 
         render_receipt_to_image: async function () {
-            var el = document.querySelector('.pos-receipt-container');
+            var el = document.querySelector('.pos-sale-ticket');
             if (!el) {
                 throw new Error('Receipt element (.pos-receipt-container) not found in DOM.');
             }
@@ -115,8 +115,9 @@ odoo.define('pos_direct_print.Printer', function (require) {
             clone.style.left = '-9999px';
             clone.style.fontSize = '2rem';
             clone.style.height = 'auto';
-            clone.style.width = '450px';
+            clone.style.width = '500px';
             clone.style.padding = '20px';
+
             document.body.appendChild(clone);
             var canvas = await html2canvas(clone, {
                 backgroundColor: '#ffffff',
@@ -126,8 +127,7 @@ odoo.define('pos_direct_print.Printer', function (require) {
             });
             document.body.removeChild(clone);
 
-            // Scale the receipt to fill the paper width and center it
-            const paperWidth = 794; // ~A4 width at 96dpi; adjust to match your paper width
+            const paperWidth = 520;
             const scaledCanvas = document.createElement('canvas');
             const scale = paperWidth / canvas.width;
             scaledCanvas.width = paperWidth;
@@ -253,7 +253,7 @@ odoo.define('pos_direct_print.Printer', function (require) {
                 args: [[], printerId, method, receiptParts, undefined, is_byte_stream],
                 kwargs: {},
             })
-        }
+        },
     });
 
     return DirectPrinter;
