@@ -115,19 +115,81 @@ odoo.define('pos_direct_print.Printer', function (require) {
             clone.style.left = '-9999px';
             clone.style.fontSize = '2rem';
             clone.style.height = 'auto';
-            clone.style.width = '500px';
+            clone.style.width = '580px';
             clone.style.padding = '20px';
+            clone.style.boxSizing = 'border-box';
 
+            // Force all descendant block/flex elements to fill the full available width
+            var styleOverride = document.createElement('style');
+            styleOverride.textContent = `
+                .pos-sale-ticket, .pos-sale-ticket * {
+                    box-sizing: border-box !important;
+                    max-width: 100% !important;
+                }
+                .pos-sale-ticket table {
+                    width: 100% !important;
+                    table-layout: fixed !important;
+                }
+                .pos-sale-ticket td, .pos-sale-ticket th {
+                    word-break: break-word !important;
+                    white-space: normal !important;
+                }
+            `;
+            clone.appendChild(styleOverride);
+
+            // Convert SVG barcode elements to <img> so html2canvas can render them
+            clone.querySelectorAll('svg').forEach(function (svg) {
+                var svgData = new XMLSerializer().serializeToString(svg);
+                var svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                var url = URL.createObjectURL(svgBlob);
+                var img = document.createElement('img');
+                img.crossOrigin = 'anonymous';
+                img.src = url;
+                img.width = svg.getBoundingClientRect().width || svg.getAttribute('width') || 200;
+                img.height = svg.getBoundingClientRect().height || svg.getAttribute('height') || 100;
+                img.style.display = 'block';
+                svg.parentNode.replaceChild(img, svg);
+            });
+
+            // Set crossOrigin on all existing images and force reload so the browser
+            // fetches them with CORS headers (required for html2canvas to read pixel data)
+            clone.querySelectorAll('img').forEach(function (img) {
+                if (!img.src.startsWith('blob:')) {
+                    img.crossOrigin = 'anonymous';
+                    // Re-trigger load by resetting src
+                    var src = img.src;
+                    img.src = '';
+                    img.src = src;
+                }
+            });
+
+            // Append to DOM first so images actually begin loading
             document.body.appendChild(clone);
+
+            // Wait for every <img> in the clone to finish loading
+            await Promise.all(
+                Array.from(clone.querySelectorAll('img')).map(function (img) {
+                    if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+                    return new Promise(function (resolve) {
+                        img.onload = resolve;
+                        img.onerror = resolve;
+                    });
+                })
+            );
+
             var canvas = await html2canvas(clone, {
                 backgroundColor: '#ffffff',
                 scale: 1,
                 useCORS: true,
                 logging: false,
             });
+            // Revoke blob URLs created for SVG→img conversion
+            clone.querySelectorAll('img[src^="blob:"]').forEach(function (img) {
+                URL.revokeObjectURL(img.src);
+            });
             document.body.removeChild(clone);
 
-            const paperWidth = 520;
+            const paperWidth = 580;
             const scaledCanvas = document.createElement('canvas');
             const scale = paperWidth / canvas.width;
             scaledCanvas.width = paperWidth;
@@ -255,6 +317,5 @@ odoo.define('pos_direct_print.Printer', function (require) {
             })
         },
     });
-
     return DirectPrinter;
 });
