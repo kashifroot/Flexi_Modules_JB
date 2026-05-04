@@ -4146,14 +4146,32 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					this.$('.pos-receipt-container').html(order.print_receipt_html);
 				} else {
 					if (this.pos.user.pos_user_type == 'salesman') {
-						this.$('.pos-receipt-container').html(QWeb.render('PosTicket_custom_salesperson', {
-
-							widget: this,
-							order: order,
-							receipt: order.export_for_printing(),
-							orderlines: order.get_orderlines(),
-							paymentlines: order.get_paymentlines(),
-						}));
+						var self = this;
+						var barcode_url = this.getSession()['web.base.url'] + '/report/barcode/Code128/' + encodeURIComponent(order.name);
+						var barcodeImg = new Image();
+						barcodeImg.crossOrigin = 'Anonymous';
+						var renderSalespersonReceipt = function(barcode_base64) {
+							self.$('.pos-receipt-container').html(QWeb.render('PosTicket_custom_salesperson', {
+								widget: self,
+								order: order,
+								receipt: order.export_for_printing(),
+								orderlines: order.get_orderlines(),
+								paymentlines: order.get_paymentlines(),
+								barcode_base64: barcode_base64,
+							}));
+						};
+						barcodeImg.onload = function() {
+							var canvas = document.createElement('canvas');
+							canvas.width = barcodeImg.width || 250;
+							canvas.height = barcodeImg.height || 80;
+							canvas.getContext('2d').drawImage(barcodeImg, 0, 0);
+							var barcode_base64 = canvas.toDataURL('image/png').split(',')[1];
+							renderSalespersonReceipt(barcode_base64);
+						};
+						barcodeImg.onerror = function() {
+							renderSalespersonReceipt(null);
+						};
+						barcodeImg.src = barcode_url;
 					} else {
 
 						// Kashif 19 jan 25: Invoke action_einvoice_qr to get QR code

@@ -3566,7 +3566,20 @@
                         </tr>
                 </table>
 
-                <table style="margin-left:33px;"><tbody><tr id="barcode2"/></tbody></table>
+                <t t-if="barcode_base64">
+                    <t>image area</t>
+                    <br>
+
+                    </br>
+                    <img t-att-src="'data:image/png;base64,' + barcode_base64" width='250' height='80'/>
+                </t>
+                <t t-else="">
+                    <barcode encoding="CODE128"><t t-esc="order.name"/></barcode>
+                     <t>image area 2</t>
+                        <br>
+
+                    </br>
+                </t>
 
             </div>
 
