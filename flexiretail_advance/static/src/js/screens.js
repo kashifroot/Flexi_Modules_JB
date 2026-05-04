@@ -4278,7 +4278,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 							canvas.getContext('2d').drawImage(barcodeImg, 0, 0);
 							var barcode_base64 = canvas.toDataURL('image/png').split(',')[1];
 							order._direct_print_barcode_base64 = barcode_base64;
-							var receipt = QWeb.render('XmlPosTicket_custom_salesperson', {
+							var receipt = QWeb.render('XmlPosTicket_custom_salespersons', {
 								widget: self,
 								pos: self.pos,
 								order: order,
@@ -4292,7 +4292,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 						};
 						barcodeImg.onerror = function () {
 							order._direct_print_barcode_base64 = null;
-							var receipt = QWeb.render('XmlPosTicket_custom_salesperson', {
+							var receipt = QWeb.render('XmlPosTicket_custom_salespersons', {
 								widget: self,
 								pos: self.pos,
 								order: order,

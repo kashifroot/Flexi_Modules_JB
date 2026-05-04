@@ -3574,7 +3574,7 @@
     </t>
 
 
-    <t t-name="XmlPosTicket_custom_salesperson">
+    <t t-name="XmlPosTicket_custom_salespersons">
         <receipt align='center' width='40' value-thousands-separator=''>
             <t t-if="widget.pos.company_logo_base64">
                 <div style="text-align:center;">
