@@ -3538,7 +3538,7 @@
                                 </t>
 
                             </td>
-                            <td colspan="3">
+                            <td colspan="3" style="white-space:nowrap; font-family:Arial,sans-serif; font-weight:normal; text-align:left; padding-left:6px;">
                                 <!--   <t t-esc="widget.calc_discount_item(orderline.get_display_price(),order.get_before_disc_total())"/>-->
                                 <t t-esc="widget.format_currency_front(orderline.get_display_price())"/>
                             </td>
@@ -3550,7 +3550,7 @@
                             <td colspan="4">
                                 <b>Total:</b>
                             </td>
-                        <td colspan="8" style="text-align:center">
+                        <td colspan="8" style="white-space:nowrap; font-family:Arial,sans-serif; font-weight:normal; text-align:left; padding-left:6px;">
                                  <t t-if="order.get_credit_detail()">
                                     <t t-set="net_total" t-value="0"/>
                                      <t t-foreach="order.get_credit_detail()" t-as="credit">
