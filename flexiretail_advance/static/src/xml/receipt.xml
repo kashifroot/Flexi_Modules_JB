@@ -3458,7 +3458,7 @@
                         <td style="text-align:center; width:100%">
 <!--          Yulia 18012025 use html entity nbsp                  -->
 
-                            <span>UNPAIDy</span>
+                            <span>UNPAID</span>
                         </td>
                     </tr>
                 </table>
@@ -3568,7 +3568,7 @@
 
                 <div style="text-align:center; width:100%; margin-top:8px;">
                     <t t-if="barcode_base64">
-                        <img t-att-src="'data:image/png;base64,' + barcode_base64" width='320' height='100' style="display:block; margin:0 auto;"/>
+                        <img t-att-src="'data:image/png;base64,' + barcode_base64" width='420' height='150' style="display:block; margin:0 auto;"/>
                     </t>
                     <t t-else="">
                         <barcode encoding="CODE128"><t t-esc="order.name"/></barcode>
