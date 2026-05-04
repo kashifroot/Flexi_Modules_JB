@@ -2913,9 +2913,9 @@
 .pos-sale-ticket {
                     font-family: "Lato","Lucida Grande", Helvetica, Verdana, Arial;
     text-align: center;
-    width: 300px;
+    width: 420px;
     background-color: white;
-    margin: 10px;
+    margin: 4px;
     padding: 5px;
     font-size: 14px;
     padding-bottom:3px;
@@ -3412,7 +3412,7 @@
 <!--                     <img t-att-src="'/report/barcode/QR/einvoice/' + str(''.join(c for c in str(order.pos_reference) if c.isdigit())) + '?width=160&amp;height=160'"-->
 <!--                       style="max-width:160px; height:160px;padding: 3px;"       alt="Barcode"/>-->
                     <img t-att-src="data.taxqr" style="max-width:160px; height:160px;padding: 3px;"/>
-                    <div style="font-size:14px; text-align:center; padding:0 0px;max-width: 460px;">
+                    <div style="font-size:17px; text-align:center; padding:0 0px;max-width: 460px;">
                         <b>Request Timeline:</b><br/>
                         <b>Start Date:</b> Next day after your purchase<br/>
                         <b>Last Date:</b> Within <span t-esc='taxInvoiceTimeframe'/> days from your purchase<br/>
@@ -3582,7 +3582,7 @@
                     <br/>
                 </div>
             </t>
-            <h2>UNPAID</h2>
+            <h2>UNPAIDx</h2>
             <br/>
             <line>
                 <left>Sticker:</left>
@@ -3656,10 +3656,18 @@
             </line>
             <br/>
             <t t-if="barcode_base64">
+                <t>image area</t>
+                <br>
+
+                </br>
                 <img t-att-src="'data:image/png;base64,' + barcode_base64" width='250' height='80'/>
             </t>
             <t t-else="">
                 <barcode encoding="CODE128"><t t-esc="order.name"/></barcode>
+                 <t>image area 2</t>
+                    <br>
+
+                </br>
             </t>
         </receipt>
     </t>
