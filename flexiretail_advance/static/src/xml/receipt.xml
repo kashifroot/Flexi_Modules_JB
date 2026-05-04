@@ -2995,7 +2995,7 @@
             <!--            </t>-->
             <table class='receipt-orderlines' colspan="12">
                 <tr>
-                    <td  colspan="12" class="tight-spacing" style="text-align:center;font-size:11px;">
+                    <td  colspan="12" class="tight-spacing" style="text-align:center;font-size:22px;">
                           <span>
                                <t t-esc="widget.pos.company.name"/>
                           </span>
@@ -3003,7 +3003,7 @@
 
                  </tr>
                 <tr>
-                    <td  colspan="12" class="tight-spacing" style="text-align:center;font-size:11px;">
+                    <td  colspan="12" class="tight-spacing" style="text-align:center;font-size:22px;">
                           <span>
                              (<t t-esc="order.get_brn()"/>)
                           </span>
@@ -3012,7 +3012,7 @@
                  </tr>
                 <t t-if="receipt.header">
                      <tr>
-                         <td  colspan="12" style="text-align:center;font-size:11px;">
+                         <td  colspan="12" style="text-align:center;font-size:22px;">
                           <span class="tight-spacing">
                               <t t-esc="receipt.header"/>
                           </span>
@@ -3021,7 +3021,7 @@
                      </tr>
                 </t>
                 <tr>
-                    <td  colspan="12"  class="tight-spacing" style="text-align:center;font-size:11px;">
+                    <td  colspan="12"  class="tight-spacing" style="text-align:center;font-size:22px;">
                           <span>
                              Tel: <t t-esc="widget.pos.company.phone || ''"/>
                           </span>
@@ -3029,7 +3029,7 @@
 
                  </tr>
                               <tr>
-                    <td  colspan="12" class="tight-spacing" style="text-align:center;font-size:11px;">
+                    <td  colspan="12" class="tight-spacing" style="text-align:center;font-size:22px;">
                           <span>
                              Tin: <t t-esc="order.get_tin()"/>
                           </span>
@@ -3038,13 +3038,13 @@
                  </tr>
                 <tr>
                     <td  colspan="12" class="tight-spacing"
-                        style="text-align:center;font-size:10px;">
+                        style="text-align:center;font-size:20px;">
                           <span t-esc="dateorder"/>
                     </td>
 
                  </tr>
                 <tr>
-                    <td  colspan="12"  class="tight-spacing" style="text-align:center;font-size:10px;">
+                    <td  colspan="12"  class="tight-spacing" style="text-align:center;font-size:20px;">
                           <span>
                               <t t-esc="order.name"/>
                           </span>
@@ -3405,14 +3405,14 @@
 <!--           Kashif 19 jan 25:  QR Image Area-->
             <t t-if="data and data.taxqr">
                 <div style="text-align:center;">
-                    <div style="font-size:15px; font-weight:bold;">E-Invoice</div>
-                    <div style="font-size:12px;">Scan QR to Request</div>
+                    <div style="font-size:20px; font-weight:bold;">E-Invoice</div>
+                    <div style="font-size:16px;">Scan QR to Request</div>
                 </div>
                 <div style="text-align:center; padding:10px 0;">
-<!--                     <img t-att-src="'/report/barcode/QR/einvoice/' + str(''.join(c for c in str(order.pos_reference) if c.isdigit())) + '?width=80&amp;height=80'"-->
-<!--                       style="max-width:80px; height:80px;padding: 3px;"       alt="Barcode"/>-->
-                    <img t-att-src="data.taxqr" style="max-width:80px; height:80px;padding: 3px;"/>
-                    <div style="font-size:10px; text-align:center; padding:0 0px;max-width: 460px;">
+<!--                     <img t-att-src="'/report/barcode/QR/einvoice/' + str(''.join(c for c in str(order.pos_reference) if c.isdigit())) + '?width=160&amp;height=160'"-->
+<!--                       style="max-width:160px; height:160px;padding: 3px;"       alt="Barcode"/>-->
+                    <img t-att-src="data.taxqr" style="max-width:160px; height:160px;padding: 3px;"/>
+                    <div style="font-size:14px; text-align:center; padding:0 0px;max-width: 460px;">
                         <b>Request Timeline:</b><br/>
                         <b>Start Date:</b> Next day after your purchase<br/>
                         <b>Last Date:</b> Within <span t-esc='taxInvoiceTimeframe'/> days from your purchase<br/>
