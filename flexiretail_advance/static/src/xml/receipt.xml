@@ -3674,7 +3674,7 @@
     </t>
 
     <t t-name="XmlPosTicket_custom">
-        <receipt align='center' width='40' value-thousands-separator=''>
+        <receipt align='center' width='48' value-thousands-separator=''>
             <t t-if="widget.pos.company_logo_base64">
                 <div style="text-align:center;">
                     <img t-att-src="widget.pos.company_logo_base64" style="max-height: 70px;width:auto;height:auto;"/>
@@ -3692,7 +3692,7 @@
             <div><t t-raw="dateorder"/></div>
             <div><t t-esc="order.name"/></div>
             <br/>
-            <line><right>--------</right></line>
+            <line>------------------------------------------------</line>
             <t t-foreach="orderlines" t-as="orderline">
                 <line>
                     <left>
@@ -3727,7 +3727,7 @@
                     </right>
                 </line>
             </t>
-            <line><right>--------</right></line>
+            <line>------------------------------------------------</line>
             <line class='total' size='double-height'>
                 <left>Net Total:</left>
                 <right>
@@ -3751,9 +3751,9 @@
             <!-- Credit Details -->
             <t t-if="widget.pos.config.enable_credit and widget.pos.config.receipt_balance
                      and widget.pos.get_client() and widget.pos.get_order().get_credit_detail() and widget.pos.get_order().get_credit_detail()[0]">
-                <div>--------------------------------</div>
+                <div>------------------------------------------------</div>
                 <div>Credit Details</div>
-                <div>--------------------------------</div>
+                <div>------------------------------------------------</div>
                 <line>
                     <left>Customer:</left>
                     <right><t t-esc="widget.pos.get_client().name"/></right>
@@ -3766,9 +3766,9 @@
             </t>
             <!-- Delivery Details -->
             <t t-if="order.get_delivery_date() and order.get_delivery_address()">
-                <div>--------------------------------</div>
+                <div>------------------------------------------------</div>
                 <div>Delivery Details</div>
-                <div>--------------------------------</div>
+                <div>------------------------------------------------</div>
                 <line><left>Delivery Date</left><right><t t-esc="order.get_delivery_date() or ''"/></right></line>
                 <line><left>Delivery Time</left><right><t t-esc="order.get_delivery_time() or ''"/></right></line>
                 <line><left>Delivery Address</left><right><t t-esc="order.get_delivery_address() or ''"/></right></line>
@@ -3790,9 +3790,9 @@
             <!-- Return Valid Days -->
             <t t-if="widget.pos.config.enable_print_valid_days
                      and widget.pos.get_cashier().access_print_valid_days and !widget.pos.get_order().get_ret_o_id()">
-                <div>--------------------------------</div>
+                <div>------------------------------------------------</div>
                 <div>Return Valid Days</div>
-                <div>--------------------------------</div>
+                <div>------------------------------------------------</div>
                 <t t-foreach="orderlines" t-as="orderline">
                     <t t-if="orderline.return_valid_days > 0">
                         <line>
@@ -3806,9 +3806,9 @@
             <!-- Gift Voucher -->
             <t t-if="widget.pos.config.enable_gift_voucher">
                 <t t-if="order.get_voucher().length > 0 and order.get_remaining_redeemption()">
-                    <div>--------------------------------</div>
+                    <div>------------------------------------------------</div>
                     <div>Voucher Information</div>
-                    <div>--------------------------------</div>
+                    <div>------------------------------------------------</div>
                     <t t-foreach="order.get_remaining_redeemption()" t-as="voucher">
                         <line>
                             <left><t t-esc="voucher.voucher_name"/>(<t t-esc="voucher.voucher_code"/>)</left>
@@ -3820,9 +3820,9 @@
             </t>
             <!-- Loyalty Points -->
             <t t-if="widget.pos.config.enable_pos_loyalty and widget.pos.get_cashier().access_pos_loyalty and order.get_client()">
-                <div>--------------------------------</div>
+                <div>------------------------------------------------</div>
                 <div>Loyalty Points</div>
-                <div>--------------------------------</div>
+                <div>------------------------------------------------</div>
                 <t t-if="order.get_client() and order.get_client().total_remaining_points">
                     <line><left>Your Points:</left><right><t t-esc="order.get_client().total_remaining_points.toFixed(2)"/></right></line>
                 </t>
@@ -3850,9 +3850,9 @@
             </t>
             <!-- Gift Cards -->
             <t t-if="order.get_giftcard().length > 0">
-                <div>--------------------------------</div>
+                <div>------------------------------------------------</div>
                 <div>Card Details</div>
-                <div>--------------------------------</div>
+                <div>------------------------------------------------</div>
                 <t t-foreach="order.get_giftcard()" t-as="giftcard">
                     <t t-if="giftcard['giftcard_customer_name']">
                         <line><left>Customer:</left><right><t t-esc="giftcard['giftcard_customer_name']"/></right></line>
@@ -3864,9 +3864,9 @@
                 <br/>
             </t>
             <t t-if="order.get_recharge_giftcard().length > 0">
-                <div>--------------------------------</div>
+                <div>------------------------------------------------</div>
                 <div>Card Details</div>
-                <div>--------------------------------</div>
+                <div>------------------------------------------------</div>
                 <t t-foreach="order.get_recharge_giftcard()" t-as="recharge">
                     <t t-if="recharge['customer_name']">
                         <line><left>Customer:</left><right><t t-esc="recharge['customer_name']"/></right></line>
@@ -3877,9 +3877,9 @@
                 <br/>
             </t>
             <t t-if="order.get_redeem_giftcard().length > 0">
-                <div>--------------------------------</div>
+                <div>------------------------------------------------</div>
                 <div>Card Details</div>
-                <div>--------------------------------</div>
+                <div>------------------------------------------------</div>
                 <t t-foreach="order.get_redeem_giftcard()" t-as="redeem">
                     <t t-if="redeem['customer_name']">
                         <line><left>Customer:</left><right><t t-esc="redeem['customer_name']"/></right></line>
@@ -3893,7 +3893,7 @@
             <t t-if="data and data.qr_code_base64">
                 <div>E-Invoice</div>
                 <div>Scan QR to Request</div>
-                <img t-att-src="'data:image/png;base64,' + data.qr_code_base64" width='80' height='80'/>
+                <img t-att-src="'data:image/png;base64,' + data.qr_code_base64" width='120' height='120'/>
                 <div>Request Timeline:</div>
                 <div>Start Date: Next day after your purchase</div>
                 <div>Last Date: Within <t t-esc='taxInvoiceTimeframe'/> days from your purchase</div>
