@@ -3694,22 +3694,20 @@
             <br/>
             <line>------------------------------------------------</line>
             <t t-foreach="orderlines" t-as="orderline">
-                <line>
-                    <left>
-                        <t t-if="orderline.get_product().default_code">
-                            <t t-esc="orderline.get_product().default_code"/>
-                            <t t-if="orderline.get_product().second_name">
-                                <t t-esc="orderline.get_product().second_name"/>
-                            </t>
-                            <t t-else="">
-                                <t t-esc="widget.get_15_char_product(orderline.get_product().name)"/>
-                            </t>
+                <div>
+                    <t t-if="orderline.get_product().default_code">
+                        <t t-esc="orderline.get_product().default_code"/>
+                        <t t-if="orderline.get_product().second_name">
+                            <t t-esc="orderline.get_product().second_name"/>
                         </t>
                         <t t-else="">
-                            <t t-esc="orderline.get_product().name"/>
+                            <t t-esc="widget.get_15_char_product(orderline.get_product().name)"/>
                         </t>
-                    </left>
-                </line>
+                    </t>
+                    <t t-else="">
+                        <t t-esc="orderline.get_product().name"/>
+                    </t>
+                </div>
                 <line indent='1'>
                     <left>
                         <t t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
