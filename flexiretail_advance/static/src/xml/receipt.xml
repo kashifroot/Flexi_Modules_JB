@@ -3055,7 +3055,7 @@
                 <tr height="15px"/>
                 <t t-foreach="orderlines" t-as="orderline">
                     <tr>
-                        <td colspan="7" class="tight-spacing">
+                        <td colspan="12" class="tight-spacing" style="text-align:left;">
                             <t t-if="orderline.get_product().default_code">
                                 <t t-esc="orderline.get_product().default_code"/>
                                 <t t-if="orderline.get_product().second_name">
