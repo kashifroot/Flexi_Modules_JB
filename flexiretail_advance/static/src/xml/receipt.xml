@@ -3726,7 +3726,7 @@
                 </line>
             </t>
             <line>------------------------------------------------</line>
-            <line class='total' size='double-height'>
+            <line class='total' size='double'>
                 <left>Net Total:</left>
                 <right>
                     <t t-if="order.get_credit_detail()">
