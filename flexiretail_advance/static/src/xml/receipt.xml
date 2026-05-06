@@ -3096,9 +3096,9 @@
                     </tr>
                 </t>
                 <tr height="16px"/>
-                <tr class="tight-spacing" style="font-size: 22px;">
+                <tr class="tight-spacing" style="font-size: 25px;">
                         <td colspan="7">
-                        <b>Net Totals:</b>
+                        <b>Net Total:</b>
                         </td>
                     <td colspan="6">
                          <t t-if="order.get_credit_detail()">
@@ -3425,7 +3425,7 @@
 <!--                <br/>-->
                 <table>
                     <tr>
-                        <td colspan="12" style="text-align:center;font-size:13px;">
+                        <td colspan="12" style="text-align:center;font-size:15px;">
                              <span style="font-weight:bold;">
                                  <t t-esc="receipt.footer"/>
                              </span>
@@ -3727,7 +3727,7 @@
             </t>
             <line>------------------------------------------------</line>
             <line class='total' size='double'>
-                <left>Net Totalx:</left>
+                <left>Net Total:</left>
                 <right>
                     <t t-if="order.get_credit_detail()">
                         <t t-set="net_total" t-value="0"/>
