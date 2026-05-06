@@ -3097,22 +3097,22 @@
                 </t>
                 <tr height="16px"/>
                 <tr class="tight-spacing" style="font-size: 25px;">
-                        <td colspan="7">
+                        <td colspan="6">
                         <b>Net Total:</b>
                         </td>
-                    <td colspan="6">
+                    <td colspan="6" style="text-align:center;">
                          <t t-if="order.get_credit_detail()">
 	                        	<t t-set="net_total" t-value="0"/>
                              <t t-foreach="order.get_credit_detail()" t-as="credit">
 	                        		<t t-set="net_total" t-value="net_total + credit.amount"/>
 	                        	</t>
-                             <span style="margin-left:4px;">
+                             <span>
                                        <t t-esc="widget.format_currency_front(order.getNetTotalTaxIncluded() + net_total)"/>
                                </span>
 
 		                	</t>
                         <t t-else="">
-                            <span style="margin-left:4px;">
+                            <span>
                                 <t t-esc="widget.format_currency_front(order.getNetTotalTaxIncluded())"/>
                             </span>
 
