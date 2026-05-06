@@ -3405,8 +3405,7 @@
 <!--           Kashif 19 jan 25:  QR Image Area-->
             <t t-if="data and data.taxqr">
                 <div style="text-align:center;">
-                    <div style="font-size:20px; font-weight:bold;">E-Invoice</div>
-                    <div style="font-size:16px;">Scan QR to Request</div>
+                    <div style="font-size:20px; font-weight:bold;">E-Invoice <span style="font-size:16px; font-weight:normal;">(Scan QR to Request)</span></div>
                 </div>
                 <div style="text-align:center; padding:10px 0;">
 <!--                     <img t-att-src="'/report/barcode/QR/einvoice/' + str(''.join(c for c in str(order.pos_reference) if c.isdigit())) + '?width=160&amp;height=160'"-->
