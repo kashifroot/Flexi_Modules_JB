@@ -3899,7 +3899,7 @@
             </t>
             <!-- Footer -->
             <t t-if="receipt.footer">
-                <div><t t-esc="receipt.footer"/></div>
+                <div style="font-size:13px;"><t t-esc="receipt.footer"/></div>
             </t>
             <br/>
 <!--            <div font='b'>-->
