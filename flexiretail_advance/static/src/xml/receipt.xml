@@ -2995,7 +2995,7 @@
             <!--            </t>-->
             <table class='receipt-orderlines' colspan="12">
                 <tr>
-                    <td  colspan="12" class="tight-spacing" style="text-align:center;font-size:22px;">
+                    <td  colspan="12" class="tight-spacing" style="text-align:center;font-size:30px;font-weight:bold;">
                           <span>
                                <t t-esc="widget.pos.company.name"/>
                           </span>
@@ -3028,6 +3028,15 @@
                     </td>
 
                  </tr>
+                <t t-if="widget.pos.company.email">
+                <tr>
+                    <td  colspan="12"  class="tight-spacing" style="text-align:center;font-size:22px;">
+                          <span>
+                             Email: <t t-esc="widget.pos.company.email"/>
+                          </span>
+                    </td>
+                 </tr>
+                </t>
                               <tr>
                     <td  colspan="12" class="tight-spacing" style="text-align:center;font-size:22px;">
                           <span>
@@ -3051,10 +3060,19 @@
                     </td>
 
                  </tr>
+                <t t-if="order.salesperson_name">
+                <tr>
+                    <td  colspan="12"  class="tight-spacing" style="text-align:center;font-size:20px;">
+                          <span>
+                              Salesperson: <t t-esc="order.salesperson_name"/>
+                          </span>
+                    </td>
+                 </tr>
+                </t>
 
                 <tr height="15px"/>
                 <t t-foreach="orderlines" t-as="orderline">
-                    <tr>
+                    <tr style="font-size: 25px;">
                         <td colspan="12" class="tight-spacing" style="text-align:left;">
                             <t t-if="orderline.get_product().default_code">
                                 <t t-esc="orderline.get_product().default_code"/>
@@ -3070,7 +3088,7 @@
                              </t>
                         </td>
                     </tr>
-                    <tr class="tight-spacing">
+                    <tr class="tight-spacing" style="font-size: 25px;">
                         <td colspan="6" style="text-align:right;">
                             <t t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
                             <span>@</span>
@@ -3097,6 +3115,12 @@
                 </t>
                 <tr height="16px"/>
                 <tr class="tight-spacing" style="font-size: 25px;">
+                    <td colspan="6">Amount Paid:</td>
+                    <td colspan="6" style="text-align:center;">
+                        <span><t t-esc="widget.format_currency_front(order.get_total_paid())"/></span>
+                    </td>
+                </tr>
+                <tr class="tight-spacing" style="font-size: 25px;">
                         <td colspan="6">
                         <b>Net Total:</b>
                         </td>
@@ -3119,8 +3143,16 @@
                         </t>
                     </td>
                 </tr>
+                <t t-foreach="paymentlines" t-as="payline">
+                <tr class="tight-spacing" style="font-size: 25px;">
+                    <td colspan="6"><t t-esc="payline.name"/></td>
+                    <td colspan="6" style="text-align:center;">
+                        <span><t t-esc="widget.format_currency_front(payline.get_amount())"/></span>
+                    </td>
+                </tr>
+                </t>
                 <tr height="20px"/>
-                <tr class="tight-spacing">
+                <tr class="tight-spacing" style="font-size: 25px;">
                     <td colspan="6">Change:</td>
                     <td colspan="6" style="text-align:center;">
                         <span> <t t-esc="widget.format_currency_front(order.get_change())"/></span>
