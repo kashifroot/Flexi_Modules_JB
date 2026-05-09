@@ -3025,7 +3025,7 @@
                           <span>
                              <t t-esc="widget.pos.company.phone || ''"/>
                              <t t-if="widget.pos.company.email">
-                                 &nbsp;&nbsp;<t t-esc="widget.pos.company.email"/>
+                                 &#160;&#160;<t t-esc="widget.pos.company.email"/>
                              </t>
                           </span>
                     </td>
