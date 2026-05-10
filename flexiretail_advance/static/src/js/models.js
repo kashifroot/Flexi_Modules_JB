@@ -217,6 +217,16 @@ odoo.define('flexiretail_advance.models', function (require) {
             self.set({ 'gift_voucher_list': gift_vouchers });
         },
     });
+    models.PosModel.prototype.models.push({
+        model: 'res.partner',
+        fields: ['buyer_tin_no', 'brn_no'],
+        ids: function (self) {
+            return self.company && self.company.partner_id ? [self.company.partner_id[0]] : [];
+        },
+        loaded: function (self, partners) {
+            self.company_partner = partners && partners.length > 0 ? partners[0] : {};
+        },
+    });
     function decimalAdjust(value) {
         //	    var split_value = value.toFixed(2).split('.');
         //	    //convert string value to integer

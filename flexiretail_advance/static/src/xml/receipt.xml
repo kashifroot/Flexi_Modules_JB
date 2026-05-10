@@ -3002,14 +3002,15 @@
                     </td>
 
                  </tr>
+                <t t-if="widget.pos.company_partner and widget.pos.company_partner.brn_no">
                 <tr>
                     <td  colspan="12" class="tight-spacing" style="text-align:center;font-size:22px;">
                           <span>
-                             (<t t-esc="order.get_brn()"/>)
+                             (<t t-esc="widget.pos.company_partner.brn_no"/>)
                           </span>
                     </td>
-
                  </tr>
+                </t>
                 <t t-if="receipt.header">
                      <tr>
                          <td  colspan="12" style="text-align:center;font-size:22px;">
@@ -3030,14 +3031,15 @@
                           </span>
                     </td>
                  </tr>
-                              <tr>
+                <t t-if="widget.pos.company_partner and widget.pos.company_partner.buyer_tin_no">
+                <tr>
                     <td  colspan="12" class="tight-spacing" style="text-align:center;font-size:22px;">
                           <span>
-                             Tin: <t t-esc="order.get_tin()"/>
+                             Tin: <t t-esc="widget.pos.company_partner.buyer_tin_no"/>
                           </span>
                     </td>
-
                  </tr>
+                </t>
                 <tr>
                     <td  colspan="12" class="tight-spacing"
                         style="text-align:center;font-size:20px;">
@@ -3045,6 +3047,15 @@
                     </td>
 
                  </tr>
+                <t t-if="order.get_tour_code()">
+                <tr>
+                    <td  colspan="12" class="tight-spacing" style="text-align:center;font-size:20px;">
+                          <span>
+                              Tour Code: <t t-esc="order.get_tour_code()"/>
+                          </span>
+                    </td>
+                 </tr>
+                </t>
                 <tr>
                     <td  colspan="12"  class="tight-spacing" style="text-align:center;font-size:20px;">
                           <span>
