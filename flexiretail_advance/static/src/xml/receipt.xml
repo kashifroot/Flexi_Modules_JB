@@ -3717,15 +3717,28 @@
                 </div>
             </t>
             <t t-set="dateorder" t-value="order.formatted_validation_date || order.date_order"/>
-            <h4><t t-esc="widget.pos.company.name"/></h4>
-            <div>(<t t-esc="order.get_brn()"/>)</div>
+            <h2><t t-esc="widget.pos.company.name"/></h2>
+            <t t-if="widget.pos.company_partner and widget.pos.company_partner.brn_no">
+                <div>(<t t-esc="widget.pos.company_partner.brn_no"/>)</div>
+            </t>
             <t t-if="receipt.header">
                 <div><t t-esc="receipt.header"/></div>
             </t>
-            <div>Tel: <t t-esc="widget.pos.company.phone || ''"/></div>
-            <div>Tin: <t t-esc="order.get_tin()"/></div>
+            <div>
+                <t t-esc="widget.pos.company.phone || ''"/>
+                <t t-if="widget.pos.company.email">&#160;&#160;<t t-esc="widget.pos.company.email"/></t>
+            </div>
+            <t t-if="widget.pos.company_partner and widget.pos.company_partner.buyer_tin_no">
+                <div>Tin: <t t-esc="widget.pos.company_partner.buyer_tin_no"/></div>
+            </t>
             <div><t t-raw="dateorder"/></div>
+            <t t-if="order.get_tour_code()">
+                <div>Tour Code: <t t-esc="order.get_tour_code()"/></div>
+            </t>
             <div><t t-esc="order.name"/></div>
+            <t t-if="order.salesperson_name">
+                <div>Salesperson: <t t-esc="order.salesperson_name"/></div>
+            </t>
             <br/>
             <line>------------------------------------------------</line>
             <t t-foreach="orderlines" t-as="orderline">
@@ -3761,6 +3774,10 @@
                 </line>
             </t>
             <line>------------------------------------------------</line>
+            <line>
+                <left>Amount Paid:</left>
+                <right><t t-esc="widget.format_currency_front(order.get_total_paid())"/></right>
+            </line>
             <line class='total' size='double'>
                 <left>Net Total:</left>
                 <right>
@@ -3776,6 +3793,12 @@
                     </t>
                 </right>
             </line>
+            <t t-foreach="paymentlines" t-as="payline">
+                <line>
+                    <left><t t-esc="payline.name"/></left>
+                    <right><t t-esc="widget.format_currency_front(payline.get_amount())"/></right>
+                </line>
+            </t>
             <line>
                 <left>Change:</left>
                 <right><t t-esc="widget.format_currency_front(order.get_change())"/></right>

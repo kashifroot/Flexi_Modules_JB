@@ -1543,7 +1543,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					model: 'pos.order',
 					method: 'search_read',
 					domain: [['pos_reference', '=', pos_ref]],
-					fields: ['salesman_id', 'sticker'],
+					fields: ['salesman_id', 'sticker', 'tour_id'],
 				}).then(function (results) {
 					if (results && results.length > 0) {
 						var backend_order = results[0];
@@ -1558,6 +1558,17 @@ odoo.define('flexiretail_advance.screens', function (require) {
 						}
 						if (backend_order.sticker) {
 							order.set_sticker(backend_order.sticker);
+						}
+						if (backend_order.tour_id && backend_order.tour_id[0]) {
+							rpc.query({
+								model: 'tour.registration',
+								method: 'read',
+								args: [[backend_order.tour_id[0]], ['tour_code']],
+							}).then(function (tours) {
+								if (tours && tours.length > 0 && tours[0].tour_code) {
+									order.set_tour_code(tours[0].tour_code);
+								}
+							});
 						}
 						// Refresh UI indicators after data is updated
 						if (self.pos.chrome.screens.products) {
