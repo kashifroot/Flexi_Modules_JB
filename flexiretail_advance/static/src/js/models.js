@@ -2019,7 +2019,9 @@ odoo.define('flexiretail_advance.models', function (require) {
                     return_valid_days = 0;
                 }
             }
-            selected_line.set_return_valid_days(return_valid_days);
+            if (selected_line) {
+                selected_line.set_return_valid_days(return_valid_days);
+            }
 
             //        	function to have latest added product selected
             var order = self.pos.get_order();

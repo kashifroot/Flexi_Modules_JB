@@ -4014,7 +4014,23 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			}
 		},
 		render_receipt: function () {
+			var self = this;
 			var order = this.pos.get_order();
+			// Fetch tour_code from backend if sticker is set but tour_code is not yet loaded
+			if (order.get_sticker && order.get_sticker() && !order.get_tour_code() && !order._tour_code_fetched) {
+				order._tour_code_fetched = true;
+				rpc.query({
+					model: 'tour.registration',
+					method: 'get_sticker_details',
+					args: ['', order.get_sticker()],
+				}).then(function (details) {
+					if (details && details[0]) {
+						order.set_tour_code(details[0]);
+					}
+					self.render_receipt();
+				});
+				return;
+			}
 			if (order.get_free_data()) {
 				this.$('.pos-receipt-container').html(QWeb.render('FreeTicket', {
 					widget: this,
