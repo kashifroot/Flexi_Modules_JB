@@ -12,6 +12,9 @@ odoo.define('wk_odoo_direct_print.ReceiptScreen', function (require) {
 
     screens.ReceiptScreenWidget.include({
         should_auto_print: function () {
+            if (this.pos.config.use_direct_print && this.pos.proxy.direct_printer) {
+                return false;
+            }
             return this._super();
         },
         print: function () {
