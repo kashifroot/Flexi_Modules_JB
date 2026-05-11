@@ -3541,7 +3541,7 @@
                     <!--<tr height="15px;"/>-->
                     <t t-foreach="orderlines" t-as="orderline">
                         <tr>
-                            <td colspan="9" style="font-family: 'Arial Black';display:flex">
+                            <td colspan="9" style="font-family: 'Arial Black'; word-break:break-word;">
                                 <span >
                               <t t-if="orderline.get_product().default_code">
                                     <t t-esc="orderline.get_product().default_code"/>
