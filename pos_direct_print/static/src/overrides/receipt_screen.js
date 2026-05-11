@@ -4,11 +4,8 @@ odoo.define('wk_odoo_direct_print.ReceiptScreen', function (require) {
     /* License URL : <https://store.webkul.com/license.html/> */
     "use strict";
     var screens = require('point_of_sale.screens');
-    var gui = require('point_of_sale.gui');
     var core = require('web.core');
-    var _t = core._t;
     var QWeb = core.qweb;
-    
 
     screens.ReceiptScreenWidget.include({
         should_auto_print: function () {
@@ -17,6 +14,39 @@ odoo.define('wk_odoo_direct_print.ReceiptScreen', function (require) {
             }
             return this._super();
         },
+
+        show: function () {
+            this._super.apply(this, arguments);
+            if (this.pos.config.use_direct_print && this.pos.proxy.direct_printer) {
+                // Wait one animation frame so the receipt DOM is fully painted,
+                // then start pre-rendering in the background.
+                requestAnimationFrame(() => this._preRenderForPrint());
+            }
+        },
+
+        _preRenderForPrint: function () {
+            var printer = this.pos.proxy.direct_printer;
+            if (!printer) return;
+
+            if (printer.host_platform === 'Android') {
+                // Kick off html2canvas immediately and store the Promise.
+                // print_xml_receipt() will await this instead of starting a new render.
+                printer._pendingImagePromise = printer.render_receipt_to_image()
+                    .catch(function (err) {
+                        console.error('[DirectPrint] Pre-render image failed, will retry on print:', err);
+                        return null;
+                    });
+            } else {
+                // Pre-compute ESC/POS commands via backend RPC and cache the Promise.
+                var xmlReceipt = QWeb.render('XmlReceipt', this.get_receipt_render_env());
+                printer._pendingEscPromise = printer.get_esc_command_set(xmlReceipt)
+                    .catch(function (err) {
+                        console.error('[DirectPrint] Pre-compute ESC failed, will retry on print:', err);
+                        return null;
+                    });
+            }
+        },
+
         print: function () {
             if (
                 this.pos.config.use_direct_print &&
@@ -24,11 +54,12 @@ odoo.define('wk_odoo_direct_print.ReceiptScreen', function (require) {
             ) {
                 this.print_xml();
                 this.lock_screen(false);
-                return true
+                return true;
             } else {
                 return this._super();
             }
         },
+
         print_xml: function () {
             if (
                 this.pos.config.use_direct_print &&
@@ -37,9 +68,9 @@ odoo.define('wk_odoo_direct_print.ReceiptScreen', function (require) {
                 var receipt = QWeb.render('XmlReceipt', this.get_receipt_render_env());
                 this.pos.proxy.direct_printer.print_xml_receipt(receipt);
                 this.pos.get_order()._printed = true;
-                return
+                return;
             }
             return this._super();
         },
     });
-}); 
+});

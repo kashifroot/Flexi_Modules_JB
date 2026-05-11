@@ -32,6 +32,8 @@ odoo.define('pos_direct_print.Printer', function (require) {
             this.pending_print_jobs = 0
             this.pos_cashdrawer = false;
             this.host_platform = '';
+            this._pendingImagePromise = null;
+            this._pendingEscPromise = null;
             this.set({
                 'is_hostmachine_online': false,
                 'pending_print_jobs': 0,
@@ -73,13 +75,30 @@ odoo.define('pos_direct_print.Printer', function (require) {
             var self = this;
 
             if (this.host_platform === 'Android') {
-                let imageBase64 = await this.render_receipt_to_image();
-                console.log("imageBase64------------>",imageBase64);
+                let imageBase64 = null;
+                if (this._pendingImagePromise) {
+                    // Await the already-running pre-render (may already be complete)
+                    imageBase64 = await this._pendingImagePromise;
+                    this._pendingImagePromise = null;
+                }
+                // Fall back to fresh render if pre-render failed or wasn't started
+                if (!imageBase64) {
+                    imageBase64 = await this.render_receipt_to_image();
+                }
                 await this.send_image_printing_job(imageBase64);
                 return;
             }
 
-            var receipt = await this.get_esc_command_set(xmlReceipt)
+            let receipt = null;
+            if (this._pendingEscPromise) {
+                // Await the already-running pre-compute (may already be complete)
+                receipt = await this._pendingEscPromise;
+                this._pendingEscPromise = null;
+            }
+            // Fall back to fresh computation if pre-compute failed or wasn't started
+            if (!receipt) {
+                receipt = await this.get_esc_command_set(xmlReceipt);
+            }
             if (receipt) {
                 this.receipt_queue.push(receipt);
             }
