@@ -3479,7 +3479,7 @@
                 .pos .pos-sale-ticket {
       width:8cm;
                         text-align:center;
-                        font-size: calc(1em - 2px);
+                        font-size: calc(1em - 4px);
                 }
                     </style>
         <div class="pos-sale-ticket">
