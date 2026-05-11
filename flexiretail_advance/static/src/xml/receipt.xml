@@ -3481,7 +3481,7 @@
                         text-align:center;
                 }
                     </style>
-        <div class="pos-sale-ticket" style="font-size:87.5%;">
+        <div class="pos-sale-ticket" style="font-size:65%;">
             <div class="page">
                 <t t-set="dateorder" t-value="order.formatted_validation_date || order.date_order"/>
                 <!--   Yulia 12122024 change receipt format         -->
@@ -3560,52 +3560,48 @@
                         </tr>
 
                         <tr>
-                            <td colspan="9" >
-                                  &#160;&#160;&#160;&#160;<t
-                                    t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
-                                <span>@</span>
-                                <t t-if="orderline.discount_amount > 0 || orderline.discount > 0">
-                                       <t t-esc="widget.after_discount_price(orderline.quantity,orderline.get_display_price())"/>
-                                    <t t-set="discounted_price"
-                                       t-value="widget.after_discount_price(orderline.quantity, orderline.get_display_price())"/>
-                                    <t t-if="discount_price == 1">
-                                         <t t-esc="orderline.get_display_price()"/>
+                            <td colspan="12" style="display:flex; justify-content:space-between; align-items:baseline;">
+                                <span>
+                                    &#160;&#160;&#160;&#160;<t t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
+                                    @
+                                    <t t-if="orderline.discount_amount > 0 || orderline.discount > 0">
+                                        <t t-set="discounted_price" t-value="widget.after_discount_price(orderline.quantity, orderline.get_display_price())"/>
+                                        <t t-if="discount_price == 1">
+                                            <t t-esc="orderline.get_display_price()"/>
+                                        </t>
+                                        <t t-else="">
+                                            <t t-esc="discounted_price"/>
+                                        </t>
                                     </t>
                                     <t t-else="">
-                                        <t t-esc="discounted_price"/>
+                                        <t t-esc="widget.format_currency_front(orderline.price)"/>
                                     </t>
-                                </t>
-                                <t t-else="">
-                                      <t t-esc="widget.format_currency_front(orderline.price)"/>
-                                </t>
-
-                            </td>
-                            <td colspan="3" style="white-space:nowrap; font-family:Arial,sans-serif; font-weight:normal; text-align:right; padding-left:6px; width:35%;">
-                                <!--   <t t-esc="widget.calc_discount_item(orderline.get_display_price(),order.get_before_disc_total())"/>-->
-                                <t t-esc="widget.format_currency_front(orderline.get_display_price())"/>
+                                </span>
+                                <span style="white-space:nowrap; font-family:Arial,sans-serif; font-weight:normal; flex-shrink:0; padding-left:8px;">
+                                    <t t-esc="widget.format_currency_front(orderline.get_display_price())"/>
+                                </span>
                             </td>
                         </tr>
                     </t>
                     <!-- <tr height="20px;"></tr>-->
 
                     <tr>
-                            <td colspan="4">
-                                <b>Total:</b>
-                            </td>
-                        <td colspan="8" style="white-space:nowrap; font-family:Arial,sans-serif; font-weight:normal; text-align:right; padding-left:6px; width:35%;">
-                                 <t t-if="order.get_credit_detail()">
+                        <td colspan="12" style="display:flex; justify-content:space-between; align-items:baseline;">
+                            <span><b>Total:</b></span>
+                            <span style="white-space:nowrap; font-family:Arial,sans-serif; font-weight:normal; flex-shrink:0; padding-left:8px;">
+                                <t t-if="order.get_credit_detail()">
                                     <t t-set="net_total" t-value="0"/>
-                                     <t t-foreach="order.get_credit_detail()" t-as="credit">
+                                    <t t-foreach="order.get_credit_detail()" t-as="credit">
                                         <t t-set="net_total" t-value="net_total + credit.amount"/>
                                     </t>
-                                     <t t-esc="widget.format_currency_front(order.getNetTotalTaxIncluded() + net_total)"/>
+                                    <t t-esc="widget.format_currency_front(order.getNetTotalTaxIncluded() + net_total)"/>
                                 </t>
-                            <t t-else="">
+                                <t t-else="">
                                     <t t-esc="widget.format_currency_front(order.getNetTotalTaxIncluded())"/>
                                 </t>
-
-                            </td>
-                        </tr>
+                            </span>
+                        </td>
+                    </tr>
                 </table>
 
                 <div style="text-align:center; width:100%; margin-top:8px;">
@@ -3624,7 +3620,7 @@
 
 
     <t t-name="XmlPosTicket_custom_salespersons">
-        <receipt align='center' width='40' value-thousands-separator=''>
+        <receipt align='center' width='48' value-thousands-separator=''>
             <t t-if="widget.pos.company_logo_base64">
                 <div style="text-align:center;">
                     <img t-att-src="widget.pos.company_logo_base64" style="max-height: 70px;width:auto;height:auto;"/>
