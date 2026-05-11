@@ -124,9 +124,16 @@ odoo.define('pos_direct_print.Printer', function (require) {
         },
 
         render_receipt_to_image: async function () {
-            var el = document.querySelector('.pos-sale-ticket');
+            // Poll until the receipt element appears in the DOM (up to 3 seconds).
+            // This handles the case where pre-rendering starts before QWeb finishes painting.
+            var el = null;
+            for (var i = 0; i < 30; i++) {
+                el = document.querySelector('.pos-sale-ticket');
+                if (el) break;
+                await new Promise(function (resolve) { setTimeout(resolve, 100); });
+            }
             if (!el) {
-                throw new Error('Receipt element (.pos-receipt-container) not found in DOM.');
+                throw new Error('Receipt element (.pos-sale-ticket) not found in DOM after 3s.');
             }
             var clone = el.cloneNode(true);
             clone.style.position = 'fixed';
