@@ -3479,9 +3479,10 @@
                 .pos .pos-sale-ticket {
       width:8cm;
                         text-align:center;
+                        font-size:12px
                 }
                     </style>
-        <div class="pos-sale-ticket" style="font-size:55%;">
+        <div class="pos-sale-ticket" style="font-size:12px;">
             <div class="page">
                 <t t-set="dateorder" t-value="order.formatted_validation_date || order.date_order"/>
                 <!--   Yulia 12122024 change receipt format         -->
