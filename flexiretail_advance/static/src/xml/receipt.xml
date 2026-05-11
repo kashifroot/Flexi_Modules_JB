@@ -3638,6 +3638,12 @@
                 <left>Sticker:</left>
                 <right><t t-esc="order.sticker"/></right>
             </line>
+            <t t-if="order.get_tour_code and order.get_tour_code()">
+                <line>
+                    <left>Tour Code:</left>
+                    <right><t t-esc="order.get_tour_code()"/></right>
+                </line>
+            </t>
             <line>
                 <left>Order:</left>
                 <right><t t-esc="order.name"/></right>
