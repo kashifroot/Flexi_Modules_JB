@@ -3479,6 +3479,7 @@
                 .pos .pos-sale-ticket {
       width:8cm;
                         text-align:center;
+                        font-size: calc(1em - 2px);
                 }
                     </style>
         <div class="pos-sale-ticket">
@@ -3524,7 +3525,7 @@
                     <tr t-if="order.salesperson_name">
                         <td style="text-align:center">
 
-                            User: <t t-esc="order.salesperson_name"/>
+                            Salesperson: <t t-esc="order.salesperson_name"/>
                         </td>
                     </tr>
                     <tr t-else="">
