@@ -3485,121 +3485,104 @@
             <div class="page">
                 <t t-set="dateorder" t-value="order.formatted_validation_date || order.date_order"/>
                 <!--   Yulia 12122024 change receipt format         -->
-                <table style="font-family: 'Arial Black'">
-                   <!-- <tr>
-                        <td colspan="9"/>
-                    </tr>-->
+                <table style="font-family: Arial, sans-serif; font-weight:normal; width:100%;">
                     <tr>
                         <td style="text-align:center; width:100%">
-<!--          Yulia 18012025 use html entity nbsp                  -->
-
                             <span>UNPAID</span>
                         </td>
                     </tr>
                 </table>
-                <table style="font-family: 'Arial Black';">
+                <table style="font-family: Arial, sans-serif; font-weight:normal; width:100%;">
                     <tr>
                         <td style="text-align:center">
-
-                              <span>
-                                 Sticker: <t t-esc="order.sticker"/>
-                              </span>
+                              <span>Sticker: <t t-esc="order.sticker"/></span>
                         </td>
                     </tr>
                     <tr t-if="order.get_tour_code and order.get_tour_code()">
                         <td style="text-align:center">
-                              <span>
-                                 Tour Code: <t t-esc="order.get_tour_code()"/>
-                              </span>
+                              <span>Tour Code: <t t-esc="order.get_tour_code()"/></span>
                         </td>
                     </tr>
                     <tr>
                         <td style="text-align:center">
-
-                              <span>
-                                   <t t-esc="order.name"/>
-                              </span>
+                              <span><t t-esc="order.name"/></span>
                         </td>
                     </tr>
                     <tr t-if="order.salesperson_name">
                         <td style="text-align:center">
-
                             Salesperson: <t t-esc="order.salesperson_name"/>
                         </td>
                     </tr>
                     <tr t-else="">
                         <td style="text-align:center">
-
                             User: <t t-esc="widget.pos.get_cashier().name"/>
                         </td>
                     </tr>
-
                 </table>
                 <br/>
 
-                <table style="font-family: 'Arial Black'; width:100%;">
-                    <!--<tr height="15px;"/>-->
+                <table style="font-family: Arial, sans-serif; font-weight:normal; width:100%;">
                     <t t-foreach="orderlines" t-as="orderline">
                         <tr>
-                            <td colspan="9" style="font-family: 'Arial Black'; word-break:break-word;">
-                                <span >
-                              <t t-if="orderline.get_product().default_code">
+                            <td style="word-break:break-word; width:100%;">
+                                <t t-if="orderline.get_product().default_code">
                                     <t t-esc="orderline.get_product().default_code"/>
-                                  <t t-if="orderline.get_product().second_name">
-                                    <t t-esc="orderline.get_product().second_name"/>
-                                    </t>
-                                  <t t-else="">
-                                    <t t-esc="widget.get_15_char_product(orderline.get_product().name)"/>
-                                </t>
-                                </t>
-                                <t t-else="">
-                                     <t t-esc="orderline.get_product().name"/>
-                                 </t>
-                                 </span>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td colspan="12" style="display:flex; justify-content:space-between; align-items:baseline;">
-                                <span>
-                                    &#160;&#160;&#160;&#160;<t t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
-                                    @
-                                    <t t-if="orderline.discount_amount > 0 || orderline.discount > 0">
-                                        <t t-set="discounted_price" t-value="widget.after_discount_price(orderline.quantity, orderline.get_display_price())"/>
-                                        <t t-if="discount_price == 1">
-                                            <t t-esc="orderline.get_display_price()"/>
-                                        </t>
-                                        <t t-else="">
-                                            <t t-esc="discounted_price"/>
-                                        </t>
+                                    <t t-if="orderline.get_product().second_name">
+                                        <t t-esc="orderline.get_product().second_name"/>
                                     </t>
                                     <t t-else="">
-                                        <t t-esc="widget.format_currency_front(orderline.price)"/>
+                                        <t t-esc="widget.get_15_char_product(orderline.get_product().name)"/>
                                     </t>
-                                </span>
-                                <span style="white-space:nowrap; font-family:Arial,sans-serif; font-weight:normal; flex-shrink:0; padding-left:8px;">
-                                    <t t-esc="widget.format_currency_front(orderline.get_display_price())"/>
-                                </span>
+                                </t>
+                                <t t-else="">
+                                    <t t-esc="orderline.get_product().name"/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:100%;">
+                                <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                                    <span>
+                                        &#160;&#160;&#160;&#160;<t t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
+                                        @
+                                        <t t-if="orderline.discount_amount > 0 || orderline.discount > 0">
+                                            <t t-set="discounted_price" t-value="widget.after_discount_price(orderline.quantity, orderline.get_display_price())"/>
+                                            <t t-if="discount_price == 1">
+                                                <t t-esc="orderline.get_display_price()"/>
+                                            </t>
+                                            <t t-else="">
+                                                <t t-esc="discounted_price"/>
+                                            </t>
+                                        </t>
+                                        <t t-else="">
+                                            <t t-esc="widget.format_currency_front(orderline.price)"/>
+                                        </t>
+                                    </span>
+                                    <span style="white-space:nowrap; flex-shrink:0; padding-left:8px;">
+                                        <t t-esc="widget.format_currency_front(orderline.get_display_price())"/>
+                                    </span>
+                                </div>
                             </td>
                         </tr>
                     </t>
-                    <!-- <tr height="20px;"></tr>-->
 
                     <tr>
-                        <td colspan="12" style="display:flex; justify-content:space-between; align-items:baseline;">
-                            <span><b>Total:</b></span>
-                            <span style="white-space:nowrap; font-family:Arial,sans-serif; font-weight:normal; flex-shrink:0; padding-left:8px;">
-                                <t t-if="order.get_credit_detail()">
-                                    <t t-set="net_total" t-value="0"/>
-                                    <t t-foreach="order.get_credit_detail()" t-as="credit">
-                                        <t t-set="net_total" t-value="net_total + credit.amount"/>
+                        <td style="width:100%;">
+                            <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                                <span>Total:</span>
+                                <span style="white-space:nowrap; flex-shrink:0; padding-left:8px;">
+                                    <t t-if="order.get_credit_detail()">
+                                        <t t-set="net_total" t-value="0"/>
+                                        <t t-foreach="order.get_credit_detail()" t-as="credit">
+                                            <t t-set="net_total" t-value="net_total + credit.amount"/>
+                                        </t>
+                                        <t t-esc="widget.format_currency_front(order.getNetTotalTaxIncluded() + net_total)"/>
                                     </t>
-                                    <t t-esc="widget.format_currency_front(order.getNetTotalTaxIncluded() + net_total)"/>
-                                </t>
-                                <t t-else="">
-                                    <t t-esc="widget.format_currency_front(order.getNetTotalTaxIncluded())"/>
-                                </t>
-                            </span>
+                                    <t t-else="">
+                                        <t t-esc="widget.format_currency_front(order.getNetTotalTaxIncluded())"/>
+                                    </t>
+                                </span>
+                            </div>
                         </td>
                     </tr>
                 </table>
@@ -3620,7 +3603,7 @@
 
 
     <t t-name="XmlPosTicket_custom_salespersons">
-        <receipt align='center' width='48' value-thousands-separator=''>
+        <receipt align='center' width='40' value-thousands-separator=''>
             <t t-if="widget.pos.company_logo_base64">
                 <div style="text-align:center;">
                     <img t-att-src="widget.pos.company_logo_base64" style="max-height: 70px;width:auto;height:auto;"/>
