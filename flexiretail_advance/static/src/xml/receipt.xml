@@ -3506,6 +3506,13 @@
                               </span>
                         </td>
                     </tr>
+                    <tr t-if="order.get_tour_code and order.get_tour_code()">
+                        <td style="text-align:center">
+                              <span>
+                                 Tour Code: <t t-esc="order.get_tour_code()"/>
+                              </span>
+                        </td>
+                    </tr>
                     <tr>
                         <td style="text-align:center">
 
@@ -3530,7 +3537,7 @@
                 </table>
                 <br/>
 
-                <table style="font-family: 'Arial Black';    display: table-cell;">
+                <table style="font-family: 'Arial Black'; width:100%;">
                     <!--<tr height="15px;"/>-->
                     <t t-foreach="orderlines" t-as="orderline">
                         <tr>
@@ -3573,7 +3580,7 @@
                                 </t>
 
                             </td>
-                            <td colspan="3" style="white-space:nowrap; font-family:Arial,sans-serif; font-weight:normal; text-align:left; padding-left:6px;">
+                            <td colspan="3" style="white-space:nowrap; font-family:Arial,sans-serif; font-weight:normal; text-align:right; padding-left:6px; width:35%;">
                                 <!--   <t t-esc="widget.calc_discount_item(orderline.get_display_price(),order.get_before_disc_total())"/>-->
                                 <t t-esc="widget.format_currency_front(orderline.get_display_price())"/>
                             </td>
@@ -3585,7 +3592,7 @@
                             <td colspan="4">
                                 <b>Total:</b>
                             </td>
-                        <td colspan="8" style="white-space:nowrap; font-family:Arial,sans-serif; font-weight:normal; text-align:left; padding-left:6px;">
+                        <td colspan="8" style="white-space:nowrap; font-family:Arial,sans-serif; font-weight:normal; text-align:right; padding-left:6px; width:35%;">
                                  <t t-if="order.get_credit_detail()">
                                     <t t-set="net_total" t-value="0"/>
                                      <t t-foreach="order.get_credit_detail()" t-as="credit">
