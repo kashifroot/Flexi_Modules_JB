@@ -83,9 +83,15 @@ odoo.define('pos_direct_print.Printer', function (require) {
                 }
                 // Fall back to fresh render if pre-render failed or wasn't started
                 if (!imageBase64) {
-                    imageBase64 = await this.render_receipt_to_image();
+                    try {
+                        imageBase64 = await this.render_receipt_to_image();
+                    } catch (e) {
+                        console.error('[DirectPrint] render_receipt_to_image failed:', e);
+                    }
                 }
-                await this.send_image_printing_job(imageBase64);
+                if (imageBase64) {
+                    await this.send_image_printing_job(imageBase64);
+                }
                 return;
             }
 
@@ -125,15 +131,17 @@ odoo.define('pos_direct_print.Printer', function (require) {
 
         render_receipt_to_image: async function () {
             // Poll until the receipt element appears in the DOM (up to 3 seconds).
-            // This handles the case where pre-rendering starts before QWeb finishes painting.
+            // .pos-receipt-container is always present on the receipt screen.
+            // .pos-sale-ticket is only present for the custom UNPAID sticker receipt.
             var el = null;
             for (var i = 0; i < 30; i++) {
-                el = document.querySelector('.pos-sale-ticket');
+                el = document.querySelector('.pos-receipt-container') ||
+                     document.querySelector('.pos-sale-ticket');
                 if (el) break;
                 await new Promise(function (resolve) { setTimeout(resolve, 100); });
             }
             if (!el) {
-                throw new Error('Receipt element (.pos-sale-ticket) not found in DOM after 3s.');
+                throw new Error('Receipt element not found in DOM after 3s.');
             }
             var clone = el.cloneNode(true);
             clone.style.position = 'fixed';
@@ -148,14 +156,16 @@ odoo.define('pos_direct_print.Printer', function (require) {
             // Force all descendant block/flex elements to fill the full available width
             var styleOverride = document.createElement('style');
             styleOverride.textContent = `
-                .pos-sale-ticket, .pos-sale-ticket * {
+                .pos-receipt-container, .pos-sale-ticket,
+                .pos-receipt-container *, .pos-sale-ticket * {
                     box-sizing: border-box !important;
                     max-width: 100% !important;
                 }
-                .pos-sale-ticket table {
+                .pos-receipt-container table, .pos-sale-ticket table {
                     width: 100% !important;
                     table-layout: fixed !important;
                 }
+                .pos-receipt-container td, .pos-receipt-container th,
                 .pos-sale-ticket td, .pos-sale-ticket th {
                     word-break: break-word !important;
                     white-space: normal !important;
