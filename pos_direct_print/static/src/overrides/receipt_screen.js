@@ -52,6 +52,7 @@ odoo.define('wk_odoo_direct_print.ReceiptScreen', function (require) {
                 this.pos.config.use_direct_print &&
                 this.pos.proxy.direct_printer
             ) {
+                console.log('[DirectPrint] Print button clicked on receipt screen');
                 this.print_xml();
                 this.lock_screen(false);
                 return true;

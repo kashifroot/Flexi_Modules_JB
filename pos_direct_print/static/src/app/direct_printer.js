@@ -90,6 +90,7 @@ odoo.define('pos_direct_print.Printer', function (require) {
                     }
                 }
                 if (imageBase64) {
+                    console.log('[DirectPrint] Base64 image ready, sending to printer. Length:', imageBase64.length, '| Preview (first 80 chars):', imageBase64.substring(0, 80));
                     await this.send_image_printing_job(imageBase64);
                 }
                 return;
