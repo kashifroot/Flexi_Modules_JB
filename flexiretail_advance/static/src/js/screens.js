@@ -1230,14 +1230,14 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				input.focus();
 			});
 			var search_timeout = null;
-			this.$('.searchbox input').on('keyup', function (event) {
+			this.$('.searchbox input').on('keyup input', function (event) {
 				$(this).autocomplete({
 					source: self.namelist,
 				});
 				var searchbox = this;
 				clearTimeout(search_timeout);
 				search_timeout = setTimeout(function () {
-					self.perform_search(self.category, searchbox.value, event.which === 13);
+					self.perform_search(self.category, searchbox.value, event.type === 'keyup' && event.which === 13);
 				}, 70);
 			});
 			this.$('.ac_product_list_manage').delegate('.main-product', 'click', self.product_click);
@@ -7465,7 +7465,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			_.each(self.pos.db.get_product_namelist(), function (list) {
 				self.namelist.push(list[1]);
 			});
-			this.$('.searchbox input').on('keyup', function (event) {
+			this.$('.searchbox input').on('keyup input', function (event) {
 				//            this.search_handler = function(event){
 				// $(this).autocomplete({
 				//     source:self.namelist,
@@ -7474,7 +7474,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				//                if(event.type == "keypress" || event.keyCode === 46 || event.keyCode === 8){
 				clearTimeout(search_timeout);
 				search_timeout = setTimeout(function () {
-					self.perform_search(self.category, searchbox.value, event.which === 13);
+					self.perform_search(self.category, searchbox.value, event.type === 'keyup' && event.which === 13);
 				}, 70);
 				//                }
 			});
