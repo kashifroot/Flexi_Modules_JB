@@ -1229,11 +1229,11 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				input.val('');
 				input.focus();
 			});
+			this.$('.searchbox input, input.search_inputboxe').autocomplete({
+				source: self.namelist,
+			});
 			var search_timeout = null;
 			this.$('.searchbox input, input.search_inputboxe').on('keyup input', function (event) {
-				$(this).autocomplete({
-					source: self.namelist,
-				});
 				var searchbox = this;
 				clearTimeout(search_timeout);
 				search_timeout = setTimeout(function () {
