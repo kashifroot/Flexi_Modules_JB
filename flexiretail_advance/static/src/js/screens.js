@@ -1225,12 +1225,12 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			self._super();
 			this.$('span.search-clear').click(function (e) {
 				self.clear_search();
-				var input = $('.searchbox input');
+				var input = $('.searchbox input, input.search_inputboxe');
 				input.val('');
 				input.focus();
 			});
 			var search_timeout = null;
-			this.$('.searchbox input').on('keyup input', function (event) {
+			this.$('.searchbox input, input.search_inputboxe').on('keyup input', function (event) {
 				$(this).autocomplete({
 					source: self.namelist,
 				});
@@ -1254,8 +1254,8 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			var all_products = this.pos.db.get_product_by_category(0)
 			$('.brand_searchbox input').val('');
 			$('.category_searchbox input').val('');
-			$('.searchbox input').val('');
-			$('.searchbox input').focus();
+			$('.searchbox input, input.search_inputboxe').val('');
+			$('.searchbox input, input.search_inputboxe').focus();
 //			$('span.category-clear_manage').click(function (e) {
 //				self.clear_search();
 //				var input = $('.category_searchbox input');
