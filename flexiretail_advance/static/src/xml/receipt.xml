@@ -3474,58 +3474,58 @@
 
 
     <t t-name="PosTicket_custom_salesperson">
-                    <style>
-
-                .pos .pos-sale-ticket {
-      width:8cm;
-                        text-align:center;
-                        font-size:12px
-                }
-                    </style>
-        <div class="pos-sale-ticket" style="font-size:12px;">
+        <style>
+            .pos .pos-sale-ticket {
+                width: 8cm;
+                text-align: center;
+                font-size: 14px;
+            }
+        </style>
+        <div class="pos-sale-ticket" style="font-size:14px;">
             <div class="page">
                 <t t-set="dateorder" t-value="order.formatted_validation_date || order.date_order"/>
-                <!--   Yulia 12122024 change receipt format         -->
-                <table style="font-family: Arial, sans-serif; font-weight:normal; width:100%;">
+                <!-- UNPAID header -->
+                <table style="font-family: Arial, sans-serif; width:100%;">
                     <tr>
-                        <td style="text-align:center; width:100%">
+                        <td style="text-align:center; font-size:25px; font-weight:bold; width:100%;">
                             <span>UNPAID</span>
                         </td>
                     </tr>
                 </table>
+                <!-- Tour code / Sticker / Order / Salesperson -->
                 <table style="font-family: Arial, sans-serif; font-weight:normal; width:100%;">
                     <tr t-if="order.get_tour_code and order.get_tour_code()">
-                        <td style="text-align:center">
-                              <span>Tour Code: <t t-esc="order.get_tour_code()"/> (<t t-esc="order.sticker"/>)</span>
+                        <td style="text-align:center; font-size:20px;">
+                            <span>Tour Code: <t t-esc="order.get_tour_code()"/> (<t t-esc="order.sticker"/>)</span>
                         </td>
                     </tr>
                     <tr t-else="">
-                        <td style="text-align:center">
-                              <span>Sticker: <t t-esc="order.sticker"/></span>
+                        <td style="text-align:center; font-size:20px;">
+                            <span>Sticker: <t t-esc="order.sticker"/></span>
                         </td>
                     </tr>
                     <tr>
-                        <td style="text-align:center">
-                              <span><t t-esc="order.name"/></span>
+                        <td style="text-align:center; font-size:20px;">
+                            <span><t t-esc="order.name"/></span>
                         </td>
                     </tr>
                     <tr t-if="order.salesperson_name">
-                        <td style="text-align:center">
+                        <td style="text-align:center; font-size:20px;">
                             Salesperson: <t t-esc="order.salesperson_name"/>
                         </td>
                     </tr>
                     <tr t-else="">
-                        <td style="text-align:center">
+                        <td style="text-align:center; font-size:20px;">
                             User: <t t-esc="widget.pos.get_cashier().name"/>
                         </td>
                     </tr>
                 </table>
                 <br/>
-
+                <!-- Order lines -->
                 <table style="font-family: Arial, sans-serif; font-weight:normal; width:100%;">
                     <t t-foreach="orderlines" t-as="orderline">
                         <tr>
-                            <td style="word-break:break-word; width:100%;">
+                            <td style="word-break:break-word; width:100%; font-size:25px;">
                                 <t t-if="orderline.get_product().default_code">
                                     <t t-esc="orderline.get_product().default_code"/>
                                     <t t-if="orderline.get_product().second_name">
@@ -3541,7 +3541,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td style="width:100%;">
+                            <td style="width:100%; font-size:25px;">
                                 <div style="display:flex; justify-content:space-between; align-items:baseline;">
                                     <span>
                                         &#160;&#160;&#160;&#160;<t t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
@@ -3566,9 +3566,9 @@
                             </td>
                         </tr>
                     </t>
-
+                    <!-- Total -->
                     <tr>
-                        <td style="width:100%;">
+                        <td style="width:100%; font-size:25px;">
                             <div style="display:flex; justify-content:space-between; align-items:baseline;">
                                 <span>Total:</span>
                                 <span style="white-space:nowrap; flex-shrink:0; padding-left:8px;">
@@ -3587,18 +3587,18 @@
                         </td>
                     </tr>
                 </table>
-
-                <div style="text-align:center; width:100%; margin-top:8px;">
+                <!-- Barcode: centered, proportioned for CODE128 readability -->
+                <div style="text-align:center; width:100%; margin-top:10px;">
                     <t t-if="barcode_base64">
-                        <img t-att-src="'data:image/png;base64,' + barcode_base64" width='420' height='150' style="display:block; margin:0 auto;"/>
+                        <img t-att-src="'data:image/png;base64,' + barcode_base64"
+                             width="300" height="80"
+                             style="display:block; margin:0 auto;"/>
                     </t>
                     <t t-else="">
                         <barcode encoding="CODE128"><t t-esc="order.name"/></barcode>
                     </t>
                 </div>
-
             </div>
-
         </div>
     </t>
 
