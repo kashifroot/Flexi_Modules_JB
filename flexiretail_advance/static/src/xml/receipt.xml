@@ -3640,36 +3640,36 @@
                 </line>
             </t>
             <line><right>--------</right></line>
-            <t t-foreach="orderlines" t-as="orderline">
+            <t t-foreach="receipt.orderlines" t-as="orderline">
                 <line>
                     <left>
-                        <t t-if="orderline.get_product().default_code">
-                            <t t-esc="orderline.get_product().default_code"/>
-                            <t t-if="orderline.get_product().second_name">
-                                <t t-esc="orderline.get_product().second_name"/>
+                        <t t-if="orderline.default_code">
+                            <t t-esc="orderline.default_code"/>
+                            <t t-if="orderline.second_name">
+                                <t t-esc="orderline.second_name"/>
                             </t>
                             <t t-else="">
-                                <t t-esc="widget.get_15_char_product(orderline.get_product().name)"/>
+                                <t t-esc="widget.get_15_char_product(orderline.product_name)"/>
                             </t>
                         </t>
                         <t t-else="">
-                            <t t-esc="orderline.get_product().name"/>
+                            <t t-esc="orderline.product_name"/>
                         </t>
                     </left>
                 </line>
                 <line indent='1'>
                     <left>
-                        <t t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
+                        <t t-esc="widget.get_quantity_no_dp(orderline.quantity)"/>
                         @
                         <t t-if="orderline.discount_amount > 0 or orderline.discount > 0">
-                            <t t-esc="widget.after_discount_price(orderline.quantity, orderline.get_display_price())"/>
+                            <t t-esc="widget.after_discount_price(orderline.quantity, orderline.price_display)"/>
                         </t>
                         <t t-else="">
                             <t t-esc="widget.format_currency_front(orderline.price)"/>
                         </t>
                     </left>
                     <right>
-                        <t t-esc="widget.format_currency_front(orderline.get_display_price())"/>
+                        <t t-esc="widget.format_currency_front(orderline.price_display)"/>
                     </right>
                 </line>
             </t>
@@ -3734,27 +3734,27 @@
             </t>
             <br/>
             <line>------------------------------------------------</line>
-            <t t-foreach="orderlines" t-as="orderline">
+            <t t-foreach="receipt.orderlines" t-as="orderline">
                 <div>
-                    <t t-if="orderline.get_product().default_code">
-                        <t t-esc="orderline.get_product().default_code"/>
-                        <t t-if="orderline.get_product().second_name">
-                            <t t-esc="orderline.get_product().second_name"/>
+                    <t t-if="orderline.default_code">
+                        <t t-esc="orderline.default_code"/>
+                        <t t-if="orderline.second_name">
+                            <t t-esc="orderline.second_name"/>
                         </t>
                         <t t-else="">
-                            <t t-esc="widget.get_15_char_product(orderline.get_product().name)"/>
+                            <t t-esc="widget.get_15_char_product(orderline.product_name)"/>
                         </t>
                     </t>
                     <t t-else="">
-                        <t t-esc="orderline.get_product().name"/>
+                        <t t-esc="orderline.product_name"/>
                     </t>
                 </div>
                 <line indent='1'>
                     <left>
-                        <t t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
+                        <t t-esc="widget.get_quantity_no_dp(orderline.quantity)"/>
                         @
                         <t t-if="orderline.discount_amount > 0 or orderline.discount > 0">
-                            <t t-set="discounted_price" t-value="widget.after_discount_price(orderline.quantity, orderline.get_display_price())"/>
+                            <t t-set="discounted_price" t-value="widget.after_discount_price(orderline.quantity, orderline.price_display)"/>
                             <t t-esc="discounted_price"/>
                         </t>
                         <t t-else="">
@@ -3762,7 +3762,7 @@
                         </t>
                     </left>
                     <right>
-                        <t t-esc="widget.format_currency_front(orderline.get_display_price())"/>
+                        <t t-esc="widget.format_currency_front(orderline.price_display)"/>
                     </right>
                 </line>
             </t>

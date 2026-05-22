@@ -3710,6 +3710,8 @@ odoo.define('flexiretail_advance.models', function (require) {
                 is_print: order.get_print_serial(),
                 return_valid_days: this.get_return_valid_days(),
                 discount_amount: this.get_discount_amount(),
+                default_code: this.get_product().default_code || '',
+                second_name: this.get_product().second_name || '',
             }
             $.extend(lines, new_attr);
             return lines;
