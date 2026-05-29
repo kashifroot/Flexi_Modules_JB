@@ -4201,10 +4201,10 @@ odoo.define('flexiretail_advance.screens', function (require) {
 						barcodeImg.src = barcode_url;
 					} else {
 
-						// Pre-load QR image as base64 before rendering to ensure it appears in print
+						// Pre-load QR image into browser cache before rendering receipt
 						var self = this;
 						var base_url = this.getSession()['web.base.url'];
-						var qr_url = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + base_url + '/einvoice/' + order.uid;
+						var qr_url = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(base_url + '/einvoice/' + order.uid);
 
 						var renderReceiptWithQR = function(taxqr_src) {
 							var qr_data = {
@@ -4224,16 +4224,13 @@ odoo.define('flexiretail_advance.screens', function (require) {
 						};
 
 						var qrImg = new Image();
-						qrImg.crossOrigin = 'Anonymous';
 						qrImg.onload = function() {
-							var canvas = document.createElement('canvas');
-							canvas.width = qrImg.width || 250;
-							canvas.height = qrImg.height || 250;
-							canvas.getContext('2d').drawImage(qrImg, 0, 0);
-							renderReceiptWithQR(canvas.toDataURL('image/png'));
+							// Image is cached; render receipt — browser serves it from cache instantly
+							renderReceiptWithQR(qr_url);
 						};
 						qrImg.onerror = function() {
-							renderReceiptWithQR(qr_url);
+							// Render without QR on network failure
+							renderReceiptWithQR('');
 						};
 						qrImg.src = qr_url;
 					}

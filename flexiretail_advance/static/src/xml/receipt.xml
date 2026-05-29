@@ -3437,7 +3437,7 @@
                     <div style="font-size:20px; font-weight:bold; text-align:center;"><span>(Scan QR to Request)</span></div>
                 </div>
                 <div style="text-align:center; padding:5px 0;">
-                    <img t-att-src="data.taxqr" style="max-width:160px; height:160px;padding: 3px; display:block; margin:0 auto;"/>
+                    <img t-att-src="data.taxqr" style="width:160px; height:160px;"/>
                 </div>
                 <div style="font-size:14px; text-align:center; width:100%;">
                     <div style="text-align:center;"><b>Request Timeline:</b></div>
