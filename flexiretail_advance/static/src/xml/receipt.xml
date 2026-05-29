@@ -3075,51 +3075,44 @@
                 </t>
 
                 <tr height="15px"/>
-                <t t-foreach="orderlines" t-as="orderline">
+                <t t-foreach="receipt.orderlines" t-as="orderline">
                     <tr style="font-size: 25px;">
                         <td colspan="12" class="tight-spacing" style="text-align:left;">
-                            <t t-if="orderline.get_product().default_code">
-                                <t t-esc="orderline.get_product().default_code"/>
-                                <t t-if="orderline.get_product().second_name">
-                                <t t-esc="orderline.get_product().second_name"/>
-                               </t>
+                            <span>
+                                <t t-if="orderline.default_code">
+                                    <t t-esc="orderline.default_code"/>
+                                    <t t-if="orderline.second_name">
+                                        <t t-esc="orderline.second_name"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="widget.get_15_char_product(orderline.product_name)"/>
+                                    </t>
+                                </t>
                                 <t t-else="">
-                                <t t-esc="widget.get_15_char_product(orderline.get_product().name)"/>
-                            </t>
-                            </t>
-                            <t t-else="">
-                                 <t t-esc="orderline.get_product().name"/>
-                             </t>
+                                    <t t-esc="orderline.product_name"/>
+                                </t>
+                            </span>
                         </td>
                     </tr>
                     <tr class="tight-spacing" style="font-size: 25px;">
                         <td colspan="6" style="text-align:right;">
-                            <t t-esc="widget.get_quantity_no_dp(orderline.get_quantity_str_with_unit())"/>
+                            <span><t t-esc="widget.get_quantity_no_dp(orderline.quantity)"/></span>
                             <span>@</span>
-                            <t t-if="orderline.discount_amount > 0 || orderline.discount > 0">
-                                       <t t-esc="widget.after_discount_price(orderline.quantity,orderline.get_display_price())"/>
-                                <t t-set="discounted_price"
-                                   t-value="widget.after_discount_price(orderline.quantity, orderline.get_display_price())"/>
-                                <t t-if="discount_price == 1">
-                                         <t t-esc="orderline.get_display_price()"/>
-                                    </t>
-                                <t t-else="">
-                                        <t t-esc="discounted_price"/>
-                                    </t>
-                                </t>
+                            <t t-if="orderline.discount > 0">
+                                <span><t t-esc="widget.after_discount_price(orderline.quantity, orderline.price_display)"/></span>
+                            </t>
                             <t t-else="">
-                                      <t t-esc="widget.format_currency_front(orderline.price)"/>
-                                </t>
+                                <span><t t-esc="widget.format_currency_front(orderline.price)"/></span>
+                            </t>
                         </td>
                         <td colspan="6" style="text-align:center;">
-                <!--                            <t t-esc="widget.calc_discount_item(orderline.get_display_price(),order.get_before_disc_total())"/>-->
-                            <t t-esc="widget.format_currency_front(orderline.get_display_price())"/>
+                            <span><t t-esc="widget.format_currency_front(orderline.price_display)"/></span>
                         </td>
                     </tr>
                 </t>
                 <tr height="16px"/>
                 <tr class="tight-spacing" style="font-size: 25px;">
-                    <td colspan="6">Amount Paid:</td>
+                    <td colspan="6"><span>Amount Paid:</span></td>
                     <td colspan="6" style="text-align:center;">
                         <span><t t-esc="widget.format_currency_front(order.get_total_paid())"/></span>
                     </td>
@@ -3149,7 +3142,7 @@
                 </tr>
                 <t t-foreach="paymentlines" t-as="payline">
                 <tr class="tight-spacing" style="font-size: 25px;">
-                    <td colspan="6"><t t-esc="payline.name"/></td>
+                    <td colspan="6"><span><t t-esc="payline.name"/></span></td>
                     <td colspan="6" style="text-align:center;">
                         <span><t t-esc="widget.format_currency_front(payline.get_amount())"/></span>
                     </td>
@@ -3157,9 +3150,9 @@
                 </t>
                 <tr height="20px"/>
                 <tr class="tight-spacing" style="font-size: 25px;">
-                    <td colspan="6">Change:</td>
+                    <td colspan="6"><span>Change:</span></td>
                     <td colspan="6" style="text-align:center;">
-                        <span> <t t-esc="widget.format_currency_front(order.get_change())"/></span>
+                        <span><t t-esc="widget.format_currency_front(order.get_change())"/></span>
                     </td>
                 </tr>
             </table>
@@ -3441,18 +3434,16 @@
 <!--           Kashif 19 jan 25:  QR Image Area-->
             <t t-if="data and data.taxqr">
                 <div style="text-align:center;">
-                    <div style="font-size:20px; font-weight:bold;">E-Invoice <span style="font-size:16px; font-weight:normal;">(Scan QR to Request)</span></div>
+                    <div style="font-size:20px; font-weight:bold; text-align:center;"><span>(Scan QR to Request)</span></div>
                 </div>
-                <div style="text-align:center; padding:10px 0;">
-<!--                     <img t-att-src="'/report/barcode/QR/einvoice/' + str(''.join(c for c in str(order.pos_reference) if c.isdigit())) + '?width=160&amp;height=160'"-->
-<!--                       style="max-width:160px; height:160px;padding: 3px;"       alt="Barcode"/>-->
-                    <img t-att-src="data.taxqr" style="max-width:160px; height:160px;padding: 3px;"/>
-                    <div style="font-size:17px; text-align:center; padding:0 0px;max-width: 460px;margin: 0 auto;">
-                        <b>Request Timeline:</b><br/>
-                        <b>Start Date:</b> Next day after your purchase<br/>
-                        <b>Last Date:</b> Within <span t-esc='taxInvoiceTimeframe'/> days from your purchase<br/>
-                        <i>(All requests must be submitted within the timeframe)</i>
-                    </div>
+                <div style="text-align:center; padding:5px 0;">
+                    <img t-att-src="data.taxqr" style="max-width:160px; height:160px;padding: 3px; display:block; margin:0 auto;"/>
+                </div>
+                <div style="font-size:14px; text-align:center; width:100%;">
+                    <div style="text-align:center;"><b>Request Timeline:</b></div>
+                    <div style="text-align:center;"><b>Start Date:</b> <span>Next day after your purchase</span></div>
+                    <div style="text-align:center;"><b>Last Date:</b> <span>Within </span><span t-esc='taxInvoiceTimeframe'/><span> days from your purchase</span></div>
+                    <div style="text-align:center;"><i>(All requests must be submitted within the timeframe)</i></div>
                 </div>
             </t>
 <!--            END-->
