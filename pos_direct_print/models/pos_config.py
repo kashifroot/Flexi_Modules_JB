@@ -129,7 +129,7 @@ class PrintJobs(models.Model):
 
             new_print_job.content = base64.b64encode(img_bytes).decode('utf-8')
 
-
+            
         for each_partner in new_print_job.printer_id.hostmachine_id.user_ids:
             message = {'type': 'print_direct',
                         'payload': {'method': 'print-job-cmd', 'host_id': new_print_job.printer_id.hostmachine_id.host_id, 'record_id':new_print_job.id}}

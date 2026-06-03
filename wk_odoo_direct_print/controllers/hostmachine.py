@@ -34,7 +34,9 @@ class HostMachine(http.Controller):
                 })
         else:
             if host_info:
-                host_obj.is_online = is_online if 'is_online' in request.jsonrequest else True
+                new_status = is_online if 'is_online' in request.jsonrequest else True
+                if host_obj.is_online != new_status:
+                    host_obj.is_online = new_status
         return {
                 'success' : True,
                 'msg': 'Received request.'
@@ -63,7 +65,8 @@ class HostMachine(http.Controller):
 
         host_obj = request.env['wk.hostmachine'].search([('host_id', '=', host_info.get('host_id')), ('platform', '=', host_info.get('platform'))])
         if host_obj:
-            host_obj.is_online = True
+            if not host_obj.is_online:
+                host_obj.is_online = True
             add_printer(host_obj)
         return {
                 'success' : True,
@@ -76,7 +79,8 @@ class HostMachine(http.Controller):
         record_id = request.jsonrequest.get('record_id')
         job_id = request.env['print.jobs'].search([('id', '=', record_id)])
         if job_id and job_id.host_id == host_info.get('host_id'):
-            job_id.printer_id.hostmachine_id.is_online = True # Change The host machine status 
+            if not job_id.printer_id.hostmachine_id.is_online:
+                job_id.printer_id.hostmachine_id.is_online = True
             printer_id = job_id.printer_id
             print_data = printer_id._get_printer_config()
             if job_id.printer_id.printerType == "ESCPOS" and job_id.printer_id.hostmachine_id.platform in ['Android','iOS']:

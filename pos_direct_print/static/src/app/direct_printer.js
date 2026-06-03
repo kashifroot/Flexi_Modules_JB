@@ -32,8 +32,6 @@ odoo.define('pos_direct_print.Printer', function (require) {
             this.pending_print_jobs = 0
             this.pos_cashdrawer = false;
             this.host_platform = '';
-            this._pendingImagePromise = null;
-            this._pendingEscPromise = null;
             this.set({
                 'is_hostmachine_online': false,
                 'pending_print_jobs': 0,
@@ -73,76 +71,50 @@ odoo.define('pos_direct_print.Printer', function (require) {
         },
         async print_xml_receipt(xmlReceipt) {
             var self = this;
-
+            
             if (this.host_platform === 'Android') {
-                let imageBase64 = null;
-                if (this._pendingImagePromise) {
-                    // Await the already-running pre-render (may already be complete)
-                    imageBase64 = await this._pendingImagePromise;
-                    this._pendingImagePromise = null;
-                }
-                // Fall back to fresh render if pre-render failed or wasn't started
-                if (!imageBase64) {
-                    try {
-                        imageBase64 = await this.render_receipt_to_image();
-                    } catch (e) {
-                        console.error('[DirectPrint] render_receipt_to_image failed:', e);
-                    }
-                }
-                if (imageBase64) {
-                    console.log('[DirectPrint] Base64 image ready at', new Date().toISOString(), '| Length:', imageBase64.length, '| Full base64:\n', imageBase64);
-                    await this.send_image_printing_job(imageBase64);
-                }
+                let imageBase64 = await this.render_receipt_to_image();
+                console.log("imageBase64------------>",imageBase64);
+                await this.send_image_printing_job(imageBase64);
                 return;
             }
 
-            let receipt = null;
-            if (this._pendingEscPromise) {
-                // Await the already-running pre-compute (may already be complete)
-                receipt = await this._pendingEscPromise;
-                this._pendingEscPromise = null;
-            }
-            // Fall back to fresh computation if pre-compute failed or wasn't started
-            if (!receipt) {
-                receipt = await this.get_esc_command_set(xmlReceipt);
-            }
+            var receipt = await this.get_esc_command_set(xmlReceipt)
             if (receipt) {
                 this.receipt_queue.push(receipt);
             }
-            function sendPrintingXmlReceiptjob() {
-                if (self.receipt_queue.length > 0) {
-                    var r = self.receipt_queue.shift();
-                    self.send_printing_job(r)
-                        .then(function () {
-                            sendPrintingXmlReceiptjob();
-                        }, function (error) {
-                            if (error) {
-                                self.pos.gui.show_popup('error-traceback', {
-                                    'title': _t('Printing Error: ') + error.data.message,
-                                    'body': error.data.debug,
-                                });
-                                return;
-                            }
-                            self.receipt_queue.unshift(r);
-                        });
+            return new Promise(function (resolve, reject) {
+                function sendPrintingXmlReceiptjob() {
+                    if (self.receipt_queue.length > 0) {
+                        var r = self.receipt_queue.shift();
+                        self.send_printing_job(r)
+                            .then(function () {
+                                resolve();
+                                sendPrintingXmlReceiptjob();
+                            }, function (error) {
+                                if (error) {
+                                    self.pos.gui.show_popup('error-traceback', {
+                                        'title': _t('Printing Error: ') + error.data.message,
+                                        'body': error.data.debug,
+                                    });
+                                    reject(error);
+                                    return;
+                                }
+                                self.receipt_queue.unshift(r);
+                                resolve();
+                            });
+                    } else {
+                        resolve();
+                    }
                 }
-            }
-            sendPrintingXmlReceiptjob();
+                sendPrintingXmlReceiptjob();
+            });
         },
 
         render_receipt_to_image: async function () {
-            // Poll until the receipt element appears in the DOM (up to 3 seconds).
-            // .pos-receipt-container is always present on the receipt screen.
-            // .pos-sale-ticket is only present for the custom UNPAID sticker receipt.
-            var el = null;
-            for (var i = 0; i < 30; i++) {
-                el = document.querySelector('.pos-receipt-container') ||
-                     document.querySelector('.pos-sale-ticket');
-                if (el) break;
-                await new Promise(function (resolve) { setTimeout(resolve, 100); });
-            }
+            var el = document.querySelector('.pos-sale-ticket');
             if (!el) {
-                throw new Error('Receipt element not found in DOM after 3s.');
+                throw new Error('Receipt element (.pos-receipt-container) not found in DOM.');
             }
             var clone = el.cloneNode(true);
             clone.style.position = 'fixed';
