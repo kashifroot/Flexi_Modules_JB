@@ -3852,6 +3852,83 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			this.pos.get_order().finalize();
 			$('.pos-rightheader').removeAttr('style');
 		},
+		renderElement: function () {
+			this._super();
+			var self = this;
+			// Bind the additional "Print XML" button. The existing
+			// ".button.print" binding is left untouched by the base widget.
+			this.$('.button.print_xml').off('click.printxml').on('click.printxml', function () {
+				if (!self._locked) {
+					self.print_xml_separate();
+				}
+			});
+		},
+		// "Print XML" flow: print the receipt body as ESC/POS text and send the
+		// QR code as a separate image job (printed right after the text). This
+		// is intentionally independent of the existing print()/print_xml() path
+		// (which rasterizes the whole receipt to a single base64 image).
+		print_xml_separate: function () {
+			var self = this;
+			var order = this.pos.get_order();
+			var direct_printer = this.pos.proxy.direct_printer;
+			// No direct printer configured: fall back to the existing flow.
+			if (!(this.pos.config.use_direct_print && direct_printer)) {
+				return this.print();
+			}
+			var base_url = this.getSession()['web.base.url'];
+			var qr_img_url = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + base_url + '/einvoice/' + order.uid;
+
+			var renderAndPrint = function (qr_code_base64) {
+				order._direct_print_qr_code_base64 = qr_code_base64 || null;
+				var qr_data = {
+					qr_code_base64: qr_code_base64 || null,
+					taxInvoiceTimeframe: 3,
+					// When a QR image follows, don't cut after the text so the
+					// paper is cut after the QR image instead.
+					cut_receipt: qr_code_base64 ? 'false' : 'true',
+				};
+				var receipt = QWeb.render('XmlPosTicket_custom_print_xml', {
+					widget: self,
+					pos: self.pos,
+					order: order,
+					receipt: order.export_for_printing(),
+					orderlines: order.get_orderlines(),
+					paymentlines: order.get_paymentlines(),
+					data: qr_data,
+					taxInvoiceTimeframe: qr_data.taxInvoiceTimeframe,
+				});
+				// 1) Receipt body as ESC/POS text (logo/QR excluded).
+				direct_printer.get_esc_command_set(receipt).then(function (escposReceipt) {
+					if (escposReceipt) {
+						return direct_printer.send_printing_job(escposReceipt);
+					}
+				}).then(function () {
+					// 2) QR code as a separate image job, printed below the text.
+					if (qr_code_base64) {
+						return direct_printer.send_image_printing_job(qr_code_base64);
+					}
+				}).catch(function (err) {
+					console.error('Print XML failed:', err);
+				});
+				order._printed = true;
+			};
+
+			var qrImg = new Image();
+			qrImg.crossOrigin = 'Anonymous';
+			qrImg.onload = function () {
+				var canvas = document.createElement('canvas');
+				canvas.width = 250;
+				canvas.height = 250;
+				canvas.getContext('2d').drawImage(qrImg, 0, 0, 250, 250);
+				var qr_code_base64 = canvas.toDataURL('image/png').split(',')[1];
+				renderAndPrint(qr_code_base64);
+			};
+			qrImg.onerror = function () {
+				// QR fetch failed: still print the text receipt (and cut it).
+				renderAndPrint(null);
+			};
+			qrImg.src = qr_img_url;
+		},
 		print_web: function () {
 			if ($.browser.safari) {
 				//              var header_html = $('.pos-rightheader').html();
