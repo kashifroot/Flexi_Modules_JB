@@ -629,7 +629,7 @@ class Escpos:
             elif elem.tag == 'line':
                 width = stylestack.get('width')
                 if stylestack.get('size') in ('double', 'double-width'):
-                    width = width / 2
+                    width = width // 2
 
                 lineserializer = XmlLineSerializer(stylestack.get('indent')+indent,stylestack.get('tabwidth'),width,stylestack.get('line-ratio'))
                 serializer.start_block(stylestack)
@@ -672,7 +672,7 @@ class Escpos:
             elif elem.tag == 'hr':
                 width = stylestack.get('width')
                 if stylestack.get('size') in ('double', 'double-width'):
-                    width = width / 2
+                    width = width // 2
                 serializer.start_block(stylestack)
                 serializer.text('-'*width)
                 serializer.end_entity()
