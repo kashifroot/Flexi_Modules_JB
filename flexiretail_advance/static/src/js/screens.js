@@ -3852,17 +3852,6 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			this.pos.get_order().finalize();
 			$('.pos-rightheader').removeAttr('style');
 		},
-		renderElement: function () {
-			this._super();
-			var self = this;
-			// Bind the additional "Print XML" button. The existing
-			// ".button.print" binding is left untouched by the base widget.
-			this.$('.button.print_xml').off('click.printxml').on('click.printxml', function () {
-				if (!self._locked) {
-					self.print_xml_separate();
-				}
-			});
-		},
 		// "Print XML" flow: print the receipt body as ESC/POS text and send the
 		// QR code as a separate image job (printed right after the text). This
 		// is intentionally independent of the existing print()/print_xml() path
@@ -3980,6 +3969,13 @@ odoo.define('flexiretail_advance.screens', function (require) {
 		renderElement: function () {
 			var self = this;
 			this._super();
+			// Bind the additional "Print XML" button. The existing
+			// ".button.print" binding is left untouched by the base widget.
+			this.$('.button.print_xml').off('click.printxml').on('click.printxml', function () {
+				if (!self._locked) {
+					self.print_xml_separate();
+				}
+			});
 			var customer_display = this.pos.config.customer_display;
 			this.$('.next').click(function () {
 				if (self.pos.get_order()) {
