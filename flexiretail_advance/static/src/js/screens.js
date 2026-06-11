@@ -3972,6 +3972,15 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			// Bind the additional "Print XML" button. The existing
 			// ".button.print" binding is left untouched by the base widget.
 			this.$('.button.print_xml').off('click.printxml').on('click.printxml', function () {
+				var order = self.pos.get_order();
+				console.log('%c[Print XML] button clicked', 'color:#fff;background:#28a745;padding:2px 6px;border-radius:3px;', {
+					locked: !!self._locked,
+					use_direct_print: self.pos.config.use_direct_print,
+					has_direct_printer: !!(self.pos.proxy && self.pos.proxy.direct_printer),
+					order_uid: order ? order.uid : null,
+					order_name: order ? order.name : null,
+					total_with_tax: order ? order.get_total_with_tax() : null,
+				});
 				if (!self._locked) {
 					self.print_xml_separate();
 				}
