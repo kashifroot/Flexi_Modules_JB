@@ -1930,6 +1930,10 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				var order = self.pos.get('selectedOrder');
 				order.set_print_serial($('#is_serial').is(':checked'));
 			});
+			this.$('#print_with_qr').click(function () {
+				var order = self.pos.get('selectedOrder');
+				order.set_print_with_qr($('#print_with_qr').is(':checked'));
+			});
 			this.$('#is_ereciept').click(function () {
 				var order = self.pos.get('selectedOrder');
 				var customer_email = order.get_client() ? order.get_client().email : false;
@@ -3969,8 +3973,17 @@ odoo.define('flexiretail_advance.screens', function (require) {
 		renderElement: function () {
 			var self = this;
 			this._super();
-			// Bind the additional "Print XML" button. The existing
-			// ".button.print" binding is left untouched by the base widget.
+			// Override normal print button: route to XML+QR or plain image based on order flag.
+			this.$('.button.print').off('click').on('click', function () {
+				if (!self._locked) {
+					var order = self.pos.get_order();
+					if (order.get_print_with_qr()) {
+						self.print_xml_separate();
+					} else {
+						self.print();
+					}
+				}
+			});
 			this.$('.button.print_xml').off('click.printxml').on('click.printxml', function () {
 				var order = self.pos.get_order();
 				console.log('%c[Print XML] button clicked', 'color:#fff;background:#28a745;padding:2px 6px;border-radius:3px;', {

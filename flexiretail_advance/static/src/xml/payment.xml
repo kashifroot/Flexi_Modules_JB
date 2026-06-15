@@ -256,6 +256,12 @@
                             <span style="font-size: 16px;margin-left: 10px;color: #333;">Print Serial On Receipt</span>
                         </div>
                     </t>
+                    <t t-if="widget.pos.config.use_direct_print">
+                        <div>
+                            <input type="checkbox" checked="checked" name="print_with_qr" id='print_with_qr'/>
+                            <span style="font-size: 16px;margin-left: 10px;color: #333;">Print with QR Image</span>
+                        </div>
+                    </t>
                     <t t-if="widget.pos.config and widget.pos.config.enable_order_note and widget.pos.get_cashier().access_order_note">
                         <div style="display: inline-block;width: 95%;position: relative;">
                             <details style="width: 100%;">

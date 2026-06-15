@@ -2898,28 +2898,20 @@
     </t>
 
     <t t-name="PosTicket_custom">
-                    <style>
-  .pos-receipt-container {
-    font-size: 0.65em;
-    text-align: center;
-    direction: ltr;
-                    font-family: "Lato","Lucida Grande", Helvetica, Verdana, Arial;
-}
-                    </style>
         <div class="pos-sale-ticket">
             <style>
   .pos-receipt-container {
     font-size: 0.65em;
     text-align: center;
     direction: ltr;
-                    font-family: "Lato","Lucida Grande", Helvetica, Verdana, Arial;
+    font-family: "Inconsolata", monospace;
 }
                 .pos .pos-sale-ticket {
       width:8cm;
                 }
 
 .pos-sale-ticket {
-                    font-family: "Lato","Lucida Grande", Helvetica, Verdana, Arial;
+    font-family: "Inconsolata", monospace;
     text-align: center;
     width: 420px;
     background-color: white;
@@ -2928,7 +2920,6 @@
     font-size: 14px;
     padding-bottom:3px;
     display: inline-block;
-    font-family: "Inconsolata";
     border: solid 1px rgb(220,220,220);
     border-radius: 3px;
     overflow: hidden;

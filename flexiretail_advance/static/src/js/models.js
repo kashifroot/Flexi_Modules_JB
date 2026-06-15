@@ -1142,6 +1142,7 @@ odoo.define('flexiretail_advance.models', function (require) {
             }
             this.serial_list = [];
             this.print_serial = true;
+            this.print_with_qr = true;
             this.discount_amount_total = 0;
             this.before_disc_total = 0;
             var res = _super_Order.initialize.apply(this, arguments);
@@ -3358,6 +3359,12 @@ odoo.define('flexiretail_advance.models', function (require) {
         },
         get_print_serial: function () {
             return this.print_serial;
+        },
+        set_print_with_qr: function (val) {
+            this.print_with_qr = val;
+        },
+        get_print_with_qr: function () {
+            return this.print_with_qr;
         },
         display_lot_popup: function () {
             var self = this;
