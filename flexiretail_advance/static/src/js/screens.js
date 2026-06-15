@@ -4342,16 +4342,21 @@ odoo.define('flexiretail_advance.screens', function (require) {
 							}));
 						};
 
-						var qrImg = new Image();
-						qrImg.onload = function() {
-							// Image is cached; render receipt — browser serves it from cache instantly
-							renderReceiptWithQR(qr_url);
-						};
-						qrImg.onerror = function() {
-							// Render without QR on network failure
-							renderReceiptWithQR('');
-						};
-						qrImg.src = qr_url;
+						if (!order.get_print_with_qr()) {
+							// Checkbox unchecked — render receipt without QR immediately
+							renderReceiptWithQR(null);
+						} else {
+							var qrImg = new Image();
+							qrImg.onload = function() {
+								// Image is cached; render receipt — browser serves it from cache instantly
+								renderReceiptWithQR(qr_url);
+							};
+							qrImg.onerror = function() {
+								// Render without QR on network failure
+								renderReceiptWithQR('');
+							};
+							qrImg.src = qr_url;
+						}
 					}
 				}
 
