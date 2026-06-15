@@ -1930,10 +1930,23 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				var order = self.pos.get('selectedOrder');
 				order.set_print_serial($('#is_serial').is(':checked'));
 			});
-			this.$('#print_with_qr').click(function () {
+			if (self.pos.config.use_direct_print) {
 				var order = self.pos.get('selectedOrder');
-				order.set_print_with_qr($('#print_with_qr').is(':checked'));
-			});
+				var $qr_div = $('<div style="padding-top:8px;">' +
+					'<input type="checkbox" name="print_with_qr" id="print_with_qr"' +
+					(order.get_print_with_qr() !== false ? ' checked="checked"' : '') +
+					'/>' +
+					'<span style="font-size:16px;margin-left:10px;color:#333;">Print with QR Image</span>' +
+					'</div>');
+				var $create_invoice = self.$('.payment-create-invoice');
+				if ($create_invoice.length) {
+					$create_invoice.after($qr_div);
+				}
+				$qr_div.find('#print_with_qr').click(function () {
+					var ord = self.pos.get('selectedOrder');
+					ord.set_print_with_qr($(this).is(':checked'));
+				});
+			}
 			this.$('#is_ereciept').click(function () {
 				var order = self.pos.get('selectedOrder');
 				var customer_email = order.get_client() ? order.get_client().email : false;
@@ -3977,8 +3990,19 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			this.$('.button.print').off('click').on('click', function () {
 				if (!self._locked) {
 					var order = self.pos.get_order();
-					if (order.get_print_with_qr()) {
-						self.print_xml_separate();
+					var direct_printer = self.pos.proxy.direct_printer;
+					if (self.pos.config.use_direct_print && direct_printer) {
+						if (order.get_print_with_qr()) {
+							self.print_xml_separate();
+						} else {
+							// Print full receipt HTML as image — no QR
+							direct_printer.render_receipt_to_image().then(function (imageBase64) {
+								return direct_printer.send_image_printing_job(imageBase64);
+							}).catch(function (err) {
+								console.error('Receipt image print failed:', err);
+							});
+							order._printed = true;
+						}
 					} else {
 						self.print();
 					}
