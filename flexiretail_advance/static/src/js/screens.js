@@ -3903,6 +3903,38 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					data: qr_data,
 					taxInvoiceTimeframe: qr_data.taxInvoiceTimeframe,
 				});
+				// Open a print-preview popup so the operator can save as PDF.
+				try {
+					var qr_data_preview = {
+						type: 'url',
+						taxqr: qr_code_base64 ? ('data:image/png;base64,' + qr_code_base64) : null,
+						taxInvoiceTimeframe: 3,
+					};
+					var receiptHtml = QWeb.render('PosTicket_custom', {
+						widget: self,
+						pos: self.pos,
+						order: order,
+						receipt: order.export_for_printing(),
+						orderlines: order.get_orderlines(),
+						paymentlines: order.get_paymentlines(),
+						data: qr_data_preview,
+						taxInvoiceTimeframe: 3,
+					});
+					var previewWin = window.open('', '_blank', 'width=500,height=700,scrollbars=yes');
+					if (previewWin) {
+						previewWin.document.write(
+							'<!DOCTYPE html><html><head><title>Receipt Preview</title>' +
+							'<style>body{margin:0;background:#eee;display:flex;justify-content:center;padding:20px;}' +
+							'@media print{body{background:#fff;padding:0;}}</style>' +
+							'</head><body>' + receiptHtml + '</body></html>'
+						);
+						previewWin.document.close();
+						previewWin.focus();
+						previewWin.print();
+					}
+				} catch (e) {
+					console.warn('[Print XML] preview failed:', e);
+				}
 				// 1) Receipt body as ESC/POS text (logo/QR excluded).
 				direct_printer.get_esc_command_set(receipt).then(function (escposReceipt) {
 					if (escposReceipt) {
