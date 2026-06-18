@@ -3919,6 +3919,12 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				order._printed = true;
 			};
 
+			// Skip QR image if the operator unchecked "Print with QR Image".
+			if (!order.get_print_with_qr()) {
+				renderAndPrint(null);
+				return;
+			}
+
 			var qrImg = new Image();
 			qrImg.crossOrigin = 'Anonymous';
 			qrImg.onload = function () {
