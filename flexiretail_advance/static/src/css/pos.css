@@ -970,11 +970,9 @@
 	position: relative;
 	margin: 14px;
 }
-.pos .payment-screen .top-content_finalset1 .button.validate-print,
-.pos .payment-screen .top-content_finalset1 .button.validate-qr-print {
+.pos .payment-screen .top-content_finalset1 .validate-buttons-group {
 	float: right;
 	position: relative;
-	margin: 14px 4px;
 }
 
 .pos .payment-screen .top-content_finalset1 .button.back {
@@ -1684,9 +1682,7 @@
 	right: -20px;
 }
 
-.screen .top-content .button.next,
-.screen .top-content .button.validate-print,
-.screen .top-content .button.validate-qr-print {
+.screen .top-content .button.next {
 	float: right;
 	width: 167px;
 	line-height: 35px;

@@ -2097,11 +2097,11 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			self.renderElement();
 			if (order.get_total_with_tax() > 0) {
 				if ((order.get_paying_due() || order.get_cancel_order())) {
-					self.$('#partial_pay, .next, .validate-print, .validate-qr-print').show();
+					self.$('#partial_pay, .next, .validate-buttons-group').show();
 				}
 			} else {
 				self.$('#partial_pay').hide();
-				self.$('.next, .validate-print, .validate-qr-print').show();
+				self.$('.next, .validate-buttons-group').show();
 			}
 			// if((order.get_paying_due() || order.get_cancel_order())){
 			//     self.$('#partial_pay').text("Pay");
@@ -8051,7 +8051,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					selectedOrder.set_sale_order_pay(true);
 					self.gui.show_screen('payment');
 					self.pos.gui.screen_instances.payment.renderElement();
-					$(self.pos.gui.screen_instances.payment.el).find('.button.next, .button.validate-print, .button.validate-qr-print, .button.js_invoice').hide();
+					$(self.pos.gui.screen_instances.payment.el).find('.button.next, .validate-buttons-group, .button.js_invoice').hide();
 				}
 
 			});
@@ -8117,7 +8117,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				selectedOrder.set_edit_quotation(true);
 				selectedOrder.set_sequence(result.name);
 				self.pos.gui.screen_instances.payment.renderElement();
-				$(self.pos.gui.screen_instances.payment.el).find('.button.next, .button.validate-print, .button.validate-qr-print, .button.js_invoice').hide();
+				$(self.pos.gui.screen_instances.payment.el).find('.button.next, .validate-buttons-group, .button.js_invoice').hide();
 				self.gui.show_screen('products');
 			});
 
@@ -8417,7 +8417,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					selectedOrder.set_invoice_pay(true);
 					self.gui.show_screen('payment');
 					self.pos.gui.screen_instances.payment.renderElement();
-					$(self.pos.gui.screen_instances.payment.el).find('.button.next, .button.validate-print, .button.validate-qr-print, .button.js_invoice').hide();
+					$(self.pos.gui.screen_instances.payment.el).find('.button.next, .validate-buttons-group, .button.js_invoice').hide();
 				} else {
 					self.gui.show_popup('error-traceback', {
 						title: _t("Configuration Required"),
@@ -8500,7 +8500,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				selectedOrder.set_edit_quotation(true);
 				selectedOrder.set_sequence(result.name);
 				self.pos.gui.screen_instances.payment.renderElement();
-				$(self.pos.gui.screen_instances.payment.el).find('.button.next, .button.validate-print, .button.validate-qr-print, .button.js_invoice').hide();
+				$(self.pos.gui.screen_instances.payment.el).find('.button.next, .validate-buttons-group, .button.js_invoice').hide();
 				self.gui.show_screen('products');
 			});
 			//search box

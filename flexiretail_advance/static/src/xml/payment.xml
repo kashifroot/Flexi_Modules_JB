@@ -173,14 +173,16 @@
 	                        </span>
 	                    </t>
                         <t t-if="!widget.pos.get_order().get_invoice_id() and !widget.pos.get_order().get_sale_order_mode() and !widget.pos.get_order().get_invoice_id()">
-                            <span class='button validate-print'>
-                                Validate &amp; Print
-                                <i class='fa fa-angle-double-right'/>
-                            </span>
-                            <span class='button validate-qr-print'>
-                                Validate &amp; QR Print
-                                <i class='fa fa-qrcode'/>
-                            </span>
+                            <div class="validate-buttons-group" style="float: right; display: flex; flex-direction: column; gap: 3px; margin: 6px 4px;">
+                                <span class='button validate-print' style="line-height: 26px; font-size: 13px; padding: 0 10px; margin: 0;">
+                                    Validate &amp; Print
+                                    <i class='fa fa-angle-double-right'/>
+                                </span>
+                                <span class='button validate-qr-print' style="line-height: 26px; font-size: 13px; padding: 0 10px; margin: 0;">
+                                    Validate &amp; QR Print
+                                    <i class='fa fa-qrcode'/>
+                                </span>
+                            </div>
                         </t>
 	                 </div>
                 </div>
