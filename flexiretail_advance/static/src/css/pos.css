@@ -970,9 +970,15 @@
 	position: relative;
 	margin: 14px;
 }
-.pos .payment-screen .top-content_finalset1 .validate-buttons-group {
+.pos .payment-screen .top-content_finalset1 .button.validate-print,
+.pos .payment-screen .top-content_finalset1 .button.validate-qr-print {
 	float: right;
+	clear: right;
 	position: relative;
+	margin: 2px 4px;
+	line-height: 24px;
+	font-size: 12px;
+	padding: 0 8px;
 }
 
 .pos .payment-screen .top-content_finalset1 .button.back {
