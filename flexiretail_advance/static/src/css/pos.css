@@ -965,55 +965,77 @@
 	line-height: 34px;
 }
 
-/* Left group: Back / Edit / Customer — flex row, override global max-width: 20% */
+/* ── Payment top bar: absolute-position redesign ────────────────────────────
+   pos_mobile.css injects margin-top:150px / max-width:20% on these children
+   which breaks all flex-based approaches. Absolute positioning bypasses all of
+   that: children are taken out of the flex flow and pinned to the container. */
+
+.pos .payment-screen .top-content.top-content_finalset1 {
+	position: relative !important;
+	height: 65px !important;
+	box-sizing: border-box !important;
+	overflow: visible !important;
+}
+
+/* Left group: Back / Edit / Customer — pinned to left edge */
 .pos .payment-screen .top-content_finalset1 .payment_btn_top {
-	display: flex !important;
-	align-items: center !important;
-	flex-shrink: 0 !important;
-	gap: 4px !important;
-	width: auto !important;
-	max-width: none !important;
-}
-
-/* Buttons inside payment_btn_top: strip float so flex layout works */
-.pos .payment-screen .top-content_finalset1 .payment_btn_top .button {
-	float: none !important;
-	margin: 0 2px !important;
-}
-
-/* Right group: Validate buttons container — flex row
-   margin-top:0 overrides pos_mobile.css @media(max-width:1024px) which sets margin-top:150px */
-.pos .payment-screen .top-content_finalset1 .payment_btn_top1 {
+	position: absolute !important;
+	left: 4px !important;
+	top: 50% !important;
+	transform: translateY(-50%) !important;
 	display: flex !important;
 	align-items: center !important;
 	gap: 6px !important;
-	float: none !important;
 	width: auto !important;
-	max-width: none !important;
-	flex-shrink: 1 !important;
-	margin-top: 0 !important;
+	max-width: 55% !important;
+	margin: 0 !important;
+	float: none !important;
+	z-index: 2 !important;
+}
+
+.pos .payment-screen .top-content_finalset1 .payment_btn_top .button {
+	float: none !important;
+	margin: 0 !important;
+	position: static !important;
+	flex-shrink: 0 !important;
+}
+
+/* Right group: Validate buttons — pinned to right edge */
+.pos .payment-screen .top-content_finalset1 .payment_btn_top1 {
+	position: absolute !important;
+	right: 4px !important;
+	top: 50% !important;
+	transform: translateY(-50%) !important;
+	display: flex !important;
+	align-items: center !important;
+	gap: 6px !important;
+	width: auto !important;
+	max-width: 50% !important;
+	margin: 0 !important;
+	float: none !important;
+	z-index: 2 !important;
 	font-size: 14px !important;
 }
 
 .pos .payment-screen .top-content_finalset1 .button.next {
-	float: right;
-	position: relative;
-	margin: 14px;
+	float: none;
+	position: static;
+	margin: 0 4px;
 }
 
-/* Both validate buttons side by side, override any inline margin from JS
-   overflow:visible overrides pos_mobile.css @media(1024px) overflow:hidden on .top-content .button */
+/* Validate buttons: side by side, full label visible */
 .pos .payment-screen .top-content_finalset1 .button.validate-print,
 .pos .payment-screen .top-content_finalset1 .button.validate-qr-print {
 	display: inline-block !important;
 	float: none !important;
 	margin: 0 !important;
-	line-height: 28px !important;
-	font-size: 13px !important;
 	padding: 0 12px !important;
+	line-height: 34px !important;
+	font-size: 13px !important;
 	white-space: nowrap !important;
 	overflow: visible !important;
 	text-overflow: clip !important;
+	flex-shrink: 0 !important;
 }
 
 .pos .payment-screen .top-content_finalset1 .button.back {
