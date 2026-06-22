@@ -173,9 +173,13 @@
 	                        </span>
 	                    </t>
                         <t t-if="!widget.pos.get_order().get_invoice_id() and !widget.pos.get_order().get_sale_order_mode() and !widget.pos.get_order().get_invoice_id()">
-                            <span class='button next'>
-                                Validate
+                            <span class='button validate-print'>
+                                Validate &amp; Print
                                 <i class='fa fa-angle-double-right'/>
+                            </span>
+                            <span class='button validate-qr-print'>
+                                Validate &amp; QR Print
+                                <i class='fa fa-qrcode'/>
                             </span>
                         </t>
 	                 </div>

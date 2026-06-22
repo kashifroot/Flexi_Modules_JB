@@ -1930,23 +1930,17 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				var order = self.pos.get('selectedOrder');
 				order.set_print_serial($('#is_serial').is(':checked'));
 			});
-			if (self.pos.config.use_direct_print) {
-				var order = self.pos.get('selectedOrder');
-				var $qr_div = $('<div style="padding-top:8px;">' +
-					'<input type="checkbox" name="print_with_qr" id="print_with_qr"' +
-					(order.get_print_with_qr() !== false ? ' checked="checked"' : '') +
-					'/>' +
-					'<span style="font-size:16px;margin-left:10px;color:#333;">Print with QR Image</span>' +
-					'</div>');
-				var $create_invoice = self.$('.payment-create-invoice');
-				if ($create_invoice.length) {
-					$create_invoice.after($qr_div);
-				}
-				$qr_div.find('#print_with_qr').click(function () {
-					var ord = self.pos.get('selectedOrder');
-					ord.set_print_with_qr($(this).is(':checked'));
-				});
-			}
+			// kashif 22jun26: Validate & Print / Validate & QR Print
+			this.$('.button.validate-print').off('click').on('click', function () {
+				var ord = self.pos.get_order();
+				if (ord) { ord.set_print_with_qr(false); }
+				self.validate_order();
+			});
+			this.$('.button.validate-qr-print').off('click').on('click', function () {
+				var ord = self.pos.get_order();
+				if (ord) { ord.set_print_with_qr(true); }
+				self.validate_order();
+			});
 			this.$('#is_ereciept').click(function () {
 				var order = self.pos.get('selectedOrder');
 				var customer_email = order.get_client() ? order.get_client().email : false;
@@ -2103,11 +2097,11 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			self.renderElement();
 			if (order.get_total_with_tax() > 0) {
 				if ((order.get_paying_due() || order.get_cancel_order())) {
-					self.$('#partial_pay, .next').show();
+					self.$('#partial_pay, .next, .validate-print, .validate-qr-print').show();
 				}
 			} else {
 				self.$('#partial_pay').hide();
-				self.$('.next').show();
+				self.$('.next, .validate-print, .validate-qr-print').show();
 			}
 			// if((order.get_paying_due() || order.get_cancel_order())){
 			//     self.$('#partial_pay').text("Pay");
@@ -3951,7 +3945,6 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				order._printed = true;
 			};
 
-			// Skip QR image if the operator unchecked "Print with QR Image".
 			if (!order.get_print_with_qr()) {
 				renderAndPrint(null);
 				return;
@@ -3960,10 +3953,16 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			var qrImg = new Image();
 			qrImg.crossOrigin = 'Anonymous';
 			qrImg.onload = function () {
+				var qrSize = 150;
+				var paperWidth = 576;
+				var padding = 20;
 				var canvas = document.createElement('canvas');
-				canvas.width = 250;
-				canvas.height = 250;
-				canvas.getContext('2d').drawImage(qrImg, 0, 0, 250, 250);
+				canvas.width = paperWidth;
+				canvas.height = qrSize + padding * 2;
+				var ctx = canvas.getContext('2d');
+				ctx.fillStyle = '#ffffff';
+				ctx.fillRect(0, 0, canvas.width, canvas.height);
+				ctx.drawImage(qrImg, Math.floor((paperWidth - qrSize) / 2), padding, qrSize, qrSize);
 				var qr_code_base64 = canvas.toDataURL('image/png').split(',')[1];
 				renderAndPrint(qr_code_base64);
 			};
@@ -8052,7 +8051,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					selectedOrder.set_sale_order_pay(true);
 					self.gui.show_screen('payment');
 					self.pos.gui.screen_instances.payment.renderElement();
-					$(self.pos.gui.screen_instances.payment.el).find('.button.next, .button.js_invoice').hide();
+					$(self.pos.gui.screen_instances.payment.el).find('.button.next, .button.validate-print, .button.validate-qr-print, .button.js_invoice').hide();
 				}
 
 			});
@@ -8118,7 +8117,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				selectedOrder.set_edit_quotation(true);
 				selectedOrder.set_sequence(result.name);
 				self.pos.gui.screen_instances.payment.renderElement();
-				$(self.pos.gui.screen_instances.payment.el).find('.button.next, .button.js_invoice').hide();
+				$(self.pos.gui.screen_instances.payment.el).find('.button.next, .button.validate-print, .button.validate-qr-print, .button.js_invoice').hide();
 				self.gui.show_screen('products');
 			});
 
@@ -8418,7 +8417,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					selectedOrder.set_invoice_pay(true);
 					self.gui.show_screen('payment');
 					self.pos.gui.screen_instances.payment.renderElement();
-					$(self.pos.gui.screen_instances.payment.el).find('.button.next, .button.js_invoice').hide();
+					$(self.pos.gui.screen_instances.payment.el).find('.button.next, .button.validate-print, .button.validate-qr-print, .button.js_invoice').hide();
 				} else {
 					self.gui.show_popup('error-traceback', {
 						title: _t("Configuration Required"),
@@ -8501,7 +8500,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				selectedOrder.set_edit_quotation(true);
 				selectedOrder.set_sequence(result.name);
 				self.pos.gui.screen_instances.payment.renderElement();
-				$(self.pos.gui.screen_instances.payment.el).find('.button.next, .button.js_invoice').hide();
+				$(self.pos.gui.screen_instances.payment.el).find('.button.next, .button.validate-print, .button.validate-qr-print, .button.js_invoice').hide();
 				self.gui.show_screen('products');
 			});
 			//search box
