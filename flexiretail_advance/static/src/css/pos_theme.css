@@ -3161,3 +3161,69 @@ height : 40px !important ;
 	background: #d2ca7a;
 	color: #333;
 }
+
+/* ── Payment top bar: validate buttons layout (kashif 23jun26) ──────────────
+   pos_mobile.css injects margin-top:150px on .payment_btn_top1 which breaks
+   flex layouts. Use absolute positioning to anchor groups to left/right edges,
+   completely bypassing margin, float and max-width conflicts.               */
+
+.pos .payment-screen .top-content.top-content_finalset1 {
+    position: relative !important;
+    height: 65px !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+}
+
+/* Left: Back / Edit / Customer */
+.pos .payment-screen .top-content_finalset1 .payment_btn_top {
+    position: absolute !important;
+    left: 4px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    width: auto !important;
+    max-width: 55% !important;
+    margin: 0 !important;
+    float: none !important;
+    z-index: 2 !important;
+}
+
+.pos .payment-screen .top-content_finalset1 .payment_btn_top .button {
+    float: none !important;
+    margin: 0 !important;
+    position: static !important;
+    flex-shrink: 0 !important;
+}
+
+/* Right: Validate & Print / Validate & QR Print */
+.pos .payment-screen .top-content_finalset1 .payment_btn_top1 {
+    position: absolute !important;
+    right: 4px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    width: auto !important;
+    max-width: 50% !important;
+    margin: 0 !important;
+    float: none !important;
+    z-index: 2 !important;
+    font-size: 14px !important;
+}
+
+.pos .payment-screen .top-content_finalset1 .button.validate-print,
+.pos .payment-screen .top-content_finalset1 .button.validate-qr-print {
+    display: inline-block !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 12px !important;
+    line-height: 34px !important;
+    font-size: 13px !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    flex-shrink: 0 !important;
+}
