@@ -975,10 +975,10 @@
 	float: right;
 	clear: right;
 	position: relative;
-	margin: 2px 4px;
-	line-height: 24px;
-	font-size: 12px;
-	padding: 0 8px;
+	margin: 3px 120px 3px 4px;
+	line-height: 26px;
+	font-size: 13px;
+	padding: 0 12px;
 }
 
 .pos .payment-screen .top-content_finalset1 .button.back {
