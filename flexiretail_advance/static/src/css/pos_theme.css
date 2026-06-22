@@ -3163,31 +3163,36 @@ height : 40px !important ;
 }
 
 /* ── Payment top bar: validate buttons layout (kashif 23jun26) ──────────────
-   pos_mobile.css injects margin-top:150px on .payment_btn_top1 which breaks
-   flex layouts. Use absolute positioning to anchor groups to left/right edges,
-   completely bypassing margin, float and max-width conflicts.               */
+   Flexbox space-between on the container. Avoids z-index pitfalls — any
+   inline z-index:-1 set by JS on payment_btn_top1 has no effect on
+   position:static elements.                                                 */
 
 .pos .payment-screen .top-content.top-content_finalset1 {
-    position: relative !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
     height: 65px !important;
     box-sizing: border-box !important;
     overflow: visible !important;
+    position: relative !important;
+    line-height: normal !important;
+    float: none !important;
+    width: 100% !important;
 }
 
 /* Left: Back / Edit / Customer */
 .pos .payment-screen .top-content_finalset1 .payment_btn_top {
-    position: absolute !important;
-    left: 4px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
     display: flex !important;
+    flex-direction: row !important;
     align-items: center !important;
     gap: 6px !important;
+    flex: 0 0 auto !important;
     width: auto !important;
-    max-width: 55% !important;
-    margin: 0 !important;
+    max-width: 58% !important;
+    margin: 0 0 0 4px !important;
     float: none !important;
-    z-index: 2 !important;
+    position: static !important;
 }
 
 .pos .payment-screen .top-content_finalset1 .payment_btn_top .button {
@@ -3199,28 +3204,28 @@ height : 40px !important ;
 
 /* Right: Validate & Print / Validate & QR Print */
 .pos .payment-screen .top-content_finalset1 .payment_btn_top1 {
-    position: absolute !important;
-    right: 4px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
     display: flex !important;
+    flex-direction: row !important;
     align-items: center !important;
     gap: 6px !important;
+    flex: 0 0 auto !important;
     width: auto !important;
     max-width: 50% !important;
-    margin: 0 !important;
+    margin: 0 4px 0 0 !important;
     float: none !important;
-    z-index: 2 !important;
+    position: static !important;
     font-size: 14px !important;
 }
 
 .pos .payment-screen .top-content_finalset1 .button.validate-print,
 .pos .payment-screen .top-content_finalset1 .button.validate-qr-print {
-    display: inline-block !important;
+    display: inline-flex !important;
+    align-items: center !important;
     float: none !important;
     margin: 0 !important;
     padding: 0 12px !important;
-    line-height: 34px !important;
+    height: 34px !important;
+    line-height: normal !important;
     font-size: 13px !important;
     white-space: nowrap !important;
     overflow: visible !important;
