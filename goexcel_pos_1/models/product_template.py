@@ -17,7 +17,7 @@ class ProductTemplateInherit(models.Model):
 
     #  Yulia 21012025 only additional field by kenny, jb no need
     # item_code = fields.Char(placeholder='IMAC-8-10-F3A1-10')
-    order_number = fields.Char()
+    order_number = fields.Integer()
     second_name = fields.Char()
     third_name = fields.Char()
 

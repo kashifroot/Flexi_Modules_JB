@@ -15,7 +15,7 @@ class ProductProduct(models.Model):
 
     # Yulia 21022025 jb no neeed this field
     # item_code = fields.Char(store=True, related='product_tmpl_id.item_code')
-    order_number = fields.Char(store=True, related='product_tmpl_id.order_number')
+    order_number = fields.Integer(store=True, related='product_tmpl_id.order_number')
     #
     # def _generate_order_by(self, order_spec, query):
     #     return """
