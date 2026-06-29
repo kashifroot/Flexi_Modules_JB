@@ -3243,6 +3243,20 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			$('.searchbox input').autocomplete({
 				source: self.namelist,
 			});
+			// Mobile fix: the base `search_handler` only reacts to keypress /
+			// Backspace / Delete. On mobile soft keyboards keypress never fires for
+			// character keys and keydown reports keyCode 229 (IME composition), so
+			// the search only ran on Backspace. The `input` event fires reliably on
+			// every device whenever the field value changes — bind it here and route
+			// to the existing perform_search.
+			var product_search_timeout = null;
+			$('.searchbox input').off('input.mobilesearch').on('input.mobilesearch', function () {
+				var searchbox = this;
+				clearTimeout(product_search_timeout);
+				product_search_timeout = setTimeout(function () {
+					self.perform_search(self.category, searchbox.value, false);
+				}, 70);
+			});
 			$('span.set_customer').click(function () {
 				self.gui.show_screen('clientlist');
 			});
