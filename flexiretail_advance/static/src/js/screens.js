@@ -4025,17 +4025,15 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					var order = self.pos.get_order();
 					var direct_printer = self.pos.proxy.direct_printer;
 					if (self.pos.config.use_direct_print && direct_printer) {
-						if (order.get_print_with_qr()) {
-							self.print_xml_separate();
-						} else {
-							// Print full receipt HTML as image — no QR
-							direct_printer.render_receipt_to_image().then(function (imageBase64) {
-								return direct_printer.send_image_printing_job(imageBase64);
-							}).catch(function (err) {
-								console.error('Receipt image print failed:', err);
-							});
-							order._printed = true;
-						}
+						// "Print Receipt" always prints the whole receipt as a single
+						// image. The on-screen receipt already includes the QR image
+						// when it is allowed, so rasterizing it captures the QR too.
+						direct_printer.render_receipt_to_image().then(function (imageBase64) {
+							return direct_printer.send_image_printing_job(imageBase64);
+						}).catch(function (err) {
+							console.error('Receipt image print failed:', err);
+						});
+						order._printed = true;
 					} else {
 						self.print();
 					}
