@@ -564,6 +564,22 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			});
 //			this.el.querySelector('.category-clear').addEventListener('click', this.clear_category_search_handler);
 //			this.el.querySelector('.brand-clear').addEventListener('click', this.clear_brand_search_handler);
+			// Realtime product search that also works on mobile devices.
+			// The base `search_handler` is bound to keypress/keydown only: on mobile
+			// soft keyboards `keypress` never fires for character keys and `keydown`
+			// reports keyCode 229 (IME composition), so the product search only ran
+			// on Backspace. The `input` event fires reliably on every device whenever
+			// the field value changes. Bound here in renderElement so it is
+			// re-attached after each category re-render, and scoped to this widget's
+			// own product searchbox.
+			var product_search_timeout = null;
+			$('.searchbox input', this.el).off('input.mobilesearch').on('input.mobilesearch', function () {
+				var value = this.value;
+				clearTimeout(product_search_timeout);
+				product_search_timeout = setTimeout(function () {
+					self.perform_search(self.category, value, false);
+				}, 100);
+			});
 		},
 		clear_cat_search: function () {
 			var self = this;
@@ -3242,20 +3258,6 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			//    		}
 			$('.searchbox input').autocomplete({
 				source: self.namelist,
-			});
-			// Mobile fix: the base `search_handler` only reacts to keypress /
-			// Backspace / Delete. On mobile soft keyboards keypress never fires for
-			// character keys and keydown reports keyCode 229 (IME composition), so
-			// the search only ran on Backspace. The `input` event fires reliably on
-			// every device whenever the field value changes — bind it here and route
-			// to the existing perform_search.
-			var product_search_timeout = null;
-			$('.searchbox input').off('input.mobilesearch').on('input.mobilesearch', function () {
-				var searchbox = this;
-				clearTimeout(product_search_timeout);
-				product_search_timeout = setTimeout(function () {
-					self.perform_search(self.category, searchbox.value, false);
-				}, 70);
 			});
 			$('span.set_customer').click(function () {
 				self.gui.show_screen('clientlist');
