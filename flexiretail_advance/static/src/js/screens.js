@@ -1933,12 +1933,20 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			// kashif 22jun26: Validate & Print / Validate & QR Print
 			this.$('.button.validate-print').off('click').on('click', function () {
 				var ord = self.pos.get_order();
-				if (ord) { ord.set_print_with_qr(false); }
+				if (ord) {
+					ord.set_print_with_qr(false);
+					// Skip the automatic direct print on the receipt screen for this button.
+					ord._skip_auto_direct_print = true;
+				}
 				self.validate_order();
 			});
 			this.$('.button.validate-qr-print').off('click').on('click', function () {
 				var ord = self.pos.get_order();
-				if (ord) { ord.set_print_with_qr(true); }
+				if (ord) {
+					ord.set_print_with_qr(true);
+					// Skip the automatic direct print on the receipt screen for this button.
+					ord._skip_auto_direct_print = true;
+				}
 				self.validate_order();
 			});
 			this.$('#is_ereciept').click(function () {
@@ -3841,6 +3849,15 @@ odoo.define('flexiretail_advance.screens', function (require) {
 	});
 
 	screens.ReceiptScreenWidget.include({
+		should_auto_print: function () {
+			var order = this.pos.get_order();
+			// The "Receipt Print" / "Receipt QR Print" buttons handle their own
+			// printing flow, so suppress the automatic direct print here.
+			if (order && order._skip_auto_direct_print) {
+				return false;
+			}
+			return this._super();
+		},
 		click_back: function () {
 			// Placeholder method for ReceiptScreen extensions that
 			// can go back ...
@@ -3953,7 +3970,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			var qrImg = new Image();
 			qrImg.crossOrigin = 'Anonymous';
 			qrImg.onload = function () {
-				var qrSize = 150;
+				var qrSize = 90;
 				var paperWidth = 576;
 				var padding = 20;
 				var canvas = document.createElement('canvas');
