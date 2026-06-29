@@ -3892,6 +3892,17 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			if (!(this.pos.config.use_direct_print && direct_printer)) {
 				return this.print();
 			}
+			// Salesperson receipts: print the salesperson receipt as displayed
+			// (rasterized to an image). No QR text / QR image / preview.
+			if (this.pos.user.pos_user_type == 'salesman') {
+				direct_printer.render_receipt_to_image().then(function (imageBase64) {
+					return direct_printer.send_image_printing_job(imageBase64);
+				}).catch(function (err) {
+					console.error('Salesperson receipt print failed:', err);
+				});
+				order._printed = true;
+				return;
+			}
 			var base_url = this.getSession()['web.base.url'];
 			var qr_img_url = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + base_url + '/einvoice/' + order.uid;
 
@@ -3914,38 +3925,6 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					data: qr_data,
 					taxInvoiceTimeframe: qr_data.taxInvoiceTimeframe,
 				});
-				// Open a print-preview popup so the operator can save as PDF.
-				try {
-					var qr_data_preview = {
-						type: 'url',
-						taxqr: qr_code_base64 ? ('data:image/png;base64,' + qr_code_base64) : null,
-						taxInvoiceTimeframe: 3,
-					};
-					var receiptHtml = QWeb.render('PosTicket_custom', {
-						widget: self,
-						pos: self.pos,
-						order: order,
-						receipt: order.export_for_printing(),
-						orderlines: order.get_orderlines(),
-						paymentlines: order.get_paymentlines(),
-						data: qr_data_preview,
-						taxInvoiceTimeframe: 3,
-					});
-					var previewWin = window.open('', '_blank', 'width=500,height=700,scrollbars=yes');
-					if (previewWin) {
-						previewWin.document.write(
-							'<!DOCTYPE html><html><head><title>Receipt Preview</title>' +
-							'<style>body{margin:0;background:#eee;display:flex;justify-content:center;padding:20px;}' +
-							'@media print{body{background:#fff;padding:0;}}</style>' +
-							'</head><body>' + receiptHtml + '</body></html>'
-						);
-						previewWin.document.close();
-						previewWin.focus();
-						previewWin.print();
-					}
-				} catch (e) {
-					console.warn('[Print XML] preview failed:', e);
-				}
 				// 1) Receipt body as ESC/POS text (logo/QR excluded).
 				direct_printer.get_esc_command_set(receipt).then(function (escposReceipt) {
 					if (escposReceipt) {
