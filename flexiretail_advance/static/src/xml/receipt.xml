@@ -3932,7 +3932,7 @@
             <t t-if="data and data.qr_code_base64">
                 <div>E-Invoice</div>
                 <div>Scan QR to Request</div>
-                <img t-att-src="'data:image/png;base64,' + data.qr_code_base64" width='120' height='120'/>
+                <img t-att-src="'data:image/png;base64,' + data.qr_code_base64" width='90' height='90'/>
                 <div>Request Timeline:</div>
                 <div>Start Date: Next day after your purchase</div>
                 <div>Last Date: Within <t t-esc='taxInvoiceTimeframe'/> days from your purchase</div>
