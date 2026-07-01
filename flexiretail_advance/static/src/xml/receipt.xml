@@ -3966,7 +3966,7 @@
                 <div>(<t t-esc="widget.pos.company_partner.brn_no"/>)</div>
             </t>
             <t t-if="receipt.header">
-                <div><t t-esc="receipt.header"/></div>
+                <div font='b'><t t-esc="receipt.header"/></div>
             </t>
             <div>
                 <t t-esc="widget.pos.company.phone || ''"/>
@@ -4200,7 +4200,7 @@
             </t>
             <!-- Footer -->
             <t t-if="receipt.footer">
-                <div style="font-size:13px;"><t t-esc="receipt.footer"/></div>
+                <div font='b'><t t-esc="receipt.footer"/></div>
             </t>
             <br/>
         </receipt>
