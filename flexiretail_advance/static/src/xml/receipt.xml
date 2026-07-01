@@ -3952,16 +3952,14 @@
 
     <!--
         Duplicate of XmlPosTicket_custom used by the "Print XML" button.
-        Same layout/format, but:
-          - the company logo <img> is dropped (text-only path),
-          - the QR <img> is dropped here; the QR is printed as a separate
-            image job (handled in screens.js print_xml_separate).
-        'cut' is left to the caller: when a QR image follows, the text job
-        is rendered with cut='false' so the paper is cut after the QR image;
-        otherwise it cuts normally.
+        Same layout/format, but the company logo <img> is dropped (text-only
+        path). The QR is embedded as a small inline raster image so it prints
+        via the same raw ESC/POS job as the text (see escpos.py's <img>
+        handling) instead of a separate "print-image" job whose on-device
+        scaling can't be controlled from here.
     -->
     <t t-name="XmlPosTicket_custom_print_xml">
-        <receipt align='center' width='48' value-thousands-separator='' t-att-cut="data and data.cut_receipt ? data.cut_receipt : 'true'">
+        <receipt align='center' width='48' value-thousands-separator='' cut='true'>
             <t t-set="dateorder" t-value="order.formatted_validation_date || order.date_order"/>
             <h2><t t-esc="widget.pos.company.name"/></h2>
             <t t-if="widget.pos.company_partner and widget.pos.company_partner.brn_no">
@@ -4191,11 +4189,12 @@
                 </t>
                 <br/>
             </t>
-            <!-- QR Code for E-Invoice (text only; the QR itself is printed as a
-                 separate image job after this receipt body) -->
+            <!-- QR Code for E-Invoice: printed inline (small, fixed pixel
+                 size) as part of this same raw ESC/POS job -->
             <t t-if="data and data.qr_code_base64">
                 <div>E-Invoice</div>
                 <div>Scan QR to Request</div>
+                <img t-att-src="'data:image/png;base64,' + data.qr_code_base64"/>
                 <div>Request Timeline:</div>
                 <div>Start Date: Next day after your purchase</div>
                 <div>Last Date: Within <t t-esc='taxInvoiceTimeframe'/> days from your purchase</div>

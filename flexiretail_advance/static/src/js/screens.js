@@ -3896,10 +3896,13 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			this.pos.get_order().finalize();
 			$('.pos-rightheader').removeAttr('style');
 		},
-		// "Print XML" flow: print the receipt body as ESC/POS text and send the
-		// QR code as a separate image job (printed right after the text). This
-		// is intentionally independent of the existing print()/print_xml() path
-		// (which rasterizes the whole receipt to a single base64 image).
+		// "Print XML" flow: print the receipt body (including the QR, embedded
+		// as a small inline raster image) as a single ESC/POS text job. This is
+		// intentionally independent of the existing print()/print_xml() path
+		// (which rasterizes the whole receipt to a single base64 image). The QR
+		// is embedded inline (rather than sent as a separate "print-image" job)
+		// so its printed size is fully determined by the pixel size baked into
+		// this base64 PNG, not by any resizing done on the host-machine side.
 		print_xml_separate: function () {
 			var self = this;
 			var order = this.pos.get_order();
@@ -3927,9 +3930,6 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				var qr_data = {
 					qr_code_base64: qr_code_base64 || null,
 					taxInvoiceTimeframe: 3,
-					// When a QR image follows, don't cut after the text so the
-					// paper is cut after the QR image instead.
-					cut_receipt: qr_code_base64 ? 'false' : 'true',
 				};
 				var receipt = QWeb.render('XmlPosTicket_custom_print_xml', {
 					widget: self,
@@ -3941,15 +3941,11 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					data: qr_data,
 					taxInvoiceTimeframe: qr_data.taxInvoiceTimeframe,
 				});
-				// 1) Receipt body as ESC/POS text (logo/QR excluded).
+				// Receipt body (including the QR image, inline) as a single
+				// ESC/POS text job.
 				direct_printer.get_esc_command_set(receipt).then(function (escposReceipt) {
 					if (escposReceipt) {
 						return direct_printer.send_printing_job(escposReceipt);
-					}
-				}).then(function () {
-					// 2) QR code as a separate image job, printed below the text.
-					if (qr_code_base64) {
-						return direct_printer.send_image_printing_job(qr_code_base64);
 					}
 				}).catch(function (err) {
 					console.error('Print XML failed:', err);
