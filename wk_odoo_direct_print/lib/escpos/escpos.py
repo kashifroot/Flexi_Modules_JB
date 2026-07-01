@@ -934,7 +934,16 @@ class Escpos:
         #     msg = CTL_LF
         #     print("------------------------slash N Mila-------------%r", msg)
         try:
-            msg = msg and msg.decode("UTF")
+            # Every other command/constant in this module represents a raw
+            # output byte as a single Python str char (see e.g. the katakana
+            # table in constants.py, whose values are '\xa1'-style one-byte
+            # strings). latin-1 is the only codec that maps all 256 byte
+            # values to single chars without ever raising, so it round-trips
+            # arbitrary binary (e.g. raster image data from _raw_print_image)
+            # the same way; a plain utf-8/"UTF" decode fails on most binary
+            # image bytes and falls through to str(bytes), which prints its
+            # literal b'...' repr instead of the image.
+            msg = msg and msg.decode("latin-1")
         except Exception as e:
             msg = msg
 
