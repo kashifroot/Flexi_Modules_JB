@@ -3976,7 +3976,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			var qrImg = new Image();
 			qrImg.crossOrigin = 'Anonymous';
 			qrImg.onload = function () {
-				var qrSize = 90;
+				var qrSize = 180;
 				var paperWidth = 576;
 				var padding = 20;
 				var canvas = document.createElement('canvas');

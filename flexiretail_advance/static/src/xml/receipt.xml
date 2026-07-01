@@ -3961,7 +3961,7 @@
     <t t-name="XmlPosTicket_custom_print_xml">
         <receipt align='center' width='48' value-thousands-separator='' cut='true'>
             <t t-set="dateorder" t-value="order.formatted_validation_date || order.date_order"/>
-            <h2><t t-esc="widget.pos.company.name"/></h2>
+            <div bold='on'><t t-esc="widget.pos.company.name"/></div>
             <t t-if="widget.pos.company_partner and widget.pos.company_partner.brn_no">
                 <div>(<t t-esc="widget.pos.company_partner.brn_no"/>)</div>
             </t>
@@ -3986,7 +3986,7 @@
             <br/>
             <line>------------------------------------------------</line>
             <t t-foreach="receipt.orderlines" t-as="orderline">
-                <div>
+                <div align='left'>
                     <t t-if="orderline.default_code">
                         <t t-esc="orderline.default_code"/>
                         <t t-if="orderline.second_name">
@@ -4022,7 +4022,7 @@
                 <left>Amount Paid:</left>
                 <right><t t-esc="widget.format_currency_front(order.get_total_paid())"/></right>
             </line>
-            <line class='total' size='double'>
+            <line class='total' bold='on'>
                 <left>Net Total:</left>
                 <right>
                     <t t-if="order.get_credit_detail()">
