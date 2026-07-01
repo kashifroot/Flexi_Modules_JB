@@ -3983,7 +3983,6 @@
             <t t-if="order.salesperson_name">
                 <div>Salesperson: <t t-esc="order.salesperson_name"/></div>
             </t>
-            <br/>
             <line>------------------------------------------------</line>
             <t t-foreach="receipt.orderlines" t-as="orderline">
                 <div align='left'>
@@ -4192,12 +4191,11 @@
             <!-- QR Code for E-Invoice: printed inline (small, fixed pixel
                  size) as part of this same raw ESC/POS job -->
             <t t-if="data and data.qr_code_base64">
-                <div>E-Invoice</div>
-                <div>Scan QR to Request</div>
+                <div>Scan QR to Request E-Invoice</div>
                 <img t-att-src="'data:image/png;base64,' + data.qr_code_base64"/>
-                <div>Request Timeline:</div>
-                <div>Start Date: Next day after your purchase</div>
-                <div>Last Date: Within <t t-esc='taxInvoiceTimeframe'/> days from your purchase</div>
+                <div font='b'>Request Timeline:</div>
+                <div font='b'>Start Date: Next day after your purchase</div>
+                <div font='b'>Last Date: Within <t t-esc='taxInvoiceTimeframe'/> days from your purchase</div>
                 <br/>
             </t>
             <!-- Footer -->
