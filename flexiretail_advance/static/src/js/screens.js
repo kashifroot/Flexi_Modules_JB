@@ -911,6 +911,21 @@ odoo.define('flexiretail_advance.screens', function (require) {
 		show: function () {
 			var self = this;
 			self._super();
+			// Core only binds 'keypress' on the customer searchbox (see
+			// point_of_sale/static/src/js/screens.js ClientListScreenWidget),
+			// which many mobile/touchscreen virtual keyboards never fire (same
+			// root cause fixed for the product search box, which listens for
+			// 'keyup input' - see ProductsScreenWidget above). Add an 'input'
+			// listener so typing via a mobile/on-screen keyboard also triggers
+			// perform_search here.
+			var mobile_search_timeout = null;
+			this.$('.searchbox input').off('input.mobile_client_search').on('input.mobile_client_search', function (event) {
+				var searchbox = this;
+				clearTimeout(mobile_search_timeout);
+				mobile_search_timeout = setTimeout(function () {
+					self.perform_search(searchbox.value, false);
+				}, 70);
+			});
 			self.reload_partners();
 			this.selected_partner = false;
 			var partner = self.pos.partners;
