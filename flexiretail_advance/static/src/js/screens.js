@@ -3995,6 +3995,77 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			};
 			qrImg.src = qr_img_url;
 		},
+		// "Print Default" flow: always print through the browser's standard
+		// print dialog (printer / paper size chosen there) — never the
+		// direct printer. Cashiers print the XML receipt layout
+		// (XmlPosTicket_custom_print_xml, styled for the browser via CSS in
+		// pos.css); salespersons print the default salesperson receipt
+		// already rendered on screen (PosTicket_custom_salesperson).
+		print_default: function () {
+			var self = this;
+			var order = this.pos.get_order();
+			if (!order) {
+				return;
+			}
+			// Salesperson: the on-screen receipt is already the default
+			// salesperson template — print it as-is.
+			if (this.pos.user.pos_user_type == 'salesman') {
+				this.print_web();
+				return;
+			}
+			var $container = this.$('.pos-receipt-container');
+			var previous_html = $container.html();
+
+			var renderAndPrint = function (qr_code_base64) {
+				var qr_data = {
+					qr_code_base64: qr_code_base64 || null,
+					taxInvoiceTimeframe: 3,
+				};
+				var receipt = QWeb.render('XmlPosTicket_custom_print_xml', {
+					widget: self,
+					pos: self.pos,
+					order: order,
+					receipt: order.export_for_printing(),
+					orderlines: order.get_orderlines(),
+					paymentlines: order.get_paymentlines(),
+					data: qr_data,
+					taxInvoiceTimeframe: qr_data.taxInvoiceTimeframe,
+				});
+				$container.html(receipt);
+				self.print_web();
+				// Restore the on-screen receipt once the print dialog is
+				// done (execCommand('print') blocks in Chrome/Firefox; the
+				// delay covers browsers where it returns early).
+				setTimeout(function () {
+					$container.html(previous_html);
+				}, 500);
+			};
+
+			if (!order.get_print_with_qr()) {
+				renderAndPrint(null);
+				return;
+			}
+			var base_url = this.getSession()['web.base.url'];
+			var qr_img_url = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + base_url + '/einvoice/' + order.uid;
+			var qrImg = new Image();
+			qrImg.crossOrigin = 'Anonymous';
+			qrImg.onload = function () {
+				var qrSize = 180;
+				var canvas = document.createElement('canvas');
+				canvas.width = qrSize;
+				canvas.height = qrSize;
+				var ctx = canvas.getContext('2d');
+				ctx.fillStyle = '#ffffff';
+				ctx.fillRect(0, 0, canvas.width, canvas.height);
+				ctx.drawImage(qrImg, 0, 0, qrSize, qrSize);
+				renderAndPrint(canvas.toDataURL('image/png').split(',')[1]);
+			};
+			qrImg.onerror = function () {
+				// QR fetch failed: still print the receipt without it.
+				renderAndPrint(null);
+			};
+			qrImg.src = qr_img_url;
+		},
 		print_web: function () {
 			if ($.browser.safari) {
 				//              var header_html = $('.pos-rightheader').html();
@@ -4078,6 +4149,11 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				});
 				if (!self._locked) {
 					self.print_xml_separate();
+				}
+			});
+			this.$('.button.print_default').off('click.printdefault').on('click.printdefault', function () {
+				if (!self._locked) {
+					self.print_default();
 				}
 			});
 			var customer_display = this.pos.config.customer_display;

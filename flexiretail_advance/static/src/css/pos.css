@@ -5355,3 +5355,53 @@ input:checked+.slider {
 		height: calc(100vh - 250px) !important;
 	}
 }
+/* "Print Default" button: browser-print rendering of the ESC/POS XML
+   receipt (XmlPosTicket_custom_print_xml). Maps the raw <receipt>/<line>/
+   <left>/<right> print tags to readable HTML for the standard print
+   dialog. */
+.pos .pos-receipt-container receipt {
+	display: block;
+	width: 300px;
+	margin: 0 auto;
+	padding: 10px 5px;
+	background: white;
+	font-family: "Inconsolata", monospace;
+	font-size: 12px;
+	line-height: 1.35;
+	text-align: center;
+	overflow: hidden;
+	word-break: break-word;
+}
+.pos .pos-receipt-container receipt div {
+	display: block;
+}
+.pos .pos-receipt-container receipt line {
+	display: flex;
+	justify-content: space-between;
+	text-align: left;
+}
+.pos .pos-receipt-container receipt line left {
+	display: block;
+	text-align: left;
+	padding-right: 10px;
+}
+.pos .pos-receipt-container receipt line right {
+	display: block;
+	text-align: right;
+	margin-left: auto;
+}
+.pos .pos-receipt-container receipt [bold='on'] {
+	font-weight: bold;
+}
+.pos .pos-receipt-container receipt [align='left'] {
+	text-align: left;
+}
+.pos .pos-receipt-container receipt line[indent='1'] {
+	padding-left: 10px;
+}
+.pos .pos-receipt-container receipt [font='b'] {
+	font-size: 11px;
+}
+.pos .pos-receipt-container receipt img {
+	max-width: 100%;
+}

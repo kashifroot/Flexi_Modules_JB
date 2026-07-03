@@ -24,6 +24,14 @@
 			<div class="button print_xml">
 				<i class='fa fa-print'></i> Print XML
 			</div>
+			<!-- "Print Default" button: always prints through the browser's
+			     standard print dialog (choose printer / paper size there),
+			     never the direct printer. Cashier receipts use the XML
+			     receipt template; salesperson receipts use the default
+			     salesperson template. -->
+			<div class="button print_default">
+				<i class='fa fa-print'></i> Print Default
+			</div>
 		</t>
 	</t>
 
