@@ -144,6 +144,24 @@
     .pos .leftpane>.window>.subwindow:nth-child(2).collapsed .close-keyboard .hide-kb {
         display: none;
     }
+
+    /*kashif july 8 Undo flexiretail_advance's absolute-positioned summary, which overlaps the order lines when the list area is short. */
+    .pos .order .summary {
+        position: static !important;
+        bottom: auto !important;
+        height: auto !important;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 12px !important;
+        margin-bottom: 0 !important;
+        padding-top: 8px;
+        background: #fff;
+        border-top: 2px solid #ddd;
+    }
+
+    .pos .order-scroller {
+        height: 100% !important;
+    }
 }
 
 .pos .order-selector {
