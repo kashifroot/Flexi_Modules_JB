@@ -1482,8 +1482,11 @@ display: block;
 	bottom: 0px;
 	position: absolute;
 	width: 100%;
-	height: 30px;
+	min-height: 40px;
 	margin: 0 0.1px;
+	background: #fff;
+	box-sizing: border-box;
+	z-index: 2;
 }
 
 
