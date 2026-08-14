@@ -36,20 +36,22 @@
 		     apply_receipt_layout() in js/screens.js (inline styles, so no
 		     stylesheet can disagree):
 		       - "Print XML"     → tablet / laptop  (≥ 768 px)
-		       - "Print Default" → mobile           (≤ 767 px) -->
+		       - "Print Receipt" → mobile           (≤ 767 px, .print_default) -->
 		<t t-jquery="div.button.print" t-operation="replace">
 			<!-- "Print XML": prints the receipt as ESC/POS text through the
 			     direct printer, with the QR embedded as an inline raster. -->
 			<div class="button print_xml">
-				<i class='fa fa-print'></i> Print XML
+				<i class='fa fa-print'></i> Print Receipt
 			</div>
-			<!-- "Print Default": always prints through the browser's
-			     standard print dialog (choose printer / paper size there),
-			     never the direct printer. Cashier receipts use the XML
-			     receipt template; salesperson receipts use the default
-			     salesperson template. -->
+			<!-- The mobile print button. Goes to the thermal printer like
+			     "Print XML" does (see the click handler in js/screens.js);
+			     its print_default() path — the browser print dialog, cashier
+			     receipts on the XML template and salesperson receipts on the
+			     default salesperson template — is only the fallback for POS
+			     configs with no direct printer. The class name still says
+			     print_default because JS and CSS key off it. -->
 			<div class="button print_default">
-				<i class='fa fa-print'></i> Print Default
+				<i class='fa fa-print'></i> Print Receipt
 			</div>
 		</t>
 	</t>
