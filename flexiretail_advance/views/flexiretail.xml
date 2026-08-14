@@ -11,8 +11,9 @@
                 <!-- ?v= is a cache buster. These POS assets are plain <link>/
                      <script> tags, and Odoo serves /static/ files with a
                      one-week cache header, so browsers keep serving the old
-                     file after a deploy even with -u. Bump the number in the
-                     link whenever screens.js or pos.css changes. -->
+                     file after a deploy even with -u. Bump the number
+                     whenever screens.js changes. (pos.css cannot carry one —
+                     see the note on its link below.) -->
                 <script type="text/javascript" src="/flexiretail_advance/static/src/js/screens.js?v=2"/>
                 <script type="text/javascript" src="/flexiretail_advance/static/src/js/models.js"/>
                 <script type="text/javascript" src="/flexiretail_advance/static/src/js/chromes.js"/>
@@ -34,7 +35,11 @@
                       href="/flexiretail_advance/static/src/css/sale_order_screen.css"/>
                 <link rel="stylesheet" type="text/css"
                       href="/flexiretail_advance/static/src/css/multi_terminal_lock.css"/>
-                <link rel="stylesheet" type="text/css" href="/flexiretail_advance/static/src/css/pos.css?v=2"/>
+                <!-- Do NOT add a ?v= cache buster to this href: flexi_retail_mobile
+                     removes this link with an xpath that matches the exact href,
+                     and the upgrade fails with "Element cannot be located in
+                     parent view". Version receipt_buttons.css below instead. -->
+                <link rel="stylesheet" type="text/css" href="/flexiretail_advance/static/src/css/pos.css"/>
                 <link rel="stylesheet" type="text/css" href="/flexiretail_advance/static/src/css/order_screen.css"/>
                 <link rel="stylesheet" type="text/css" href="/flexiretail_advance/static/src/css/datepicker.css"/>
                 <link rel="stylesheet" type="text/css" href="/flexiretail_advance/static/src/css/login.css"/>
@@ -56,6 +61,14 @@
                       href="/flexiretail_advance/static/src/css/jquery.datetimepicker.css"/>
 
                 <t t-call="flexiretail_advance.assets_themes"/>
+
+                <!-- Receipt-screen print buttons / top bar. Loaded after the
+                     theme bundle so it outranks the theme stylesheets, and kept
+                     out of pos.css because flexi_retail_mobile removes that one
+                     from the page. ?v= is a cache buster (Odoo serves /static/
+                     with a one-week cache header) — bump it on every change. -->
+                <link rel="stylesheet" type="text/css"
+                      href="/flexiretail_advance/static/src/css/receipt_buttons.css?v=1"/>
 
                 <script type="text/javascript"
                         src="/flexiretail_advance/static/src/js/lib/jquery.simplePagination.js"/>
