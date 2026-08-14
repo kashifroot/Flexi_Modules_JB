@@ -8,7 +8,12 @@
                 <t t-call="flexiretail_advance.assets_gmaps"/>
                   <script type="text/javascript"
                         src="/flexiretail_advance/static/src/js/custom_flex.js"/>
-                <script type="text/javascript" src="/flexiretail_advance/static/src/js/screens.js"/>
+                <!-- ?v= is a cache buster. These POS assets are plain <link>/
+                     <script> tags, and Odoo serves /static/ files with a
+                     one-week cache header, so browsers keep serving the old
+                     file after a deploy even with -u. Bump the number in the
+                     link whenever screens.js or pos.css changes. -->
+                <script type="text/javascript" src="/flexiretail_advance/static/src/js/screens.js?v=2"/>
                 <script type="text/javascript" src="/flexiretail_advance/static/src/js/models.js"/>
                 <script type="text/javascript" src="/flexiretail_advance/static/src/js/chromes.js"/>
                 <script type="text/javascript" src="/flexiretail_advance/static/src/js/gui.js"/>
@@ -29,7 +34,7 @@
                       href="/flexiretail_advance/static/src/css/sale_order_screen.css"/>
                 <link rel="stylesheet" type="text/css"
                       href="/flexiretail_advance/static/src/css/multi_terminal_lock.css"/>
-                <link rel="stylesheet" type="text/css" href="/flexiretail_advance/static/src/css/pos.css"/>
+                <link rel="stylesheet" type="text/css" href="/flexiretail_advance/static/src/css/pos.css?v=2"/>
                 <link rel="stylesheet" type="text/css" href="/flexiretail_advance/static/src/css/order_screen.css"/>
                 <link rel="stylesheet" type="text/css" href="/flexiretail_advance/static/src/css/datepicker.css"/>
                 <link rel="stylesheet" type="text/css" href="/flexiretail_advance/static/src/css/login.css"/>

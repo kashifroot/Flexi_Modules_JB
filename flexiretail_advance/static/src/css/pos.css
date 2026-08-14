@@ -5502,14 +5502,38 @@ input:checked+.slider {
 	position: static;
 	margin: 0 0 0 8px;
 	white-space: nowrap;
+	line-height: 32px;
+	padding: 3px 14px;
+	border-radius: 3px;
 }
 
 .pos .receipt-screen .top-content .button.back {
 	margin: 0;
 }
 
+/* "Reprint with QR" reads as the secondary action next to Next Order, so it
+   gets its own light styling rather than inheriting whatever the active
+   theme paints .button with. */
+.pos .receipt-screen .top-content .button.reprint_qr {
+	background: #fff;
+	border: solid 1px #c6c6c6;
+	color: #3e3e3e;
+	font-weight: normal;
+}
+
+.pos .receipt-screen .top-content .button.reprint_qr:hover {
+	background: #f3f3f3;
+}
+
+.pos .receipt-screen .top-content .button.reprint_qr:active {
+	background: #3e3e3e;
+	border-color: #3e3e3e;
+	color: #fff;
+}
+
 .pos .receipt-screen .top-content .button.reprint_qr .fa {
-	margin-right: 5px;
+	margin-right: 6px;
+	opacity: 0.75;
 }
 
 /* Tablet: the second button leaves less room for the totals — shrink both a
