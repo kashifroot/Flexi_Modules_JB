@@ -3999,14 +3999,21 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				'border': is_mobile ? 'none' : '',
 			});
 		},
+		// True when the order can be sent straight to the thermal printer.
+		// This is NOT device-specific: pos_direct_print builds
+		// pos.proxy.direct_printer from the POS config alone, and its
+		// send_printing_job() is an RPC to the print.jobs model, so a phone
+		// prints directly exactly as the laptop does.
+		has_direct_printer: function () {
+			return !!(this.pos.config.use_direct_print && this.pos.proxy.direct_printer);
+		},
 		// "Reprint with QR" (next to Next Order): reprint the receipt with the
 		// QR code even when the cashier validated with "Print without QR".
-		// The print path follows the device — the same path as the print
-		// button visible on it: direct printer on tablet/laptop, the browser
-		// print dialog on mobile (or when no direct printer is configured).
+		// Goes straight to the thermal printer on every device — no browser
+		// print dialog. The dialog is only reached as a fallback on POS
+		// configs with no direct printer set up.
 		reprint_with_qr: function () {
-			var direct_printer = this.pos.proxy.direct_printer;
-			if (!this.is_mobile_device() && this.pos.config.use_direct_print && direct_printer) {
+			if (this.has_direct_printer()) {
 				this.print_xml_separate(true);
 			} else {
 				this.print_default(true);
@@ -4249,9 +4256,17 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					self.print_xml_separate();
 				}
 			});
+			// "Print Default" is the only print button on mobile, and printing
+			// there must not open the browser print dialog either — so it goes
+			// to the thermal printer whenever one is configured, and only
+			// falls back to the dialog when there is none.
 			this.$('.button.print_default').off('click.printdefault').on('click.printdefault', function () {
 				if (!self._locked) {
-					self.print_default();
+					if (self.has_direct_printer()) {
+						self.print_xml_separate();
+					} else {
+						self.print_default();
+					}
 				}
 			});
 			// "Reprint with QR": same receipt, QR forced on, printed through
