@@ -3918,7 +3918,28 @@ odoo.define('flexiretail_advance.screens', function (require) {
 		// is embedded inline (rather than sent as a separate "print-image" job)
 		// so its printed size is fully determined by the pixel size baked into
 		// this base64 PNG, not by any resizing done on the host-machine side.
-		print_xml_separate: function () {
+		// True on phone-sized screens. Must stay in sync with the 767px
+		// breakpoint used by the print-button show/hide rules in pos.css.
+		is_mobile_device: function () {
+			return window.matchMedia('(max-width: 767px)').matches;
+		},
+		// "Reprint with QR" (next to Next Order): reprint the receipt with the
+		// QR code even when the cashier validated with "Print without QR".
+		// The print path follows the device — the same path as the print
+		// button visible on it: direct printer on tablet/laptop, the browser
+		// print dialog on mobile (or when no direct printer is configured).
+		reprint_with_qr: function () {
+			var direct_printer = this.pos.proxy.direct_printer;
+			if (!this.is_mobile_device() && this.pos.config.use_direct_print && direct_printer) {
+				this.print_xml_separate(true);
+			} else {
+				this.print_default(true);
+			}
+		},
+		// force_qr: print the QR even if the order was validated without it
+		// (used by "Reprint with QR"). The order's print_with_qr flag itself is
+		// left untouched, so any later print still honours the cashier's choice.
+		print_xml_separate: function (force_qr) {
 			var self = this;
 			var order = this.pos.get_order();
 			var direct_printer = this.pos.proxy.direct_printer;
@@ -3968,7 +3989,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				order._printed = true;
 			};
 
-			if (!order.get_print_with_qr()) {
+			if (!force_qr && !order.get_print_with_qr()) {
 				renderAndPrint(null);
 				return;
 			}
@@ -4001,7 +4022,8 @@ odoo.define('flexiretail_advance.screens', function (require) {
 		// (XmlPosTicket_custom_print_xml, styled for the browser via CSS in
 		// pos.css); salespersons print the default salesperson receipt
 		// already rendered on screen (PosTicket_custom_salesperson).
-		print_default: function () {
+		// force_qr: see print_xml_separate above.
+		print_default: function (force_qr) {
 			var self = this;
 			var order = this.pos.get_order();
 			if (!order) {
@@ -4041,7 +4063,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				}, 500);
 			};
 
-			if (!order.get_print_with_qr()) {
+			if (!force_qr && !order.get_print_with_qr()) {
 				renderAndPrint(null);
 				return;
 			}
@@ -4154,6 +4176,13 @@ odoo.define('flexiretail_advance.screens', function (require) {
 			this.$('.button.print_default').off('click.printdefault').on('click.printdefault', function () {
 				if (!self._locked) {
 					self.print_default();
+				}
+			});
+			// "Reprint with QR": same receipt, QR forced on, printed through
+			// whichever path suits the device.
+			this.$('.button.reprint_qr').off('click.reprintqr').on('click.reprintqr', function () {
+				if (!self._locked) {
+					self.reprint_with_qr();
 				}
 			});
 			var customer_display = this.pos.config.customer_display;

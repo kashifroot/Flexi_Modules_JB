@@ -11,20 +11,35 @@
                     </span>
                 <h1>Total: <span class='total-value'>0.00</span> &amp;nbsp; Change:
                     <span class='change-value'>0.00</span></h1>
-                <span class='button next'>
-        	        Next Order
-            	    <i class='fa fa-angle-double-right'/>
-            	</span>
+                <!-- Right-hand button group. The base theme positions
+                     ".top-content .button.next" absolutely at right:0, so the
+                     two buttons are wrapped and the wrapper is what gets
+                     positioned (see .receipt-top-buttons in pos.css). -->
+                <span class="receipt-top-buttons">
+                    <span class='button reprint_qr'>
+                        <i class='fa fa-qrcode'/>
+                        Reprint with QR
+                    </span>
+                    <span class='button next'>
+                        Next Order
+                        <i class='fa fa-angle-double-right'/>
+                    </span>
+                </span>
            	</div>
 		</t>
-		<!-- Additional "Print XML" button: prints the receipt as ESC/POS text
-		     while sending the QR code as a separate image job. Leaves the
-		     existing "Print Receipt" button/flow untouched. -->
+		<!-- Print buttons. Only one of these is ever visible, by device:
+		       - "Print XML"     → tablet / laptop  (≥ 768 px)
+		       - "Print Default" → mobile          (≤ 767 px)
+		     The base "Print Receipt" button is hidden on every device.
+		     The show/hide rules live in css/pos.css so JS and CSS cannot
+		     disagree about what "mobile" means. -->
 		<t t-jquery="div.button.print" t-operation="after">
+			<!-- "Print XML": prints the receipt as ESC/POS text through the
+			     direct printer, with the QR embedded as an inline raster. -->
 			<div class="button print_xml">
 				<i class='fa fa-print'></i> Print XML
 			</div>
-			<!-- "Print Default" button: always prints through the browser's
+			<!-- "Print Default": always prints through the browser's
 			     standard print dialog (choose printer / paper size there),
 			     never the direct printer. Cashier receipts use the XML
 			     receipt template; salesperson receipts use the default
