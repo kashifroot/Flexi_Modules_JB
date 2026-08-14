@@ -38,7 +38,8 @@
                 <!-- Do NOT add a ?v= cache buster to this href: flexi_retail_mobile
                      removes this link with an xpath that matches the exact href,
                      and the upgrade fails with "Element cannot be located in
-                     parent view". Version receipt_buttons.css below instead. -->
+                     parent view". Note flexi_retail_mobile removes this file
+                     entirely, so receipt-screen rules go in pos_theme.css. -->
                 <link rel="stylesheet" type="text/css" href="/flexiretail_advance/static/src/css/pos.css"/>
                 <link rel="stylesheet" type="text/css" href="/flexiretail_advance/static/src/css/order_screen.css"/>
                 <link rel="stylesheet" type="text/css" href="/flexiretail_advance/static/src/css/datepicker.css"/>
@@ -61,14 +62,6 @@
                       href="/flexiretail_advance/static/src/css/jquery.datetimepicker.css"/>
 
                 <t t-call="flexiretail_advance.assets_themes"/>
-
-                <!-- Receipt-screen print buttons / top bar. Loaded after the
-                     theme bundle so it outranks the theme stylesheets, and kept
-                     out of pos.css because flexi_retail_mobile removes that one
-                     from the page. ?v= is a cache buster (Odoo serves /static/
-                     with a one-week cache header) — bump it on every change. -->
-                <link rel="stylesheet" type="text/css"
-                      href="/flexiretail_advance/static/src/css/receipt_buttons.css?v=1"/>
 
                 <script type="text/javascript"
                         src="/flexiretail_advance/static/src/js/lib/jquery.simplePagination.js"/>
