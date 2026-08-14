@@ -3918,10 +3918,86 @@ odoo.define('flexiretail_advance.screens', function (require) {
 		// is embedded inline (rather than sent as a separate "print-image" job)
 		// so its printed size is fully determined by the pixel size baked into
 		// this base64 PNG, not by any resizing done on the host-machine side.
-		// True on phone-sized screens. Must stay in sync with the 767px
-		// breakpoint used by the print-button show/hide rules in pos.css.
+		// True on phone-sized screens. Same 767px breakpoint as the CSS in
+		// pos_theme.css.
 		is_mobile_device: function () {
 			return window.matchMedia('(max-width: 767px)').matches;
+		},
+		// Device-specific print button + receipt top bar, applied as INLINE
+		// styles so no stylesheet can override them and none has to be
+		// present for this to work. Which stylesheets actually reach the POS
+		// page differs per database — flexi_retail_mobile deletes
+		// flexiretail_advance's pos.css outright, and the theme bundle loads
+		// after pos_theme.css — which is why this is enforced here rather
+		// than relying on CSS alone. Equivalent CSS is kept in pos_theme.css;
+		// change both together.
+		apply_receipt_layout: function () {
+			var is_mobile = this.is_mobile_device();
+			// Tablet: two buttons leave less room for the totals, so both take
+			// a step down in size or "Change:" gets cut off.
+			var is_tablet = !is_mobile && window.matchMedia('(max-width: 1024px)').matches;
+
+			// "Print Receipt" is replaced away in xml/receipt.xml; this only
+			// catches it if another module re-adds one.
+			this.$('.button.print').css('display', 'none');
+			this.$('.button.print_xml').css('display', is_mobile ? 'none' : 'block');
+			this.$('.button.print_default').css('display', is_mobile ? 'block' : 'none');
+
+			// Top bar: Back | totals | (Reprint with QR + Next Order). The
+			// base theme positions each .button absolutely at an edge, which
+			// puts the totals underneath them once there are two buttons on
+			// the right, so the bar is laid out as a flex row instead.
+			var $bar = this.$('.top-content');
+			$bar.css({
+				'display': 'flex',
+				'align-items': 'center',
+				'padding': '0 8px',
+				'flex-wrap': is_mobile ? 'wrap' : 'nowrap',
+				'align-content': 'center',
+				'height': is_mobile ? '104px' : '',
+			});
+			$bar.children('.button.back').css({ 'position': 'static', 'margin': '0', 'flex': '0 0 auto' });
+			$bar.children('h1').css({
+				'flex': '1 1 auto',
+				'min-width': '0',
+				'margin': '0 8px',
+				'font-size': is_mobile ? '16px' : (is_tablet ? '18px' : ''),
+				'overflow': 'hidden',
+				'text-overflow': 'ellipsis',
+				'white-space': 'nowrap',
+			});
+			var $group = $bar.children('.receipt-top-buttons');
+			$group.css({
+				'position': 'static',
+				'display': 'flex',
+				'align-items': 'center',
+				'justify-content': 'flex-end',
+				'flex': is_mobile ? '1 0 100%' : '0 0 auto',
+				'margin-top': is_mobile ? '8px' : '',
+			});
+			$group.children('.button').css({
+				'position': 'static',
+				'margin': is_mobile ? '0 0 0 6px' : '0 0 0 8px',
+				'white-space': 'nowrap',
+				'line-height': '32px',
+				'padding': is_mobile || is_tablet ? '3px 10px' : '3px 14px',
+				'font-size': is_mobile ? '16px' : (is_tablet ? '17px' : ''),
+				'border-radius': '3px',
+			});
+			$group.children('.button.reprint_qr').css({
+				'background': '#fff',
+				'border': 'solid 1px #c6c6c6',
+				'color': '#3e3e3e',
+				'font-weight': 'normal',
+			});
+			// Mobile: the bar is two rows, so the receipt starts lower and
+			// uses the full width instead of the base 25% side gutters.
+			this.$('.centered-content').css({
+				'top': is_mobile ? '104px' : '',
+				'left': is_mobile ? '0' : '',
+				'right': is_mobile ? '0' : '',
+				'border': is_mobile ? 'none' : '',
+			});
 		},
 		// "Reprint with QR" (next to Next Order): reprint the receipt with the
 		// QR code even when the cashier validated with "Print without QR".
@@ -4185,6 +4261,7 @@ odoo.define('flexiretail_advance.screens', function (require) {
 					self.reprint_with_qr();
 				}
 			});
+			this.apply_receipt_layout();
 			var customer_display = this.pos.config.customer_display;
 			this.$('.next').click(function () {
 				if (self.pos.get_order()) {
@@ -4272,6 +4349,9 @@ odoo.define('flexiretail_advance.screens', function (require) {
 				$("." + barcode.toString()).barcode(barcode.toString(), "code128");
 				$("td#barcode_val_redeem").html(barcode);
 			}
+			// Re-apply here too: the screen can be shown again without a
+			// re-render, which would otherwise skip renderElement.
+			this.apply_receipt_layout();
 		},
 		find_parent_category: function (category) {
 			var self = this;

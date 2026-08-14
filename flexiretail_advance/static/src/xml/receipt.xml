@@ -27,13 +27,17 @@
                 </span>
            	</div>
 		</t>
-		<!-- Print buttons. Only one of these is ever visible, by device:
+		<!-- Print buttons. This REPLACES the base "Print Receipt" button, so
+		     that button no longer exists in the DOM on any device — it is not
+		     merely hidden, which is what kept it showing when a stylesheet
+		     failed to reach the page.
+
+		     Of the two below, exactly one is shown per device, by
+		     apply_receipt_layout() in js/screens.js (inline styles, so no
+		     stylesheet can disagree):
 		       - "Print XML"     → tablet / laptop  (≥ 768 px)
-		       - "Print Default" → mobile          (≤ 767 px)
-		     The base "Print Receipt" button is hidden on every device.
-		     The show/hide rules live in css/pos.css so JS and CSS cannot
-		     disagree about what "mobile" means. -->
-		<t t-jquery="div.button.print" t-operation="after">
+		       - "Print Default" → mobile           (≤ 767 px) -->
+		<t t-jquery="div.button.print" t-operation="replace">
 			<!-- "Print XML": prints the receipt as ESC/POS text through the
 			     direct printer, with the QR embedded as an inline raster. -->
 			<div class="button print_xml">
